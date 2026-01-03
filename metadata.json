@@ -1,0 +1,7 @@
+{
+  "name": "Virtual Console Hub",
+  "description": "A console-less gaming platform allowing users to rent cloud/virtual consoles (Retro & Modern) and stream games with AI-enhanced features.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
