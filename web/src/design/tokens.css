@@ -1,0 +1,17 @@
+/*
+ * Consoless design tokens. Dark is the default and only designed theme
+ * (P-04); light values land here once design.md defines them.
+ */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --gaming-900: #0f0e17;
+  --gaming-800: #1a1a2e;
+  --gaming-700: #16213e;
+  --gaming-accent: #e94560;
+  --gaming-neon: #0ff0fc;
+  --gaming-retro: #ff8e3c;
+
+  --stream-canvas: #16161d;
+}

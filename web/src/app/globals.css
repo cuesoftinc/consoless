@@ -1,0 +1,157 @@
+@import "tailwindcss";
+@import "../design/tokens.css";
+
+/* Tokens (src/design/tokens.css) mapped into Tailwind's color and font namespaces. */
+@theme inline {
+  --color-gaming-900: var(--gaming-900);
+  --color-gaming-800: var(--gaming-800);
+  --color-gaming-700: var(--gaming-700);
+  --color-gaming-accent: var(--gaming-accent);
+  --color-gaming-neon: var(--gaming-neon);
+  --color-gaming-retro: var(--gaming-retro);
+  --color-stream-canvas: var(--stream-canvas);
+
+  --font-sans: var(--font-inter), sans-serif;
+  --font-retro: var(--font-press-start-2p), cursive;
+}
+
+@theme {
+  --animate-pulse-fast: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-slide-in: slide-in 0.3s ease-out forwards;
+  --animate-fade-out: fade-out 0.3s ease-in forwards;
+  --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;
+
+  @keyframes slide-in {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-in-up {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  /* Tailwind v3 defaults the prototype was drawn against. */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  select:not(:disabled),
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+
+  body {
+    font-family: var(--font-inter), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--gaming-900);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--gaming-800);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gaming-accent);
+  }
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility scanlines {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.2)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+@layer components {
+  .sound-wave-bar {
+    animation: sound-wave 0s infinite ease-in-out;
+  }
+  .sound-wave-bar:nth-child(1) {
+    animation-duration: 0.4s;
+  }
+  .sound-wave-bar:nth-child(2) {
+    animation-duration: 0.5s;
+  }
+  .sound-wave-bar:nth-child(3) {
+    animation-duration: 0.3s;
+  }
+  .sound-wave-bar:nth-child(4) {
+    animation-duration: 0.45s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sound-wave-bar {
+      animation: none;
+      height: 8px;
+    }
+  }
+}
+
+@keyframes sound-wave {
+  0%,
+  100% {
+    height: 4px;
+  }
+  50% {
+    height: 16px;
+  }
+}

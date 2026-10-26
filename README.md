@@ -5,7 +5,7 @@
 Virtual Console Hub is a next-generation cloud gaming platform concept. It allows users to rent high-end virtual machines or retro console emulators on-demand, enabling gameplay on any device via low-latency streaming.
 
 ![Status](https://img.shields.io/badge/Status-Prototype-blue)
-![Tech](https://img.shields.io/badge/Tech-React_|_Vite_|_Tailwind-0ff0fc)
+![Tech](https://img.shields.io/badge/Tech-Next.js_|_React_|_Tailwind-0ff0fc)
 ![AI](https://img.shields.io/badge/AI-Gemini_2.0-e94560)
 
 ---
@@ -37,42 +37,28 @@ Virtual Console Hub is a next-generation cloud gaming platform concept. It allow
 
 ## 🛠️ Getting Started
 
-Follow these steps to run the application locally.
+The app lives in [`web/`](web/), a Next.js App Router project.
 
 ### Prerequisites
-- **Node.js** (v16 or higher)
-- **npm** or **yarn**
+- **Node.js** 24 (see [`web/.nvmrc`](web/.nvmrc))
+- **npm**
 
-### Installation
+### Run Locally
 
-1. **Clone the repository** (if applicable) or download the source code.
-   ```bash
-   git clone https://github.com/your-username/virtual-console-hub.git
-   cd virtual-console-hub
-   ```
+```bash
+git clone https://github.com/cuesoftinc/consoless.git
+cd consoless/web
+npm ci
+npm run dev
+```
 
-2. **Install Dependencies**
-   ```bash
-   npm install
-   ```
+Open `http://localhost:3000`.
 
-3. **Configure Environment**
-   To use the AI Coaching feature, you need a Google Gemini API Key.
-   
-   Create a `.env` file in the root directory:
-   ```env
-   # .env
-   VITE_API_KEY=your_google_gemini_api_key_here
-   ```
-   *Note: If you don't have a key, the app will fall back to generic coaching messages.*
+### Configure AI Coaching
 
-4. **Run Development Server**
-   ```bash
-   npm run dev
-   ```
+AI coaching and lobby chatter run on the server through the Cuesoft Gemini proxy, so no key reaches the browser. Copy [`web/.env.example`](web/.env.example) to `web/.env.local` and set `GEMINI_PROXY_API_KEY`. Without a key the app falls back to generic coaching messages.
 
-5. **Open in Browser**
-   Navigate to `http://localhost:3000` (or the port shown in your terminal).
+Set `NEXT_PUBLIC_TEST_MODE=1` to answer every AI call from the in-app mocks instead.
 
 ---
 
@@ -112,11 +98,11 @@ Follow these steps to run the application locally.
 
 ## 📂 Project Structure
 
-- **`/components`**: All React UI components (Navbar, ActiveSession, Market, etc.).
-- **`/services`**: External API integrations (Gemini AI service).
-- **`/contexts`**: Global state providers (Toast Notifications).
-- **`constants.ts`**: Mock data for Games, Consoles, and Leaderboards.
-- **`types.ts`**: TypeScript interfaces for type safety.
+- **`web/src/app`**: Routes (`/` landing, `/dashboard/*` app screens) and the AI route handlers under `api/`.
+- **`web/src/components`**: React UI components (Navbar, ActiveSession, Market, etc.).
+- **`web/src/controllers`**: State and orchestration (app state, auth, toasts, AI).
+- **`web/src/models`**: Types and repositories, the only code that talks to the network.
+- **`web/src/mocks`**: Mock data for Games, Consoles, Leaderboards and TEST_MODE AI replies.
 
 ---
 
