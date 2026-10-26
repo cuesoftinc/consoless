@@ -1,0 +1,16 @@
+# Syntax: references/project-manifest.md in the installed engineering skill.
+schemaVersion: 1
+name: consoless
+profile: cuelabs
+
+surfaces:
+  web: active
+  backend: planned
+  mobile:
+    flutter: planned
+
+capabilities: {}
+deployment:
+  web: firebase-app-hosting
+  api: none
+deviations: []
