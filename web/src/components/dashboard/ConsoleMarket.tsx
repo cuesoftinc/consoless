@@ -81,7 +81,7 @@ const ConsoleMarket: React.FC<ConsoleMarketProps> = ({ preSelectedGameId }) => {
     <div className="p-6 md:p-10 h-full overflow-y-auto bg-gaming-900 scrollbar-thin scrollbar-thumb-gaming-neon/20 scrollbar-track-gaming-900 relative">
       <header className="mb-10 flex items-end justify-between border-b border-gaming-700 pb-6">
         <div>
-          <h1 className="text-3xl md:text-4xl font-retro text-white mb-2 tracking-tight drop-shadow-[0_2px_0_rgba(0,0,0,1)]">
+          <h1 className="text-3xl md:text-4xl font-retro text-white mb-2 tracking-tight drop-shadow-[0_2px_0_var(--black)]">
             {targetGame ? (
               <>
                 Play{" "}
@@ -112,7 +112,7 @@ const ConsoleMarket: React.FC<ConsoleMarketProps> = ({ preSelectedGameId }) => {
               aria-pressed={filter === type}
               className={`px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest whitespace-nowrap transition-all border-2 ${
                 filter === type
-                  ? "bg-gaming-accent border-gaming-accent text-white shadow-[0_0_15px_rgba(233,69,96,0.5)]"
+                  ? "bg-gaming-accent border-gaming-accent text-white shadow-[0_0_15px_color-mix(in_oklab,var(--gaming-accent)_50%,transparent)]"
                   : "bg-gaming-800 border-gaming-700 text-gray-400 hover:border-gaming-neon hover:text-white hover:bg-gaming-800"
               }`}
             >
@@ -131,7 +131,7 @@ const ConsoleMarket: React.FC<ConsoleMarketProps> = ({ preSelectedGameId }) => {
             return (
               <div
                 key={item.id}
-                className="bg-gaming-800 rounded-xl overflow-hidden border border-gaming-700 hover:border-gaming-neon hover:shadow-[0_0_25px_rgba(15,240,252,0.15)] transition-all duration-300 group flex flex-col relative"
+                className="bg-gaming-800 rounded-xl overflow-hidden border border-gaming-700 hover:border-gaming-neon hover:shadow-[0_0_25px_color-mix(in_oklab,var(--gaming-neon)_15%,transparent)] transition-all duration-300 group flex flex-col relative"
               >
                 <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-gaming-700 group-hover:border-gaming-neon transition-colors rounded-tl-xl z-10" />
                 <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-gaming-700 group-hover:border-gaming-neon transition-colors rounded-br-xl z-10" />
@@ -230,7 +230,7 @@ const ConsoleMarket: React.FC<ConsoleMarketProps> = ({ preSelectedGameId }) => {
             role="dialog"
             aria-modal="true"
             aria-labelledby="console-library-title"
-            className="bg-gaming-900 border border-gaming-neon w-full max-w-4xl max-h-[80vh] rounded-2xl shadow-[0_0_50px_rgba(15,240,252,0.2)] flex flex-col overflow-hidden"
+            className="bg-gaming-900 border border-gaming-neon w-full max-w-4xl max-h-[80vh] rounded-2xl shadow-[0_0_50px_color-mix(in_oklab,var(--gaming-neon)_20%,transparent)] flex flex-col overflow-hidden"
           >
             <div className="p-6 border-b border-gaming-800 flex justify-between items-center bg-gaming-800/50">
               <div>
@@ -266,7 +266,7 @@ const ConsoleMarket: React.FC<ConsoleMarketProps> = ({ preSelectedGameId }) => {
                       <button
                         key={game.id}
                         onClick={() => handleGameConfirm(game.id)}
-                        className="group relative aspect-[3/4] rounded-xl overflow-hidden bg-gaming-800 border border-gaming-700 hover:border-gaming-accent text-left transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(233,69,96,0.3)]"
+                        className="group relative aspect-[3/4] rounded-xl overflow-hidden bg-gaming-800 border border-gaming-700 hover:border-gaming-accent text-left transition-all hover:scale-105 hover:shadow-[0_0_20px_color-mix(in_oklab,var(--gaming-accent)_30%,transparent)]"
                       >
                         <img
                           src={game.coverUrl}

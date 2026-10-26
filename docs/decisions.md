@@ -20,12 +20,12 @@ decided; a parameter whose surface is `absent` or `planned` may read `n/a`.
 | P-07 | Date idiom per surface class | relative for activity, absolute for bookings | Rentals are time-bound |
 | P-08 | Command palette | none | |
 | P-09 | Data store | n/a | Backend is planned |
-| P-10 | Services and host ports | — | |
+| P-10 | Services and host ports | web 3000; api/common 8080 when built | The standard's defaults |
 | P-11 | Service transport | n/a | Backend is planned |
-| P-12 | KYC tier contents | — | |
-| P-13 | Destructive-confirm token | — | |
-| P-14 | Discord channel | #consoless-lab | Must exist on the CueLABS server before copy ships |
-| P-15 | Lint extensions | none | |
+| P-12 | KYC tier contents | Tier 1: username, email, date of birth (16 or older, enforced at sign-up); tier 2 n/a | No real payments yet; the wallet is mock |
+| P-13 | Destructive-confirm token | The user's username | |
+| P-14 | Discord channel | #consoless-lab | Exists on the CueLABS server |
+| P-15 | Lint extensions | `src/legacy/**` ignored (quarantined code is not linted); `no-restricted-imports` bans `src/legacy` (quarantine), `@mui/*` and `@emotion/*` (styled kits are pruned), `dayjs` and `moment` (date-fns is the standard) and chart libraries such as `recharts` (charts are bespoke SVG from tokens); `eslint-plugin-testing-library` React rules on `src/**/*.test.{ts,tsx}` (test hygiene) | Additions to the Next core-web-vitals and TypeScript base |
 | P-16 | Mobile application ID | n/a | Mobile is planned |
 
 ## Decisions

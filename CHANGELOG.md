@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Server routes for AI coaching and lobby messages through the Cuesoft Gemini proxy.
 - Firebase App Hosting configuration for consoless.cuesoft.io.
 
+### Changed
+
+- Charts drawn in SVG from design tokens; recharts removed.
+- Every colour comes from a design token.
+
 ### Security
 
 - The Gemini key no longer ships in the browser bundle.

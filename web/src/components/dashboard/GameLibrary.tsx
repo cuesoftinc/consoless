@@ -22,35 +22,35 @@ const INITIAL_ACCOUNTS: LinkedAccount[] = [
     provider: "Steam",
     username: "RetroKing_99",
     connected: true,
-    color: "bg-[#171a21]",
+    color: "bg-platform-steam",
   },
   {
     id: "psn",
     provider: "PlayStation Network",
     username: "",
     connected: false,
-    color: "bg-[#003791]",
+    color: "bg-platform-psn",
   },
   {
     id: "retro",
     provider: "Retro Archive (Email)",
     username: "",
     connected: false,
-    color: "bg-[#d35400]",
+    color: "bg-platform-retro",
   },
   {
     id: "epic",
     provider: "Epic Games",
     username: "",
     connected: false,
-    color: "bg-[#313131]",
+    color: "bg-platform-epic",
   },
   {
     id: "ubisoft",
     provider: "Ubisoft",
     username: "",
     connected: false,
-    color: "bg-[#00589d]",
+    color: "bg-platform-ubisoft",
   },
 ];
 
@@ -120,7 +120,7 @@ const GameLibrary: React.FC = () => {
           <Gamepad className="w-8 h-8 text-gaming-retro" />
         </div>
         <div>
-          <h1 className="text-3xl md:text-4xl font-retro text-white mb-1 tracking-tight drop-shadow-[0_2px_0_rgba(0,0,0,1)]">
+          <h1 className="text-3xl md:text-4xl font-retro text-white mb-1 tracking-tight drop-shadow-[0_2px_0_var(--black)]">
             Game Library
           </h1>
           <p className="text-gray-400 font-mono text-sm">
@@ -244,7 +244,7 @@ const GameLibrary: React.FC = () => {
                 aria-pressed={selectedGenre === genre}
                 className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border shrink-0 ${
                   selectedGenre === genre
-                    ? "bg-gaming-accent text-white border-gaming-accent shadow-[0_0_10px_rgba(233,69,96,0.4)]"
+                    ? "bg-gaming-accent text-white border-gaming-accent shadow-[0_0_10px_color-mix(in_oklab,var(--gaming-accent)_40%,transparent)]"
                     : "bg-gaming-800 text-gray-400 border-gaming-700 hover:border-gaming-neon hover:text-white"
                 }`}
               >
@@ -267,7 +267,7 @@ const GameLibrary: React.FC = () => {
                 aria-pressed={selectedEra === era.label}
                 className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border shrink-0 ${
                   selectedEra === era.label
-                    ? "bg-gaming-retro text-white border-gaming-retro shadow-[0_0_10px_rgba(255,142,60,0.4)]"
+                    ? "bg-gaming-retro text-white border-gaming-retro shadow-[0_0_10px_color-mix(in_oklab,var(--gaming-retro)_40%,transparent)]"
                     : "bg-gaming-800 text-gray-400 border-gaming-700 hover:border-gaming-retro hover:text-white"
                 }`}
               >
@@ -283,7 +283,7 @@ const GameLibrary: React.FC = () => {
             className="aspect-[3/4] rounded-xl border-2 border-dashed border-gaming-700 hover:border-gaming-neon hover:bg-gaming-800/50 transition-all group flex flex-col items-center justify-center gap-3 relative overflow-hidden active:scale-95"
           >
             <div className="absolute inset-0 bg-gaming-neon/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-14 h-14 rounded-full bg-gaming-800 group-hover:bg-gaming-neon/20 flex items-center justify-center transition-all duration-300 border border-gaming-700 group-hover:border-gaming-neon group-hover:shadow-[0_0_15px_rgba(15,240,252,0.3)] z-10">
+            <div className="w-14 h-14 rounded-full bg-gaming-800 group-hover:bg-gaming-neon/20 flex items-center justify-center transition-all duration-300 border border-gaming-700 group-hover:border-gaming-neon group-hover:shadow-[0_0_15px_color-mix(in_oklab,var(--gaming-neon)_30%,transparent)] z-10">
               <Plus className="w-6 h-6 text-gray-500 group-hover:text-gaming-neon" />
             </div>
             <span className="text-xs font-bold text-gray-500 group-hover:text-white uppercase tracking-wider z-10">
@@ -294,7 +294,7 @@ const GameLibrary: React.FC = () => {
           {filteredGames.map((game) => (
             <div
               key={game.id}
-              className="group relative aspect-[3/4] rounded-xl overflow-hidden bg-gaming-800 border border-gaming-700 hover:border-gaming-accent/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(233,69,96,0.2)]"
+              className="group relative aspect-[3/4] rounded-xl overflow-hidden bg-gaming-800 border border-gaming-700 hover:border-gaming-accent/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_color-mix(in_oklab,var(--gaming-accent)_20%,transparent)]"
             >
               <img
                 src={game.coverUrl}
@@ -332,7 +332,7 @@ const GameLibrary: React.FC = () => {
                 <button
                   onClick={() => onPlayClick(game.id)}
                   aria-label={`Play ${game.title}`}
-                  className="bg-gaming-accent text-white px-6 py-2 rounded-lg font-bold text-sm flex items-center gap-2 hover:bg-red-600 hover:scale-105 transition-all duration-200 shadow-[0_0_15px_rgba(233,69,96,0.6)] uppercase tracking-wide active:scale-95"
+                  className="bg-gaming-accent text-white px-6 py-2 rounded-lg font-bold text-sm flex items-center gap-2 hover:bg-red-600 hover:scale-105 transition-all duration-200 shadow-[0_0_15px_color-mix(in_oklab,var(--gaming-accent)_60%,transparent)] uppercase tracking-wide active:scale-95"
                 >
                   <Play className="w-4 h-4 fill-current" /> Play
                 </button>

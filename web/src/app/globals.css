@@ -9,7 +9,24 @@
   --color-gaming-accent: var(--gaming-accent);
   --color-gaming-neon: var(--gaming-neon);
   --color-gaming-retro: var(--gaming-retro);
+  --color-black: var(--black);
+  --color-white: var(--white);
   --color-stream-canvas: var(--stream-canvas);
+  --color-stream-trail: var(--stream-trail);
+  --color-chart-axis: var(--chart-axis);
+  --color-chart-border: var(--chart-border);
+  --color-chart-cursor: var(--chart-cursor);
+  --color-glow-silver: var(--glow-silver);
+  --color-glow-gold: var(--glow-gold);
+  --color-glow-bronze: var(--glow-bronze);
+  --color-glow-green: var(--glow-green);
+  --color-glow-purple: var(--glow-purple);
+  --color-glow-amber: var(--glow-amber);
+  --color-platform-steam: var(--platform-steam);
+  --color-platform-psn: var(--platform-psn);
+  --color-platform-retro: var(--platform-retro);
+  --color-platform-epic: var(--platform-epic);
+  --color-platform-ubisoft: var(--platform-ubisoft);
 
   --font-sans: var(--font-inter), sans-serif;
   --font-retro: var(--font-press-start-2p), cursive;
@@ -20,6 +37,16 @@
   --animate-slide-in: slide-in 0.3s ease-out forwards;
   --animate-fade-out: fade-out 0.3s ease-in forwards;
   --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;
+  --animate-chart-reveal: chart-reveal 1.5s ease;
+
+  @keyframes chart-reveal {
+    0% {
+      clip-path: inset(0 100% 0 0);
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+    }
+  }
 
   @keyframes slide-in {
     0% {
@@ -112,10 +139,10 @@
 @utility scanlines {
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0) 50%,
-    rgba(0, 0, 0, 0.2) 50%,
-    rgba(0, 0, 0, 0.2)
+    color-mix(in oklab, var(--white) 0%, transparent),
+    color-mix(in oklab, var(--white) 0%, transparent) 50%,
+    color-mix(in oklab, var(--black) 20%, transparent) 50%,
+    color-mix(in oklab, var(--black) 20%, transparent)
   );
   background-size: 100% 4px;
   pointer-events: none;

@@ -133,7 +133,7 @@ const WalletView: React.FC = () => {
   return (
     <div className="p-6 md:p-10 h-full overflow-y-auto bg-gaming-900 scrollbar-thin scrollbar-thumb-gaming-neon/20 scrollbar-track-gaming-900">
       <header className="mb-10 border-b border-gaming-700 pb-6">
-        <h1 className="text-3xl md:text-4xl font-retro text-white mb-2 tracking-tight drop-shadow-[0_2px_0_rgba(0,0,0,1)]">
+        <h1 className="text-3xl md:text-4xl font-retro text-white mb-2 tracking-tight drop-shadow-[0_2px_0_var(--black)]">
           Virtual <span className="text-gaming-neon">Wallet</span>
         </h1>
         <p className="text-gray-400 font-mono text-sm flex items-center gap-2">
@@ -146,14 +146,14 @@ const WalletView: React.FC = () => {
         {/* Left Column: Balance & Top Up */}
         <div className="lg:col-span-2 space-y-6">
           {/* Balance Card */}
-          <div className="bg-gaming-800 rounded-2xl p-8 border border-gaming-neon/20 shadow-[0_0_30px_rgba(15,240,252,0.05)] relative overflow-hidden">
+          <div className="bg-gaming-800 rounded-2xl p-8 border border-gaming-neon/20 shadow-[0_0_30px_color-mix(in_oklab,var(--gaming-neon)_5%,transparent)] relative overflow-hidden">
             <div className="absolute -right-20 -top-20 w-64 h-64 bg-gaming-neon/5 rounded-full blur-3xl"></div>
             <div className="relative z-10">
               <p className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-2">
                 Total Balance
               </p>
               <div className="flex items-baseline gap-2">
-                <span className="text-5xl md:text-7xl font-mono font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                <span className="text-5xl md:text-7xl font-mono font-bold text-white drop-shadow-[0_0_10px_color-mix(in_oklab,var(--white)_30%,transparent)]">
                   ${balance.toFixed(2)}
                 </span>
                 <span className="text-gaming-neon font-bold">USD</span>
@@ -299,7 +299,7 @@ const WalletView: React.FC = () => {
                           key={val}
                           onClick={() => setAmount(val.toString())}
                           aria-pressed={amount === val.toString()}
-                          className={`flex-1 py-3 rounded-xl border font-bold transition-all ${amount === val.toString() ? "bg-gaming-accent text-white border-gaming-accent shadow-[0_0_15px_rgba(233,69,96,0.4)]" : "bg-gaming-900 border-gaming-700 text-gray-400 hover:border-white hover:text-white"}`}
+                          className={`flex-1 py-3 rounded-xl border font-bold transition-all ${amount === val.toString() ? "bg-gaming-accent text-white border-gaming-accent shadow-[0_0_15px_color-mix(in_oklab,var(--gaming-accent)_40%,transparent)]" : "bg-gaming-900 border-gaming-700 text-gray-400 hover:border-white hover:text-white"}`}
                         >
                           ${val}
                         </button>

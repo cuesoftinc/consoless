@@ -27,13 +27,13 @@ const Navbar: React.FC = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="w-20 md:w-64 shrink-0 bg-gaming-900 border-r border-gaming-700 flex flex-col justify-between h-full transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] z-50">
+    <nav className="w-20 md:w-64 shrink-0 bg-gaming-900 border-r border-gaming-700 flex flex-col justify-between h-full transition-all duration-300 shadow-[0_0_20px_color-mix(in_oklab,var(--black)_50%,transparent)] z-50">
       <div>
         <div className="p-6 flex items-center gap-3">
-          <div className="w-10 h-10 bg-gaming-accent rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(233,69,96,0.5)] border border-gaming-accent/50">
+          <div className="w-10 h-10 bg-gaming-accent rounded-xl flex items-center justify-center shadow-[0_0_15px_color-mix(in_oklab,var(--gaming-accent)_50%,transparent)] border border-gaming-accent/50">
             <Gamepad2 className="text-white w-6 h-6" />
           </div>
-          <span className="hidden md:block font-retro text-sm tracking-tighter text-gaming-neon drop-shadow-[0_0_5px_rgba(15,240,252,0.5)]">
+          <span className="hidden md:block font-retro text-sm tracking-tighter text-gaming-neon drop-shadow-[0_0_5px_color-mix(in_oklab,var(--gaming-neon)_50%,transparent)]">
             V-CONSOLE
           </span>
         </div>
@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
                 aria-current={active ? "page" : undefined}
                 className={`relative w-full flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-200 group overflow-hidden ${
                   active
-                    ? "bg-gaming-800 text-white shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] border-l-4 border-gaming-neon"
+                    ? "bg-gaming-800 text-white shadow-[inset_0_0_10px_color-mix(in_oklab,var(--black)_50%,transparent)] border-l-4 border-gaming-neon"
                     : "text-gray-400 hover:bg-gaming-800/50 hover:text-white border-l-4 border-transparent"
                 }`}
               >
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
                 <item.icon
                   className={`w-6 h-6 z-10 transition-colors ${
                     active
-                      ? "text-gaming-neon drop-shadow-[0_0_8px_rgba(15,240,252,0.8)]"
+                      ? "text-gaming-neon drop-shadow-[0_0_8px_color-mix(in_oklab,var(--gaming-neon)_80%,transparent)]"
                       : "group-hover:text-gray-200"
                   }`}
                 />

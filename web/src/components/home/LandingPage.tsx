@@ -165,7 +165,7 @@ const LandingPage: React.FC = () => {
       <div aria-hidden="true" className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-gaming-accent/20 rounded-full blur-[120px] animate-pulse-fast" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-gaming-neon/10 rounded-full blur-[100px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(color-mix(in_oklab,var(--white)_3%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_oklab,var(--white)_3%,transparent)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)]" />
       </div>
 
       {/* Navbar */}
@@ -174,7 +174,7 @@ const LandingPage: React.FC = () => {
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gaming-accent rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(233,69,96,0.5)]">
+            <div className="w-10 h-10 bg-gaming-accent rounded-xl flex items-center justify-center shadow-[0_0_20px_color-mix(in_oklab,var(--gaming-accent)_50%,transparent)]">
               <Gamepad2 className="text-white w-6 h-6" />
             </div>
             <span className="font-retro text-lg tracking-tighter text-white">
@@ -197,7 +197,7 @@ const LandingPage: React.FC = () => {
                 setAuthMode("SIGNUP");
                 setAuthModalOpen(true);
               }}
-              className="bg-white text-gaming-900 px-6 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-gaming-neon hover:shadow-[0_0_20px_rgba(15,240,252,0.5)] transition-all transform hover:-translate-y-0.5"
+              className="bg-white text-gaming-900 px-6 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-gaming-neon hover:shadow-[0_0_20px_color-mix(in_oklab,var(--gaming-neon)_50%,transparent)] transition-all transform hover:-translate-y-0.5"
             >
               Get Started
             </button>
@@ -248,7 +248,7 @@ const LandingPage: React.FC = () => {
                     setAuthMode("SIGNUP");
                     setAuthModalOpen(true);
                   }}
-                  className="bg-gaming-accent text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-red-600 transition-all shadow-[0_0_30px_rgba(233,69,96,0.4)] flex items-center justify-center gap-2 group"
+                  className="bg-gaming-accent text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-red-600 transition-all shadow-[0_0_30px_color-mix(in_oklab,var(--gaming-accent)_40%,transparent)] flex items-center justify-center gap-2 group"
                 >
                   Start Free Trial{" "}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -315,7 +315,7 @@ const LandingPage: React.FC = () => {
             aria-label="Scroll to Features"
             className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer group z-20 opacity-70 hover:opacity-100 transition-opacity"
           >
-            <div className="w-6 h-10 border-2 border-gray-500 rounded-full flex justify-center p-1 group-hover:border-gaming-neon transition-colors shadow-[0_0_10px_rgba(0,0,0,0.5)] bg-black/20 backdrop-blur-sm">
+            <div className="w-6 h-10 border-2 border-gray-500 rounded-full flex justify-center p-1 group-hover:border-gaming-neon transition-colors shadow-[0_0_10px_color-mix(in_oklab,var(--black)_50%,transparent)] bg-black/20 backdrop-blur-sm">
               <div className="w-1 h-2 bg-gray-500 rounded-full animate-bounce group-hover:bg-gaming-neon transition-colors" />
             </div>
             <ChevronDown className="w-4 h-4 text-gray-500 group-hover:text-gaming-neon transition-colors animate-pulse" />
@@ -439,7 +439,7 @@ const LandingPage: React.FC = () => {
               ].map((feature, idx) => (
                 <div
                   key={idx}
-                  className="bg-gaming-900 p-8 rounded-2xl border border-gaming-800 hover:border-gaming-neon/50 hover:shadow-[0_0_30px_rgba(15,240,252,0.1)] transition-all group"
+                  className="bg-gaming-900 p-8 rounded-2xl border border-gaming-800 hover:border-gaming-neon/50 hover:shadow-[0_0_30px_color-mix(in_oklab,var(--gaming-neon)_10%,transparent)] transition-all group"
                 >
                   <div
                     className={`w-14 h-14 bg-gaming-800 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${feature.color}`}
@@ -473,7 +473,7 @@ const LandingPage: React.FC = () => {
                   setAuthMode("SIGNUP");
                   setAuthModalOpen(true);
                 }}
-                className="bg-white text-gaming-900 px-10 py-4 rounded-xl font-bold text-lg uppercase tracking-wider hover:bg-gaming-neon transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] transform hover:-translate-y-1"
+                className="bg-white text-gaming-900 px-10 py-4 rounded-xl font-bold text-lg uppercase tracking-wider hover:bg-gaming-neon transition-all shadow-[0_0_40px_color-mix(in_oklab,var(--white)_20%,transparent)] transform hover:-translate-y-1"
               >
                 Create Free Account
               </button>
@@ -610,7 +610,7 @@ const LandingPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-gaming-accent hover:bg-red-600 text-white font-bold py-3.5 rounded-lg uppercase tracking-wider text-sm shadow-[0_0_20px_rgba(233,69,96,0.4)] hover:shadow-[0_0_30px_rgba(233,69,96,0.6)] transition-all mt-6 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gaming-accent hover:bg-red-600 text-white font-bold py-3.5 rounded-lg uppercase tracking-wider text-sm shadow-[0_0_20px_color-mix(in_oklab,var(--gaming-accent)_40%,transparent)] hover:shadow-[0_0_30px_color-mix(in_oklab,var(--gaming-accent)_60%,transparent)] transition-all mt-6 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <span className="animate-pulse">Processing...</span>

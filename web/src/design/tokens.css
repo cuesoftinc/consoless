@@ -13,5 +13,27 @@
   --gaming-neon: #0ff0fc;
   --gaming-retro: #ff8e3c;
 
+  --black: #000000;
+  --white: #ffffff;
+
   --stream-canvas: #16161d;
+  --stream-trail: #101018;
+
+  --chart-axis: #4a5568;
+  --chart-border: #2d3748;
+  --chart-cursor: #cccccc;
+
+  /* Glows sit beside Tailwind palette classes; values are the v3 palette the prototype used. */
+  --glow-silver: #9ca3af;
+  --glow-gold: #eab308;
+  --glow-bronze: #c2410c;
+  --glow-green: #22c55e;
+  --glow-purple: #a855f7;
+  --glow-amber: #fbbf24;
+
+  --platform-steam: #171a21;
+  --platform-psn: #003791;
+  --platform-retro: #d35400;
+  --platform-epic: #313131;
+  --platform-ubisoft: #00589d;
 }

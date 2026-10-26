@@ -14,14 +14,7 @@ import {
   Target,
   X,
 } from "lucide-react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { AreaChart } from "@/components/ui/charts/AreaChart";
 import { useToast } from "@/controllers/toast";
 
 const MOCK_ACTIVITY_DATA = [
@@ -33,6 +26,11 @@ const MOCK_ACTIVITY_DATA = [
   { day: "Sat", hours: 6.5, xp: 4500 },
   { day: "Sun", hours: 5.0, xp: 3800 },
 ];
+
+const ACTIVITY_SERIES = [
+  { key: "hours", name: "Hours Played", color: "var(--gaming-neon)" },
+  { key: "xp", name: "XP Gained", color: "var(--gaming-accent)" },
+] as const;
 
 const AVATAR_OPTIONS = [
   "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80",
@@ -68,7 +66,7 @@ const DashboardHub: React.FC = () => {
     <div className="p-6 md:p-10 h-full overflow-y-auto bg-gaming-900 scrollbar-thin scrollbar-thumb-gaming-accent/50 scrollbar-track-gaming-900">
       <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-retro text-white mb-2 tracking-tight drop-shadow-[0_2px_0_rgba(0,0,0,1)]">
+          <h1 className="text-3xl md:text-4xl font-retro text-white mb-2 tracking-tight drop-shadow-[0_2px_0_var(--black)]">
             Command <span className="text-gaming-neon">Center</span>
           </h1>
           <p className="text-gray-400 font-mono text-sm">
@@ -108,7 +106,7 @@ const DashboardHub: React.FC = () => {
                   className="relative mb-4 group/avatar cursor-pointer"
                   onClick={() => setIsEditModalOpen(true)}
                 >
-                  <div className="w-24 h-24 rounded-full border-4 border-gaming-800 overflow-hidden shadow-[0_0_20px_rgba(233,69,96,0.5)] group-hover/avatar:shadow-[0_0_30px_rgba(15,240,252,0.6)] transition-all">
+                  <div className="w-24 h-24 rounded-full border-4 border-gaming-800 overflow-hidden shadow-[0_0_20px_color-mix(in_oklab,var(--gaming-accent)_50%,transparent)] group-hover/avatar:shadow-[0_0_30px_color-mix(in_oklab,var(--gaming-neon)_60%,transparent)] transition-all">
                     <img
                       src={avatar}
                       alt="Avatar"
@@ -132,7 +130,7 @@ const DashboardHub: React.FC = () => {
                     <span>XP: 8,450 / 10,000</span>
                   </div>
                   <div className="w-full h-2 bg-gaming-900 rounded-full overflow-hidden border border-gaming-700">
-                    <div className="h-full bg-gradient-to-r from-gaming-accent to-purple-500 w-[84%] shadow-[0_0_10px_rgba(233,69,96,0.5)]"></div>
+                    <div className="h-full bg-gradient-to-r from-gaming-accent to-purple-500 w-[84%] shadow-[0_0_10px_color-mix(in_oklab,var(--gaming-accent)_50%,transparent)]"></div>
                   </div>
                 </div>
                 <button
@@ -220,52 +218,12 @@ const DashboardHub: React.FC = () => {
               </h2>
             </div>
             <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={MOCK_ACTIVITY_DATA}>
-                  <defs>
-                    <linearGradient id="colorXp" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#e94560" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#e94560" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#0ff0fc" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#0ff0fc" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <XAxis
-                    dataKey="day"
-                    stroke="#4a5568"
-                    tick={{ fontSize: 12 }}
-                  />
-                  <YAxis stroke="#4a5568" tick={{ fontSize: 12 }} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#1a1a2e",
-                      borderColor: "#2d3748",
-                      borderRadius: "8px",
-                    }}
-                    itemStyle={{ fontSize: "12px", fontWeight: "bold" }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="hours"
-                    name="Hours Played"
-                    stroke="#0ff0fc"
-                    fillOpacity={1}
-                    fill="url(#colorHours)"
-                    strokeWidth={3}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="xp"
-                    name="XP Gained"
-                    stroke="#e94560"
-                    fillOpacity={1}
-                    fill="url(#colorXp)"
-                    strokeWidth={3}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+              <AreaChart
+                data={MOCK_ACTIVITY_DATA}
+                xKey="day"
+                series={ACTIVITY_SERIES}
+                label="Hours played and XP gained per day this week"
+              />
             </div>
           </section>
 
@@ -302,7 +260,7 @@ const DashboardHub: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-labelledby="persona-dialog-title"
-            className="bg-gaming-900 border border-gaming-neon rounded-2xl w-full max-w-md overflow-hidden shadow-[0_0_50px_rgba(15,240,252,0.2)] animate-fade-in-up"
+            className="bg-gaming-900 border border-gaming-neon rounded-2xl w-full max-w-md overflow-hidden shadow-[0_0_50px_color-mix(in_oklab,var(--gaming-neon)_20%,transparent)] animate-fade-in-up"
           >
             <div className="p-5 border-b border-gaming-800 flex justify-between items-center bg-gaming-800/50">
               <h2
@@ -337,7 +295,7 @@ const DashboardHub: React.FC = () => {
                       key={idx}
                       onClick={() => setAvatar(src)}
                       aria-pressed={avatar === src}
-                      className={`relative rounded-lg overflow-hidden aspect-square border-2 transition-all ${avatar === src ? "border-gaming-neon shadow-[0_0_15px_rgba(15,240,252,0.5)] scale-105" : "border-transparent opacity-60 hover:opacity-100 hover:border-gray-500"}`}
+                      className={`relative rounded-lg overflow-hidden aspect-square border-2 transition-all ${avatar === src ? "border-gaming-neon shadow-[0_0_15px_color-mix(in_oklab,var(--gaming-neon)_50%,transparent)] scale-105" : "border-transparent opacity-60 hover:opacity-100 hover:border-gray-500"}`}
                     >
                       <img
                         src={src}
