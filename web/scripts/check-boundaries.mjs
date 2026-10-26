@@ -12,7 +12,8 @@
  *                         replacements even while the tree is empty)
  *   - forbiddenImports    package prefixes banned repo-wide (pruned kits)
  *   - rawHex              no raw hex outside the token layer; documented
- *                         exceptions only (design.md §7 per repo)
+ *                         exceptions only (design.md §7 per repo); opt-in
+ *                         colorFunctions also bans rgb()/rgba()/hsl()/hsla()
  *   - fetchOnlyIn         fetch() confined to the repositories client (MVC —
  *                         views/controllers never fetch)
  *   - viewBoundaries      views never fetch or import repositories/gRPC;
@@ -48,15 +49,14 @@ const REPO_RULES = {
       prefixes: [],
     }),
     rawHex({
-      // Token rule scope: ui primitives + view markup/styles.
+      // Token rule scope: every component and app file; only
+      // src/design/tokens.css holds raw colours.
       scope: (path) =>
-        path.startsWith("src/components/ui/") ||
-        (path.startsWith("src/app/") &&
-          !path.startsWith("src/app/api/") &&
-          /\.(tsx|css)$/.test(path)),
+        path.startsWith("src/components/") || path.startsWith("src/app/"),
       allowLinePatterns: [],
-      commentedException: "any",
+      commentedException: "none",
       allowFileSuffixes: [],
+      colorFunctions: true,
     }),
   ],
   expendit: [
@@ -174,12 +174,14 @@ function forbiddenImports(packages, why) {
 
 /** No raw hex outside the token layer; exception classes are configured
  *  per repo (documented-comment carve-outs, data-value line patterns,
- *  file-level brand-glyph allowances). */
+ *  file-level brand-glyph allowances). `colorFunctions` extends the ban to
+ *  rgb()/hsl() literals; `commentedException: "none"` allows no carve-out. */
 function rawHex({
   scope,
   allowLinePatterns,
   commentedException,
   allowFileSuffixes,
+  colorFunctions = false,
 }) {
   return {
     check({ path, lines }, fail) {
@@ -187,18 +189,31 @@ function rawHex({
       if (allowFileSuffixes.some((suffix) => path.endsWith(suffix))) return;
       lines.forEach((line, i) => {
         if (isPureComment(line)) return;
-        const hexes = line.match(/#[0-9a-fA-F]{3,8}\b/g);
-        if (!hexes) return;
+        const hexes = line.match(/#[0-9a-fA-F]{3,8}\b/g) ?? [];
+        const functions = colorFunctions
+          ? (line.match(/\b(?:rgba?|hsla?)\(/g) ?? [])
+          : [];
+        if (hexes.length === 0 && functions.length === 0) return;
         if (allowLinePatterns.some((pattern) => pattern.test(line))) return;
         const documented = isDocumented(line, lines[i - 1] ?? "");
-        const allWhite = hexes.every(
-          (hex) =>
-            hex.toUpperCase() === "#FFFFFF" || hex.toLowerCase() === "#fff",
-        );
+        const allWhite =
+          functions.length === 0 &&
+          hexes.every(
+            (hex) =>
+              hex.toUpperCase() === "#FFFFFF" || hex.toLowerCase() === "#fff",
+          );
         const excepted =
-          commentedException === "any" ? documented : documented && allWhite;
+          commentedException === "any"
+            ? documented
+            : commentedException === "white-only" && documented && allWhite;
         if (!excepted) {
-          fail(i + 1, "raw-hex", "raw hex without a documenting comment");
+          fail(
+            i + 1,
+            "raw-hex",
+            functions.length > 0
+              ? "raw colour function outside the token layer"
+              : "raw hex without a documenting comment",
+          );
         }
       });
     },

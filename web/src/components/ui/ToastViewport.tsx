@@ -41,7 +41,7 @@ const ToastViewport: React.FC = () => {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`pointer-events-auto w-80 flex items-start gap-3 p-4 rounded-xl border shadow-[0_0_15px_rgba(0,0,0,0.3)] backdrop-blur-md animate-slide-in ${getBorderColor(toast.type)}`}
+          className={`pointer-events-auto w-80 flex items-start gap-3 p-4 rounded-xl border shadow-[0_0_15px_color-mix(in_oklab,var(--black)_30%,transparent)] backdrop-blur-md animate-slide-in ${getBorderColor(toast.type)}`}
         >
           <div className="mt-0.5">{getIcon(toast.type)}</div>
           <p className="flex-1 text-sm font-bold text-white leading-tight">

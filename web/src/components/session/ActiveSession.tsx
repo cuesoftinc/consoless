@@ -39,14 +39,7 @@ import {
   ChevronDown,
   CloudUpload,
 } from "lucide-react";
-import {
-  LineChart,
-  Line,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { LineChart } from "@/components/ui/charts/LineChart";
 import { useToast } from "@/controllers/toast";
 
 interface ActiveSessionProps {
@@ -146,7 +139,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
     y: 300,
     vx: 0,
     vy: 0,
-    color: "#0ff0fc",
+    color: "",
   });
   const particlesRef = useRef<Particle[]>([]);
 
@@ -236,6 +229,12 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
     canvas.width = 1920;
     canvas.height = 1080;
 
+    const tokens = getComputedStyle(canvas);
+    const neon = tokens.getPropertyValue("--gaming-neon").trim();
+    const accent = tokens.getPropertyValue("--gaming-accent").trim();
+    const trail = tokens.getPropertyValue("--stream-trail").trim();
+    playerRef.current.color = neon;
+
     const update = () => {
       const player = playerRef.current;
 
@@ -281,18 +280,20 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
           vx: (Math.random() - 0.5) * 5,
           vy: (Math.random() - 0.5) * 5,
           life: 1.0,
-          color: Math.random() > 0.5 ? "#e94560" : "#0ff0fc",
+          color: Math.random() > 0.5 ? accent : neon,
         });
       }
     };
 
     const draw = () => {
       // Clear Screen with Fade Effect for Trails
-      ctx.fillStyle = "rgba(16, 16, 24, 0.3)";
+      ctx.fillStyle = trail;
+      ctx.globalAlpha = 0.3;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1.0;
 
       // Draw Retro Grid
-      ctx.strokeStyle = "rgba(15, 240, 252, 0.1)";
+      ctx.strokeStyle = neon;
       ctx.lineWidth = 2;
       const gridSize = 100;
       // Offset grid by player position to simulate camera movement
@@ -308,7 +309,9 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
         ctx.moveTo(0, y);
         ctx.lineTo(canvas.width, y);
       }
+      ctx.globalAlpha = 0.1;
       ctx.stroke();
+      ctx.globalAlpha = 1.0;
 
       // Update & Draw Particles
       for (let i = particlesRef.current.length - 1; i >= 0; i--) {
@@ -903,7 +906,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
 
           {/* AI Coach Overlay */}
           {aiOpen && (
-            <div className="absolute top-20 left-4 w-80 bg-black/80 backdrop-blur-xl border border-gaming-neon/50 rounded-xl p-4 z-30 shadow-[0_0_30px_rgba(15,240,252,0.1)]">
+            <div className="absolute top-20 left-4 w-80 bg-black/80 backdrop-blur-xl border border-gaming-neon/50 rounded-xl p-4 z-30 shadow-[0_0_30px_color-mix(in_oklab,var(--gaming-neon)_10%,transparent)]">
               <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-2 text-gaming-neon">
                   <Bot className="w-5 h-5" />
@@ -953,7 +956,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
 
           {/* Controller Connection Modal */}
           {showInputMenu && (
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-gaming-900/95 backdrop-blur-xl border border-gaming-neon rounded-2xl p-6 z-50 shadow-[0_0_50px_rgba(15,240,252,0.2)] animate-fade-in-up">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-gaming-900/95 backdrop-blur-xl border border-gaming-neon rounded-2xl p-6 z-50 shadow-[0_0_50px_color-mix(in_oklab,var(--gaming-neon)_20%,transparent)] animate-fade-in-up">
               <div className="flex justify-between items-center mb-6 border-b border-gaming-800 pb-4">
                 <div>
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -988,7 +991,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
                     </div>
                   </div>
                   {inputMethod === "KEYBOARD" && (
-                    <div className="w-2 h-2 bg-gaming-accent rounded-full shadow-[0_0_5px_rgba(233,69,96,1)]" />
+                    <div className="w-2 h-2 bg-gaming-accent rounded-full shadow-[0_0_5px_var(--gaming-accent)]" />
                   )}
                 </button>
 
@@ -1008,7 +1011,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
                     </div>
                   </div>
                   {inputMethod === "VIRTUAL_TOUCH" && (
-                    <div className="w-2 h-2 bg-gaming-neon rounded-full shadow-[0_0_5px_rgba(15,240,252,1)]" />
+                    <div className="w-2 h-2 bg-gaming-neon rounded-full shadow-[0_0_5px_var(--gaming-neon)]" />
                   )}
                 </button>
 
@@ -1032,7 +1035,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
                     </div>
                   </div>
                   {inputMethod === "PHYSICAL" && (
-                    <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_5px_rgba(34,197,94,1)]" />
+                    <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_5px_var(--glow-green)]" />
                   )}
                 </button>
               </div>
@@ -1081,7 +1084,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
 
           {/* Peers Modal */}
           {peersModalOpen && (
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-gaming-900/95 backdrop-blur-xl border border-gaming-neon rounded-2xl p-6 z-50 shadow-[0_0_50px_rgba(15,240,252,0.2)]">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-gaming-900/95 backdrop-blur-xl border border-gaming-neon rounded-2xl p-6 z-50 shadow-[0_0_50px_color-mix(in_oklab,var(--gaming-neon)_20%,transparent)]">
               <div className="flex justify-between items-center mb-6 border-b border-gaming-800 pb-4">
                 <div>
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -1169,7 +1172,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
         <div className="absolute bottom-6 bg-gaming-900/90 backdrop-blur-sm border border-white/10 rounded-full px-6 py-3 flex items-center gap-6 shadow-2xl z-40">
           <button
             onClick={() => setChatOpen(!chatOpen)}
-            className={`p-2 rounded-full hover:bg-white/10 transition relative ${chatOpen ? "text-gaming-accent bg-white/10 shadow-[0_0_10px_rgba(233,69,96,0.5)]" : "text-white"}`}
+            className={`p-2 rounded-full hover:bg-white/10 transition relative ${chatOpen ? "text-gaming-accent bg-white/10 shadow-[0_0_10px_color-mix(in_oklab,var(--gaming-accent)_50%,transparent)]" : "text-white"}`}
             title="Toggle Chat"
           >
             <MessageSquare className="w-5 h-5" />
@@ -1201,7 +1204,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
 
           <button
             onClick={askAI}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full transition border border-gaming-neon/50 ${aiOpen ? "bg-gaming-neon/20 shadow-[0_0_15px_rgba(15,240,252,0.3)]" : "hover:bg-gaming-neon/10"}`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full transition border border-gaming-neon/50 ${aiOpen ? "bg-gaming-neon/20 shadow-[0_0_15px_color-mix(in_oklab,var(--gaming-neon)_30%,transparent)]" : "hover:bg-gaming-neon/10"}`}
           >
             <Bot className="w-5 h-5 text-gaming-neon" />
             <span className="text-xs font-bold text-gaming-neon uppercase">
@@ -1213,7 +1216,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
 
           <button
             onClick={() => setPeersModalOpen(!peersModalOpen)}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition border ${peersModalOpen || connectedPeers.length > 0 ? "bg-purple-500/20 text-purple-400 border-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.3)]" : "text-gray-400 hover:bg-white/5 border-transparent hover:text-white"}`}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition border ${peersModalOpen || connectedPeers.length > 0 ? "bg-purple-500/20 text-purple-400 border-purple-500/50 shadow-[0_0_10px_color-mix(in_oklab,var(--glow-purple)_30%,transparent)]" : "text-gray-400 hover:bg-white/5 border-transparent hover:text-white"}`}
           >
             <Network className="w-4 h-4" />
             {connectedPeers.length > 0
@@ -1230,7 +1233,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
                 disabled={saveStatus !== "idle"}
                 className={`group relative flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 border ${
                   saveStatus === "saved"
-                    ? "bg-green-500/20 text-green-400 border-green-500/50 scale-105 shadow-[0_0_15px_rgba(34,197,94,0.4)]"
+                    ? "bg-green-500/20 text-green-400 border-green-500/50 scale-105 shadow-[0_0_15px_color-mix(in_oklab,var(--glow-green)_40%,transparent)]"
                     : saveStatus === "saving"
                       ? "bg-gaming-accent/20 text-gaming-accent border-gaming-accent/50 cursor-wait"
                       : "text-gray-400 hover:bg-white/5 border-transparent hover:text-white"
@@ -1264,7 +1267,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
 
               <button
                 onClick={() => setIsCRT(!isCRT)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition border ${isCRT ? "bg-amber-500/20 text-amber-400 border-amber-500/50 shadow-[0_0_10px_rgba(251,191,36,0.2)]" : "text-gray-400 hover:bg-white/5 border-transparent hover:text-white"}`}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition border ${isCRT ? "bg-amber-500/20 text-amber-400 border-amber-500/50 shadow-[0_0_10px_color-mix(in_oklab,var(--glow-amber)_20%,transparent)]" : "text-gray-400 hover:bg-white/5 border-transparent hover:text-white"}`}
               >
                 <Settings className="w-4 h-4" /> CRT Mode
               </button>
@@ -1273,7 +1276,7 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
 
           <button
             onClick={() => setShowInputMenu(!showInputMenu)}
-            className={`p-2 rounded-full hover:bg-white/10 transition ${showInputMenu || inputMethod !== "KEYBOARD" ? "text-gaming-neon bg-white/10 shadow-[0_0_10px_rgba(15,240,252,0.3)]" : "text-gray-500"}`}
+            className={`p-2 rounded-full hover:bg-white/10 transition ${showInputMenu || inputMethod !== "KEYBOARD" ? "text-gaming-neon bg-white/10 shadow-[0_0_10px_color-mix(in_oklab,var(--gaming-neon)_30%,transparent)]" : "text-gray-500"}`}
             title="Controller Settings"
           >
             <Plug className="w-5 h-5" />
@@ -1464,30 +1467,12 @@ const ActiveSession: React.FC<ActiveSessionProps> = ({
                 <Cpu className="w-3 h-3" /> Frame Timing (ms)
               </p>
               <div className="h-48 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={stats}>
-                    <XAxis dataKey="time" hide />
-                    <YAxis domain={["auto", "auto"]} hide />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#1a1a2e",
-                        border: "1px solid #2d3748",
-                        borderRadius: "8px",
-                      }}
-                      itemStyle={{ color: "#0ff0fc", fontFamily: "monospace" }}
-                      labelStyle={{ display: "none" }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="fps"
-                      stroke="#0ff0fc"
-                      strokeWidth={2}
-                      dot={false}
-                      activeDot={{ r: 4, fill: "#fff" }}
-                      animationDuration={300}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <LineChart
+                  data={stats}
+                  valueKey="fps"
+                  color="var(--gaming-neon)"
+                  label="Frames per second over the last 30 seconds"
+                />
               </div>
             </div>
 

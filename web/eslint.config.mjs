@@ -34,6 +34,23 @@ const eslintConfig = defineConfig([
               group: ["dayjs", "moment"],
               message: "Use date-fns, the standard date library.",
             },
+            {
+              group: [
+                "recharts",
+                "recharts/*",
+                "chart.js",
+                "chart.js/*",
+                "react-chartjs-2",
+                "@nivo/*",
+                "victory",
+                "echarts",
+                "echarts-for-react",
+                "apexcharts",
+                "react-apexcharts",
+              ],
+              message:
+                "Charts are bespoke SVG from the token layer (web-implementation.md); use src/components/ui/charts.",
+            },
           ],
         },
       ],

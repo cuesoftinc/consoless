@@ -39,7 +39,7 @@ const TournamentHub: React.FC = () => {
             <div className="p-2 bg-yellow-500/10 rounded-lg border border-yellow-500/30">
               <Trophy className="w-8 h-8 text-yellow-400" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-retro text-white tracking-tight drop-shadow-[0_2px_0_rgba(0,0,0,1)]">
+            <h1 className="text-3xl md:text-4xl font-retro text-white tracking-tight drop-shadow-[0_2px_0_var(--black)]">
               Tourna<span className="text-gaming-neon">ments</span>
             </h1>
           </div>
@@ -52,7 +52,7 @@ const TournamentHub: React.FC = () => {
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-gaming-accent hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-[0_0_20px_rgba(233,69,96,0.4)] hover:shadow-[0_0_30px_rgba(233,69,96,0.6)] transition-all active:scale-95"
+          className="bg-gaming-accent hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-[0_0_20px_color-mix(in_oklab,var(--gaming-accent)_40%,transparent)] hover:shadow-[0_0_30px_color-mix(in_oklab,var(--gaming-accent)_60%,transparent)] transition-all active:scale-95"
         >
           <Plus className="w-5 h-5" /> Host Tag Team Event
         </button>
@@ -163,7 +163,7 @@ const TournamentHub: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-labelledby="host-event-title"
-            className="bg-gaming-900 border border-gaming-neon rounded-2xl w-full max-w-lg overflow-hidden shadow-[0_0_50px_rgba(15,240,252,0.2)]"
+            className="bg-gaming-900 border border-gaming-neon rounded-2xl w-full max-w-lg overflow-hidden shadow-[0_0_50px_color-mix(in_oklab,var(--gaming-neon)_20%,transparent)]"
           >
             <div className="p-6 border-b border-gaming-800 flex justify-between items-center bg-gaming-800/50">
               <h2
