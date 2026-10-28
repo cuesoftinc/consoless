@@ -56,7 +56,7 @@ Open `http://localhost:3000`.
 
 ### Configure AI Coaching
 
-AI coaching and lobby chatter run on the server through the Cuesoft Gemini proxy, so no key reaches the browser. Copy [`web/.env.example`](web/.env.example) to `web/.env.local` and set `GEMINI_PROXY_API_KEY`. Without a key the app falls back to generic coaching messages.
+AI coaching and lobby chatter run on the server through a hosted Gemini proxy, so no key reaches the browser. Copy [`web/.env.example`](web/.env.example) to `web/.env.local` and set `GEMINI_PROXY_API_KEY`. Without a key the app falls back to generic coaching messages.
 
 Set `NEXT_PUBLIC_TEST_MODE=true` to answer every AI call from the in-app mocks instead.
 
