@@ -1,4 +1,4 @@
-# Consoless Decisions
+# Consoless — Decisions
 
 The ratification register for Consoless. Other docs defer to this file.
 
