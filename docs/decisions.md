@@ -1,4 +1,4 @@
-# Consoless — Decisions
+# Consoless Decisions
 
 The ratification register for Consoless. Other docs defer to this file.
 
@@ -6,7 +6,7 @@ The ratification register for Consoless. Other docs defer to this file.
 
 Values Consoless chooses where the CueLABS™ standard leaves a choice. The
 IDs and allowed values are defined in `product-decisions.md` in the
-`cuelabs-engineering-standards` skill. Leave a value as `—` until it is
+CueLABS engineering standards. Leave a value unset until it is
 decided; a parameter whose surface is `absent` or `planned` may read `n/a`.
 
 | ID | Parameter | Value | Notes |
