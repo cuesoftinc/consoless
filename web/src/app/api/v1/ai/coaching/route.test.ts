@@ -73,6 +73,17 @@ describe("POST /api/v1/ai/coaching", () => {
     expect(Object.keys(sent).sort()).toEqual(["prompt", "systemPrompt"]);
   });
 
+  it("calls GEMINI_PROXY_URL when it is set", async () => {
+    vi.stubEnv("GEMINI_PROXY_URL", "https://proxy.example.test");
+    const fetchMock = proxyReturns(JSON.stringify(reply));
+
+    const res = await POST(post(validBody));
+
+    expect(res.status).toBe(200);
+    const [url] = fetchMock.mock.calls[0] as unknown as [string];
+    expect(url).toBe("https://proxy.example.test");
+  });
+
   it("parses a reply wrapped in code fences", async () => {
     proxyReturns("```json\n" + JSON.stringify(reply) + "\n```");
 

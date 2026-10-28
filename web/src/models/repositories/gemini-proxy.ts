@@ -1,6 +1,6 @@
 import "server-only";
 
-import { GEMINI_PROXY_URL, getGeminiProxyApiKey } from "@/config/server-env";
+import { getGeminiProxyApiKey, getGeminiProxyUrl } from "@/config/server-env";
 
 const PROXY_TIMEOUT_MS = 20_000;
 
@@ -29,7 +29,7 @@ export async function generateText({
 
   let response: Response;
   try {
-    response = await fetch(GEMINI_PROXY_URL, {
+    response = await fetch(getGeminiProxyUrl(), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
