@@ -1,6 +1,6 @@
 import type { AuthProvider, AuthUser } from "./provider";
 
-// Fleet canon: TEST_MODE session keys are `<product>.test-session`.
+// TEST_MODE session keys are `<product>.test-session`.
 const SESSION_KEY = "consoless.test-session";
 
 /** No network: any credentials establish a deterministic local session. */
