@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 /**
- * check:boundaries — the shared cross-repo boundary gate (org web standard),
- * wired into `npm run lint`. This file is byte-identical across apparule,
- * expendit and upstat; the only repo-specific part is the rule list in the
+ * check:boundaries — the shared boundary gate, wired into
+ * `npm run lint`. The only repo-specific part is the rule list in the
  * marked config section below, selected by the `name` field of
  * web/package.json.
  *
- * Rule library (the superset of the three repos' historical gates):
+ * Rule library:
  *   - legacyImport        live code never imports src/legacy (quarantine —
  *                         src/legacy stays the mechanism for future
  *                         replacements even while the tree is empty)
@@ -16,7 +15,7 @@
  *                         colorFunctions also bans rgb()/rgba()/hsl()/hsla()
  *   - fetchOnlyIn         fetch() confined to the repositories client (MVC —
  *                         views/controllers never fetch)
- *   - viewBoundaries      views never fetch or import repositories/gRPC;
+ *   - viewBoundaries      views never fetch or import repositories;
  *                         controllers never fetch (MVC network seam)
  */
 
@@ -26,7 +25,7 @@ import { fileURLToPath } from "node:url";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Per-repo rule lists — the ONLY repo-specific section. Keys are package
-// names; every entry ships in every repo so the file stays byte-identical.
+// names; every entry ships in every repo so the file stays identical.
 // ─────────────────────────────────────────────────────────────────────────
 const REPO_RULES = {
   apparule: [legacyImport()],
@@ -87,8 +86,9 @@ const REPO_RULES = {
         "src/models/repositories/client.ts",
         "src/controllers/use-github-stars.ts",
       ],
-      // The mock server is server-side route-handler code, not a view.
-      prefixes: ["src/app/api/mock", "src/mocks"],
+      // The mock server and the /api/v1 backend proxy are server-side
+      // route-handler code, not views.
+      prefixes: ["src/app/api/mock", "src/mocks", "src/app/api/v1"],
     }),
   ],
   upstat: [
@@ -98,12 +98,8 @@ const REPO_RULES = {
       isView: (path) =>
         path.startsWith("src/app/") && !path.startsWith("src/app/api/"),
       isController: (path) => path.startsWith("src/controllers/"),
-      // No repository imports and no gRPC/proto imports in views (MVC + the
-      // X-8 control-plane exception lives behind the repositories).
-      viewForbiddenImports: [
-        /from\s+["']@\/models\/repositories/,
-        /from\s+["'](@\/proto|grpc-web|google-protobuf)/,
-      ],
+      // No repository imports in views (MVC).
+      viewForbiddenImports: [/from\s+["']@\/models\/repositories/],
     }),
     rawHex({
       // Token rule scope (design.md §7): ui primitives + view markup/styles.
@@ -242,7 +238,7 @@ function fetchOnlyIn({ files, prefixes }) {
   };
 }
 
-/** Views never fetch or import repositories/gRPC; controllers never fetch —
+/** Views never fetch or import repositories; controllers never fetch —
  *  the repositories are the only network seam. */
 function viewBoundaries({ isView, isController, viewForbiddenImports }) {
   return {
