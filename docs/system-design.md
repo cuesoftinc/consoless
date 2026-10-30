@@ -1,6 +1,6 @@
 # Consoless — System Design
 
-> **Status:** [Ratified] v1 — signed off 2026-10-30; decisions S-1 to S-15 are
+> **Status:** [Ratified] v1 — signed off 2026-10-30; decisions S-1 to S-23 are
 > recorded in `docs/decisions.md`.
 > This document is the source for `docs/architecture.md`,
 > `docs/data-model.md` and `docs/api.md`. None of them exist yet; each is
@@ -97,7 +97,7 @@ flowchart TB
   intake --> kafka
   generate[api/generate · Python]
   verify[api/verify · Python]
-  build[api/build · Stage 3]
+  build[api/build · Python · Stage 3]
   kafka <--> generate
   kafka <--> verify
   kafka <--> build
@@ -117,7 +117,7 @@ flowchart TB
 | `api/generate` | Python | Processing (AI) | Prompt policy and IP rewrite, generation, refinement (whole game in Stage 1, per-file patches in Stage 2), publish moderation, asset generation (Stage 2). The only holder of Vertex AI access | Nothing | 8081 |
 | `api/verify` | Python | Processing (checks) | Type-checks each candidate against the engine types, bundles it, runs it headlessly for a few seconds with synthetic input, and decides pass or fail with a report. Checks user code edits the same way | Nothing | 8082 |
 | `api/intake` | Node | Gateway (Stage 2) | Verifies upload tickets, checks the file against the ticket, strips metadata, writes to `tmp/` and publishes a pointer | Nothing | 8083 |
-| `api/build` | Open (§15) | Processing (Stage 3) | Packages a version into desktop installers for Windows, macOS and Linux | Nothing | 8084 |
+| `api/build` | Python (S-20) | Processing (Stage 3) | Packages a version into desktop installers for Windows, macOS and Linux | Nothing | 8084 |
 
 **Retired:** the Next.js AI route handlers (`/api/v1/ai/lobby`,
 `/api/v1/ai/coaching`), `gemini-proxy.ts`, the env vars `GEMINI_PROXY_URL`
@@ -507,8 +507,16 @@ deploy/  docs/  scripts/
 | S-13 | A top-level `engine/` workspace for the MIT engine packages | The canonical layout, which has no non-service package directory | ✅ Ratified 2026-10-30 |
 | S-14 | The browser reaches the API through the web server's `/api/v1` proxy | `method.md`'s direct-to-API default | ✅ Ratified 2026-10-30 |
 | S-15 | P-07 becomes "relative for activity and versions"; P-12 drops the wallet; tier 1 is a one-time 16-or-older attestation for creators, and playing a published game needs no account or age check | P-07, P-12 | ✅ Ratified 2026-10-30 |
+| S-16 | The engine renders through an existing MIT-licensed WebGL renderer, kept behind the engine API so it can be swapped without changing games; the library is chosen in Phase 1a | Open question Q1 | ✅ Ratified 2026-10-30 |
+| S-17 | Online multiplayer is in scope for Stage 2; its realtime service is designed (system design v2) before Stage 2 is built. Stage 1 supports local multiplayer only | Open question Q6 | ✅ Ratified 2026-10-30 |
+| S-18 | Stage 1 leaderboards accept scores with per-player rate limits, a game-defined maximum score, and removal by the game's owner or through reports; replay checks are revisited if abuse appears | Open question Q9 | ✅ Ratified 2026-10-30 |
+| S-19 | The Studio keeps polling (S-11); streaming is reconsidered once time to first playable is measured | Open question Q10 | ✅ Ratified 2026-10-30 |
+| S-20 | Desktop export uses a webview shell (Tauri-style); `api/build` is Python and runs the packaging toolchain, with code signing in the build job; mobile apps and stores come after desktop | Open question Q3 | ✅ Ratified 2026-10-30 |
+| S-21 | The hosted service is free; Stage 1 starts with 20 generations and refinements per user per day, held as configuration in `api/common` and tuned once model cost per generation is measured; paid tiers are decided later | Open question Q4 | ✅ Ratified 2026-10-30 |
+| S-22 | The product keeps the name Consoless | Open question Q8 | ✅ Ratified 2026-10-30 |
+| S-23 | Until the analytics event API exists, `api/common` emits Game Generated, Game Published and Game Played as OpenTelemetry counters (counts only) and forwards them once it does | Open question Q13 | ✅ Ratified 2026-10-30 |
 
-Ratified 2026-10-30: S-1 to S-15 are in `docs/decisions.md` and P-07, P-09, P-11,
+Ratified 2026-10-30: S-1 to S-23 are in `docs/decisions.md` and P-07, P-09, P-11,
 P-12 and P-17 are set. Still to do: update `.cuelabs/project.yaml`, and write the docs in §12.
 
 ## 14. Migration plan
@@ -520,40 +528,28 @@ P-12 and P-17 are set. Still to do: update `.cuelabs/project.yaml`, and write th
 | 1a | `engine/` runtime, format and styles; `api/common`, `api/generate` and `api/verify` skeletons and the bus. **Runs in parallel with Phase D**: none of it depends on the designs | A hand-written game in the format runs headlessly in `api/verify`; a prompt produces a checked version in `stg` through the API | PRD Phase 1; CON-001, CON-003, CON-004 |
 | 1b | The web Studio, built from the Phase D designs on mocks (the contract) and then the real API; the play origin; versions | A prompt produces a checked, playable version in the Studio preview in `stg` | CON-001 to CON-005 |
 | 1c | Publishing, the Arcade, remix, leaderboards, export, reports and the privacy page (UI from the Phase D designs) | A published game plays from a public link and records scores | CON-006, 007, 008, 014 |
-| 2 | 3D in the engine; `api/intake`; asset generation; per-file patches | A 3D prompt runs at a stable frame rate on a mid-range laptop | CON-009 to CON-011 |
+| 2 | 3D in the engine; `api/intake`; asset generation; per-file patches; online multiplayer with a realtime service (S-17, designed in system design v2) | A 3D prompt runs at a stable frame rate on a mid-range laptop | CON-009 to CON-011 |
 | 3 | `api/build`, installers, collaboration | A Stage 1 game exports to all three desktop platforms unchanged | CON-012, CON-013 |
 
 No data migration is needed: the prototype stores nothing.
 
 ## 15. Open questions
 
-1. **Renderer.** Build on an existing open-source renderer or write our
-   own? Recommendation: build on an existing WebGL2 renderer for Stage 1
-   and keep the engine API independent of it, so it can be swapped.
-2. **Play origin domain.** Resolved: `play.cuesoft.io`, with a sandbox
-   CSP header and no `Domain=cuesoft.io` cookies (S-6).
-3. **Desktop packaging and `api/build`'s language.** Which wrapper (a
-   webview shell or a bundled browser), and where does code signing happen?
-4. **Pricing and quota numbers.** Daily generations per user, and whether
-   the hosted service stays free.
-5. **Model cost.** Expected cost per generation and refinement for 2D and
-   3D, which decides the quotas in Q4.
-6. **Multiplayer.** In scope, and in which phase? It would add a realtime
-   service that this design does not include.
-7. **Minimum age.** Resolved: 16 or older to create, attested once after
-   sign-in; no account or age check to play (S-15).
-8. **Name.** Does "Consoless" still fit?
-9. **Anti-cheat.** Scores are accepted as submitted, with rate limits.
-   Should a processing service judge plausibility (for example a replay
-   check in `verify`) before scores count?
-10. **Streaming vs polling.** Should the Studio stream model progress
-    (SSE through the web proxy) once time to first playable is measured?
-11. **Bus availability.** The shared bus has no SLA and powers off after 24
-    idle hours, yet generation is interactive. Is that acceptable for Stage
-    1, or does Consoless need a different transport? Recommendation: stay
-    on the bus, and measure overdue re-sends.
-12. **Keep-alive owner.** Which product's sweep keeps the shared bus
-    awake? Consoless assumes it is not the owner.
-13. **Analytics.** "Game Generated", "Game Published" and "Game Played"
-    wait on the analytics provider's event API (D2). Until then, should
-    `common` count them in telemetry metrics?
+Resolved on 2026-10-30: the renderer approach (S-16), the play origin
+(S-6), desktop packaging (S-20), pricing and the starting quota (S-21),
+multiplayer (S-17), minimum age (S-15), the name (S-22), anti-cheat (S-18),
+streaming (S-19), bus availability and keep-alive ownership (S-3), and
+analytics (S-23).
+
+Still open:
+
+1. **Renderer library.** Which MIT renderer the engine wraps (S-16).
+   Decided in Phase 1a with a small spike; three.js is the default
+   candidate because Stage 2 needs 3D.
+2. **Model cost.** The measured cost per generation and refinement for 2D
+   and 3D, which tunes the daily quota (S-21).
+3. **Realtime service.** The shape of the Stage 2 multiplayer service
+   (language, transport, who owns room state), designed in system design
+   v2 before Stage 2 (S-17).
+4. **Redis index.** The shared Redis database index for Consoless (P-09),
+   assigned when `api/common` is provisioned.

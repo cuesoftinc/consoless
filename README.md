@@ -28,11 +28,11 @@ The platform has two layers:
 The repository is in **Phase 0**: the earlier console-rental prototype has been retired, and the new direction is recorded in [`docs/decisions.md`](docs/decisions.md) (C-1 to C-4).
 
 - **Design first.** The landing page, Studio, Arcade, My Games and console-style frames are designed in Figma before any new UI is built (C-4). Until then the web app keeps the prototype's layouts with updated copy.
-- **Architecture.** The proposed system is in [`docs/system-design.md`](docs/system-design.md) (open [`docs/system-design.html`](docs/system-design.html) for the diagrams). It is a draft awaiting ratification (S-1 to S-15).
+- **Architecture.** The system design is in [`docs/system-design.md`](docs/system-design.md) (open [`docs/system-design.html`](docs/system-design.html) for the diagrams). It was ratified on 2026-10-30 (S-1 to S-23 in [`docs/decisions.md`](docs/decisions.md)).
 
 ---
 
-## Architecture (proposed)
+## Architecture
 
 ```mermaid
 flowchart TB

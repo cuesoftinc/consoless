@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- Proposed system design for the prompt-to-game platform (`docs/system-design.md`, `.json`, `.html`).
+- Ratified system design (S-1 to S-23) for the prompt-to-game platform (`docs/system-design.md`, `.json`, `.html`).
 - Decisions C-1 to C-4: the new product direction, the retired prototype, Google sign-in only, and design-first UI.
 - A single "Continue with Google" sign-in button.
 

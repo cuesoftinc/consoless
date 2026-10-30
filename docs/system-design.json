@@ -2,7 +2,7 @@
   "title": "Consoless System Design",
   "eyebrow": "Consoless · system design v1",
   "lead": "Go <code>api/common</code> owns every byte of data, Python makes every decision, and generated games run only on a separate play origin. <code>api/generate</code> writes the game, <code>api/verify</code> proves it runs, and the shared Kafka bus carries pointers between them. The full write-up is <code>docs/system-design.md</code>.",
-  "status": "Ratified v1 · signed off 2026-10-30 (S-1 to S-15)",
+  "status": "Ratified v1 · signed off 2026-10-30 (S-1 to S-23)",
   "theme": {
     "light": {
       "accent": "#C8304B",
@@ -1562,7 +1562,7 @@
         ],
         [
           "2",
-          "3D, <code>api/intake</code>, asset generation, per-file patches",
+          "3D, <code>api/intake</code>, asset generation, per-file patches; online multiplayer (S-17)",
           "A 3D prompt runs smoothly on a mid-range laptop"
         ],
         [
@@ -1672,6 +1672,54 @@
           "P-07 relative dates for activity and versions; P-12 drops the wallet; creators attest 16+, players need no account",
           "P-07, P-12",
           "Ratified 2026-10-30"
+        ],
+        [
+          "S-16",
+          "Existing MIT WebGL renderer behind the engine API",
+          "Open question 1",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-17",
+          "Online multiplayer in Stage 2; realtime service designed in v2",
+          "Open question 6",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-18",
+          "Stage 1 scores: rate limits, max score, owner and report removal",
+          "Open question 9",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-19",
+          "Keep polling; revisit streaming with data",
+          "Open question 10",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-20",
+          "Desktop: webview shell (Tauri-style); <code>api/build</code> in Python",
+          "Open question 3",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-21",
+          "Free service; 20 generations per user per day to start",
+          "Open question 4",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-22",
+          "Keep the name Consoless",
+          "Open question 8",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-23",
+          "OpenTelemetry counters until the analytics event API exists",
+          "Open question 13",
+          "Ratified 2026-10-30"
         ]
       ]
     },
@@ -1681,52 +1729,20 @@
       "title": "Still open",
       "items": [
         {
-          "title": "Renderer.",
-          "text": "Build on an existing WebGL2 renderer, or write one? Recommendation: build on one and keep the engine API independent of it."
+          "title": "Renderer library.",
+          "text": "Which MIT renderer the engine wraps (S-16); chosen in Phase 1a, three.js is the default candidate."
         },
         {
-          "title": "Play origin domain.",
-          "text": "Resolved: <code>play.cuesoft.io</code> with a sandbox CSP header (S-6)."
+          "title": "Model cost.",
+          "text": "Measured cost per generation and refinement, which tunes the daily quota (S-21)."
         },
         {
-          "title": "Desktop packaging.",
-          "text": "Webview shell or bundled browser, and where code signing happens; this also picks <code>api/build</code>'s language."
+          "title": "Realtime service.",
+          "text": "The Stage 2 multiplayer service's shape, designed in system design v2 (S-17)."
         },
         {
-          "title": "Quotas, pricing and model cost.",
-          "text": "Daily generations per user and cost per generation for 2D and 3D."
-        },
-        {
-          "title": "Multiplayer.",
-          "text": "In scope, and in which phase? It would add a realtime service."
-        },
-        {
-          "title": "Minimum age.",
-          "text": "Resolved: 16+ to create, attested once after sign-in; no check to play (S-15)."
-        },
-        {
-          "title": "Name.",
-          "text": "Does “Consoless” still fit a game-making product?"
-        },
-        {
-          "title": "Anti-cheat.",
-          "text": "Should a processing service judge score plausibility before scores count?"
-        },
-        {
-          "title": "Streaming.",
-          "text": "Stream model progress to the Studio once time to first playable is measured?"
-        },
-        {
-          "title": "Bus availability.",
-          "text": "The shared bus has no SLA and powers off when idle; is that acceptable for interactive generation?"
-        },
-        {
-          "title": "Keep-alive owner.",
-          "text": "Which product keeps the shared bus awake?"
-        },
-        {
-          "title": "Analytics.",
-          "text": "Generated, Published and Played counts wait on the analytics event API; count them in telemetry until then?"
+          "title": "Redis index.",
+          "text": "The shared Redis index for Consoless (P-09), assigned at provisioning."
         }
       ]
     }

@@ -89,3 +89,16 @@ The full text, reasons and alternatives are in
 | S-13 | The MIT engine lives in a top-level `engine/` workspace in this repository (a documented deviation in `.cuelabs/project.yaml`) |
 | S-14 | The browser reaches the API through the web server's `/api/v1` proxy |
 | S-15 | P-07 and P-12 take the values above: creators attest they are 16 or older once after sign-in; players need no account |
+
+### S-16 to S-23 — Open questions resolved (2026-10-30)
+
+| ID | Decision |
+| --- | --- |
+| S-16 | The engine renders through an existing MIT-licensed WebGL renderer, kept behind the engine API so it can be swapped without changing games; the library is chosen in Phase 1a |
+| S-17 | Online multiplayer is in scope for Stage 2; its realtime service is designed (system design v2) before Stage 2 is built. Stage 1 supports local multiplayer only |
+| S-18 | Stage 1 leaderboards accept scores with per-player rate limits, a game-defined maximum score, and removal by the game's owner or through reports; replay checks are revisited if abuse appears |
+| S-19 | The Studio keeps polling (S-11); streaming is reconsidered once time to first playable is measured |
+| S-20 | Desktop export uses a webview shell (Tauri-style); `api/build` is Python and runs the packaging toolchain, with code signing in the build job; mobile apps and stores come after desktop |
+| S-21 | The hosted service is free; Stage 1 starts with 20 generations and refinements per user per day, held as configuration in `api/common` and tuned once model cost per generation is measured; paid tiers are decided later |
+| S-22 | The product keeps the name Consoless |
+| S-23 | Until the analytics event API exists, `api/common` emits Game Generated, Game Published and Game Played as OpenTelemetry counters (counts only) and forwards them once it does |
