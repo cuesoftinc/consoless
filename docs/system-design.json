@@ -2,7 +2,7 @@
   "title": "Consoless System Design",
   "eyebrow": "Consoless · system design v1",
   "lead": "Go <code>api/common</code> owns every byte of data, Python makes every decision, and generated games run only on a separate play origin. <code>api/generate</code> writes the game, <code>api/verify</code> proves it runs, and the shared Kafka bus carries pointers between them. The full write-up is <code>docs/system-design.md</code>.",
-  "status": "Proposed v1 · awaiting ratification (S-1 to S-15)",
+  "status": "Ratified v1 · signed off 2026-10-30 (S-1 to S-15)",
   "theme": {
     "light": {
       "accent": "#C8304B",
@@ -987,7 +987,7 @@
             "text": "Play CDN, signed URL prefix",
             "class": "store"
           },
-          "Separate registrable domain; no public objects"
+          "<code>play.cuesoft.io</code>, sandbox CSP header; no public objects"
         ],
         [
           "Game → host page",
@@ -1575,103 +1575,103 @@
     {
       "id": "decisions",
       "type": "table",
-      "title": "Decisions to ratify",
+      "title": "Decisions, ratified",
       "columns": [
         "ID",
         "Decision",
         "Replaces",
-        "Recommendation"
+        "Status"
       ],
       "rows": [
         [
           "S-1",
           "Units: web, Go <code>common</code>, Python <code>generate</code> and <code>verify</code>; later <code>intake</code> and <code>build</code>",
           "AI calls inside Next.js",
-          "Ratify"
+          "Ratified 2026-10-30"
         ],
         [
           "S-2",
           "<code>generate</code> and <code>verify</code> are separate services; moderation runs inside <code>generate</code>",
           "One processing service",
-          "Ratify"
+          "Ratified 2026-10-30"
         ],
         [
           "S-3",
           "Shared CueLABS bus; P-17 = user <code>consoless</code>, not the keep-alive owner",
           "P-11 n/a",
-          "Sign-off"
+          "Ratified 2026-10-30"
         ],
         [
           "S-4",
           "Aiven Postgres (P-09)",
           "P-09 n/a",
-          "Sign-off"
+          "Ratified 2026-10-30"
         ],
         [
           "S-5",
           "Game format: manifest plus <code>path → sha256</code> tree; content-addressed blobs",
           "—",
-          "Ratify"
+          "Ratified 2026-10-30"
         ],
         [
           "S-6",
-          "Play origin on its own domain; dedicated play bucket behind signed Cloud CDN",
+          "Play origin at <code>play.cuesoft.io</code> with a sandbox CSP header; dedicated play bucket behind signed Cloud CDN",
           "Shared default bucket",
-          "Sign-off"
+          "Ratified 2026-10-30"
         ],
         [
           "S-7",
           "Runtime never calls the API; scores by <code>postMessage</code>",
           "—",
-          "Ratify"
+          "Ratified 2026-10-30"
         ],
         [
           "S-8",
           "Every version passes <code>verify</code>; at most 3 attempts, counted by <code>common</code>",
           "—",
-          "Ratify"
+          "Ratified 2026-10-30"
         ],
         [
           "S-9",
           "Sign-in required; quotas and locks in shared Redis",
           "In-memory limiter",
-          "Ratify"
+          "Ratified 2026-10-30"
         ],
         [
           "S-10",
           "Vertex AI over ADC in <code>generate</code> only; bring-your-own key for self-hosters",
           "Gemini proxy key",
-          "Ratify"
+          "Ratified 2026-10-30"
         ],
         [
           "S-11",
           "Studio polls status rows; no token streaming in Stage 1",
           "—",
-          "Ratify"
+          "Ratified 2026-10-30"
         ],
         [
           "S-12",
           "Every service at min 0 with wake-ups; Cloud Scheduler sweeps",
           "—",
-          "Ratify"
+          "Ratified 2026-10-30"
         ],
         [
           "S-13",
           "Top-level <code>engine/</code> workspace (MIT)",
           "Canonical layout",
-          "Sign-off"
+          "Ratified 2026-10-30"
         ],
         [
           "S-14",
           "Browser reaches the API through the web <code>/api/v1</code> proxy",
           "Direct browser-to-API",
-          "Ratify"
+          "Ratified 2026-10-30"
         ],
         [
           "S-15",
-          "P-07 relative dates for activity and versions; P-12 drops the wallet",
+          "P-07 relative dates for activity and versions; P-12 drops the wallet; creators attest 16+, players need no account",
           "P-07, P-12",
-          "Sign-off"
+          "Ratified 2026-10-30"
         ]
       ]
     },
@@ -1686,7 +1686,7 @@
         },
         {
           "title": "Play origin domain.",
-          "text": "Which registrable domain? Recommendation: not a subdomain of cuesoft.io."
+          "text": "Resolved: <code>play.cuesoft.io</code> with a sandbox CSP header (S-6)."
         },
         {
           "title": "Desktop packaging.",
@@ -1702,7 +1702,7 @@
         },
         {
           "title": "Minimum age.",
-          "text": "Keep 16, or set separate ages for creators and players?"
+          "text": "Resolved: 16+ to create, attested once after sign-in; no check to play (S-15)."
         },
         {
           "title": "Name.",
@@ -1731,5 +1731,5 @@
       ]
     }
   ],
-  "footer": "Proposed design for Consoless. It replaces the rental prototype's architecture and keeps the dark theme, the leaderboard screen and the TEST_MODE contract."
+  "footer": "Ratified design for Consoless. It replaces the rental prototype's architecture and keeps the dark theme, the leaderboard screen and the TEST_MODE contract."
 }

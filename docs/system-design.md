@@ -1,7 +1,8 @@
 # Consoless — System Design
 
-> **Status:** [Proposed] v1 — draft for ratification.
-> Once ratified, this document is the source for `docs/architecture.md`,
+> **Status:** [Ratified] v1 — signed off 2026-10-30; decisions S-1 to S-15 are
+> recorded in `docs/decisions.md`.
+> This document is the source for `docs/architecture.md`,
 > `docs/data-model.md` and `docs/api.md`. None of them exist yet; each is
 > written from the matching section here (§12).
 > It keeps every ratified product decision in `docs/decisions.md` except
@@ -165,7 +166,7 @@ Phase 0 also removes the rental, streaming and wallet screens.
 
 | Table | Key columns | Why |
 | --- | --- | --- |
-| `users` | `id`, `firebase_uid`, `email`, `display_name`, `birth_year`?, `created_at` | Google identity (tier 0); age attestation pending the minimum-age decision (§15) |
+| `users` | `id`, `firebase_uid`, `email`, `display_name`, `creator_attested_at`?, `created_at` | Google identity (tier 0); the one-time 16-or-older attestation required before creating (tier 1, S-15) |
 | `projects` | `id`, `owner_id`, `title`, `style_id`, `engine_version`, `head_version_id`, `remixed_from_version_id`, `deleted_at` | CON-002, CON-003, CON-006 |
 | `versions` | `id`, `project_id`, `parent_id`, `source` (`generated`/`edited`/`remixed`), `manifest` jsonb, `tree` jsonb (`path → sha256`), `bundle_key`, `generation_id`, `created_by` | One immutable row per change. The tree makes compare, restore and remix copies, not file copies |
 | `generations` | `id`, `project_id`, `base_version_id`, `request_id`, `status`, `attempt`, `max_attempts`, `reason_code`, `prompt_ref`, `candidate_ref`, `report_ref`, `requested_at`, `updated_at` | The status row the Studio polls (CON-001). Holds what each request was built from, so the sweep can re-send it |
@@ -342,7 +343,7 @@ Sweeps are Cloud Scheduler jobs calling `POST /internal/jobs/<name>` on
 - `consoless.cuesoft.io` serves the app. The browser calls the relative
   path `/api/v1`, which the web server proxies to `api-common` (`API_URL`,
   the delivery canon); in Stage 2, `/api/v1/uploads` goes to `api-intake`.
-- The play origin (domain to be decided, §15) serves only game bundles.
+- The play origin, `play.cuesoft.io` (S-6), serves only game bundles.
 
 **Protocol:** HTTP/JSON, the organization's error envelope, cursor
 pagination, and `Idempotency-Key` on generations, edits, publishing, scores
@@ -373,7 +374,7 @@ access returns `404`.
 | --- | --- |
 | User auth | The Firebase Authentication SDK (shared identity project, Google only) in the browser. `api/common` verifies ID tokens with ADC and rejects any `sign_in_provider` other than `google.com` |
 | Authorization and tenancy | Ownership checks in `common`'s service layer, plus Postgres RLS on every user-owned table. Cross-tenant access returns `404` |
-| Generated code | Runs only on the play origin, in `<iframe sandbox="allow-scripts">` (no `allow-same-origin`), with a CSP of `default-src 'self'`, `connect-src` limited to the approved asset hosts, and `frame-ancestors` limited to the app origin. A Permissions-Policy allows only `gamepad` and `fullscreen` |
+| Generated code | Runs only on the play origin, in `<iframe sandbox="allow-scripts">` (no `allow-same-origin`), with a CSP of `default-src 'self'`, `connect-src` limited to the approved asset hosts, and `frame-ancestors` limited to the app origin. A Permissions-Policy allows only `gamepad` and `fullscreen`. Every bundle response also carries `Content-Security-Policy: sandbox allow-scripts`, so a game opened directly (outside the iframe) still runs with an opaque origin and cannot read `cuesoft.io` cookies or storage. No Cuesoft site may set a cookie with `Domain=cuesoft.io` |
 | Play bucket access | No public objects. Cloud CDN signed URL prefixes are minted only by `common`: one hour for drafts (owner only) and for published games |
 | Headless checks | `api/verify` runs Chromium with every request except its local bundle server blocked (route interception plus host-resolver rules), and a non-root user. Its service account can read `compute/` and write `tmp/` only. It holds no Vertex access |
 | Machine identity | One Kafka user (`consoless`). Per-service service accounts with storage IAM per prefix: `generate` reads and writes `compute/`; `verify` reads `compute/` and writes `tmp/`; only `common` writes `blobs/` and the play bucket. `run.invoker` grants exist for wake-ups only |
@@ -489,26 +490,26 @@ deploy/  docs/  scripts/
 
 ## 13. Decisions to ratify
 
-| ID | Decision | Supersedes | Recommendation |
+| ID | Decision | Supersedes | Status |
 | --- | --- | --- | --- |
-| S-1 | Units: `web`, `api/common` (Go), `api/generate` (Python), `api/verify` (Python); later `api/intake` (Node, Stage 2) and `api/build` (Stage 3) | The prototype's AI calls in Next.js | ⭐ ratify |
-| S-2 | `generate` and `verify` are separate services; moderation runs inside `generate` | One processing service | ⭐ ratify (alternative: a second `generate` deployment for moderation) |
-| S-3 | Shared CueLABS bus with lanes `cuelabs.requests`, `cuelabs.results` and `cuelabs.uploads`; P-17 = shared bus, user `consoless`, the groups in §5.3, and not the keep-alive owner | P-11 `n/a` | Sign-off: P-11 and P-17 change |
-| S-4 | Aiven Postgres as the data store (P-09) | P-09 `n/a` | Sign-off: P-09 changes |
-| S-5 | Game format: a manifest plus a `path → sha256` tree; files content-addressed in `blobs/`; one format for 2D, 3D and desktop | — | ⭐ ratify |
-| S-6 | A play origin on a separate registrable domain, served from a dedicated play bucket through Cloud CDN signed requests | The shared default bucket for every object | Sign-off: this departs from the shared-bucket canon so the CDN's read grant cannot reach other products |
-| S-7 | The game runtime never calls the API; scores go through `postMessage` to the host page | — | ⭐ ratify |
-| S-8 | Every version passes `verify` before it can be previewed; at most 3 attempts, counted by `common` | — | ⭐ ratify |
-| S-9 | Generation requires sign-in; quotas and locks live in shared Redis, enforced by `common` | The in-memory `guardPaidRoute` limiter | ⭐ ratify |
-| S-10 | Vertex AI (Gemini) over ADC in `api/generate` only; bring-your-own key for self-hosters | The Gemini proxy with `x-api-key` | ⭐ ratify (meets X-4) |
-| S-11 | The Studio polls status rows; no token streaming in Stage 1 | — | ⭐ ratify (Q10 revisits it) |
-| S-12 | Every service runs at min 0 with wake-ups; sweeps are Cloud Scheduler jobs | — | ⭐ ratify |
-| S-13 | A top-level `engine/` workspace for the MIT engine packages | The canonical layout, which has no non-service package directory | Sign-off: a documented deviation in `project.yaml` |
-| S-14 | The browser reaches the API through the web server's `/api/v1` proxy | `method.md`'s direct-to-API default | ⭐ ratify (the delivery canon) |
-| S-15 | P-07 becomes "relative for activity and versions"; P-12 drops the wallet and records tier 1 as the minimum-age attestation only | P-07, P-12 | Sign-off: both are reversals |
+| S-1 | Units: `web`, `api/common` (Go), `api/generate` (Python), `api/verify` (Python); later `api/intake` (Node, Stage 2) and `api/build` (Stage 3) | The prototype's AI calls in Next.js | ✅ Ratified 2026-10-30 |
+| S-2 | `generate` and `verify` are separate services; moderation runs inside `generate` | One processing service | ✅ Ratified 2026-10-30 |
+| S-3 | Shared CueLABS bus with lanes `cuelabs.requests`, `cuelabs.results` and `cuelabs.uploads`; P-17 = shared bus, user `consoless`, the groups in §5.3, and not the keep-alive owner | P-11 `n/a` | ✅ Ratified 2026-10-30 |
+| S-4 | Aiven Postgres as the data store (P-09) | P-09 `n/a` | ✅ Ratified 2026-10-30 |
+| S-5 | Game format: a manifest plus a `path → sha256` tree; files content-addressed in `blobs/`; one format for 2D, 3D and desktop | — | ✅ Ratified 2026-10-30 |
+| S-6 | A play origin at `play.cuesoft.io`, a sibling host of `consoless.cuesoft.io` (never a child of it), served from a dedicated play bucket through Cloud CDN signed requests, with a `sandbox allow-scripts` CSP header on every response and no `Domain=cuesoft.io` cookies on any Cuesoft site | The shared default bucket for every object | ✅ Ratified 2026-10-30 |
+| S-7 | The game runtime never calls the API; scores go through `postMessage` to the host page | — | ✅ Ratified 2026-10-30 |
+| S-8 | Every version passes `verify` before it can be previewed; at most 3 attempts, counted by `common` | — | ✅ Ratified 2026-10-30 |
+| S-9 | Generation requires sign-in; quotas and locks live in shared Redis, enforced by `common` | The in-memory `guardPaidRoute` limiter | ✅ Ratified 2026-10-30 |
+| S-10 | Vertex AI (Gemini) over ADC in `api/generate` only; bring-your-own key for self-hosters | The Gemini proxy with `x-api-key` | ✅ Ratified 2026-10-30 |
+| S-11 | The Studio polls status rows; no token streaming in Stage 1 | — | ✅ Ratified 2026-10-30 |
+| S-12 | Every service runs at min 0 with wake-ups; sweeps are Cloud Scheduler jobs | — | ✅ Ratified 2026-10-30 |
+| S-13 | A top-level `engine/` workspace for the MIT engine packages | The canonical layout, which has no non-service package directory | ✅ Ratified 2026-10-30 |
+| S-14 | The browser reaches the API through the web server's `/api/v1` proxy | `method.md`'s direct-to-API default | ✅ Ratified 2026-10-30 |
+| S-15 | P-07 becomes "relative for activity and versions"; P-12 drops the wallet; tier 1 is a one-time 16-or-older attestation for creators, and playing a published game needs no account or age check | P-07, P-12 | ✅ Ratified 2026-10-30 |
 
-On ratification: copy S-1 to S-15 into `docs/decisions.md`, set P-09, P-11
-and P-17, update `.cuelabs/project.yaml`, and write the docs in §12.
+Ratified 2026-10-30: S-1 to S-15 are in `docs/decisions.md` and P-07, P-09, P-11,
+P-12 and P-17 are set. Still to do: update `.cuelabs/project.yaml`, and write the docs in §12.
 
 ## 14. Migration plan
 
@@ -529,9 +530,8 @@ No data migration is needed: the prototype stores nothing.
 1. **Renderer.** Build on an existing open-source renderer or write our
    own? Recommendation: build on an existing WebGL2 renderer for Stage 1
    and keep the engine API independent of it, so it can be swapped.
-2. **Play origin domain.** Which registrable domain? Recommendation: a
-   dedicated domain, not a subdomain of `cuesoft.io`, so cookies and
-   storage cannot be shared with any Cuesoft site.
+2. **Play origin domain.** Resolved: `play.cuesoft.io`, with a sandbox
+   CSP header and no `Domain=cuesoft.io` cookies (S-6).
 3. **Desktop packaging and `api/build`'s language.** Which wrapper (a
    webview shell or a bundled browser), and where does code signing happen?
 4. **Pricing and quota numbers.** Daily generations per user, and whether
@@ -540,8 +540,8 @@ No data migration is needed: the prototype stores nothing.
    3D, which decides the quotas in Q4.
 6. **Multiplayer.** In scope, and in which phase? It would add a realtime
    service that this design does not include.
-7. **Minimum age.** Keep 16, or set different ages for creators and
-   players? This affects S-15 and `users.birth_year`.
+7. **Minimum age.** Resolved: 16 or older to create, attested once after
+   sign-in; no account or age check to play (S-15).
 8. **Name.** Does "Consoless" still fit?
 9. **Anti-cheat.** Scores are accepted as submitted, with rate limits.
    Should a processing service judge plausibility (for example a replay

@@ -13,4 +13,10 @@ capabilities: {}
 deployment:
   web: firebase-app-hosting
   api: none
-deviations: []
+deviations:
+  - id: engine-workspace
+    reason: >-
+      The MIT game engine (runtime, game format, console styles, CLI) lives
+      in a top-level engine/ workspace beside web/ and api/, which the
+      standard layout does not define. Ratified as S-13 in docs/decisions.md.
+    expires: null
