@@ -1,0 +1,1761 @@
+{
+  "title": "Consoless System Design",
+  "eyebrow": "Consoless · system design v1",
+  "lead": "Go <code>api/common</code> owns every byte of data, Python makes every decision, and generated games run only on a separate play origin. <code>api/generate</code> writes the game, <code>api/verify</code> proves it runs, and the shared Kafka bus carries pointers between them. The full write-up is <code>docs/system-design.md</code>.",
+  "status": "Ratified v1 · signed off 2026-10-30 (S-1 to S-26)",
+  "theme": {
+    "light": {
+      "accent": "#C8304B",
+      "accent-ink": "#A3243C",
+      "accent-soft": "#FBE3E8"
+    },
+    "dark": {
+      "accent": "#E94560",
+      "accent-ink": "#FF7A90",
+      "accent-soft": "#3A1520"
+    }
+  },
+  "sections": [
+    {
+      "id": "audience",
+      "type": "text",
+      "title": "Who it's for",
+      "html": "Consoless turns a prompt such as <em>“a falling-block puzzle on a green handheld screen”</em> into a game you can play in the browser, then keeps editing it by chat. It is for non-coders with game ideas, hobbyist developers who take over the code, classrooms, retro fans and open-source contributors. Stage 1 is retro and 2D games, Stage 2 adds 3D, and Stage 3 adds desktop installers."
+    },
+    {
+      "id": "overview",
+      "type": "diagram",
+      "title": "The whole system",
+      "legend": true,
+      "caption": "<strong>Read it top to bottom.</strong> The browser reaches <code>api/common</code> through the web server's <code>/api/v1</code> proxy. Go owns Postgres, Redis and every durable object. Below the Kafka bar, <code>api/generate</code> calls the model and <code>api/verify</code> runs each candidate headlessly; both report back for Go to save. Games load only in a sandboxed iframe from the play CDN, never from the app's own origin. The dotted grey line is telemetry.",
+      "diagram": {
+        "width": 1200,
+        "height": 700,
+        "aria": "Consoless architecture. The browser loads the web app and calls /api/v1, which the web server proxies to api/common (Go, CRUD). The browser embeds a sandboxed game iframe that loads bundles from the play CDN, which reads the dedicated play bucket using signed requests. api/common owns Postgres and Redis, writes to Cloud Storage and promotes bundles to the play bucket. api/common, api/intake (Stage 2), api/generate, api/verify and api/build (Stage 3) exchange events over the shared Kafka bus. api/generate calls Vertex AI. Processing services read and write the compute and tmp prefixes in Cloud Storage. Every service sends telemetry to the observability gateway.",
+        "nodes": [
+          {
+            "id": "browser",
+            "kind": "client",
+            "x": 240,
+            "y": 30,
+            "w": 300,
+            "h": 54,
+            "title": "Browser",
+            "lines": [
+              "Studio · Arcade · My Games"
+            ]
+          },
+          {
+            "id": "iframe",
+            "kind": "client",
+            "x": 820,
+            "y": 30,
+            "w": 200,
+            "h": 54,
+            "title": "Game iframe",
+            "lines": [
+              "sandboxed · play origin"
+            ]
+          },
+          {
+            "id": "web",
+            "kind": "client",
+            "x": 20,
+            "y": 140,
+            "w": 170,
+            "h": 54,
+            "title": "web · Next.js",
+            "lines": [
+              "App Hosting"
+            ]
+          },
+          {
+            "id": "cdn",
+            "kind": "client",
+            "x": 820,
+            "y": 140,
+            "w": 160,
+            "h": 54,
+            "title": "Play CDN",
+            "lines": [
+              "LB · signed requests"
+            ]
+          },
+          {
+            "id": "playbucket",
+            "kind": "store",
+            "x": 1010,
+            "y": 140,
+            "w": 170,
+            "h": 54,
+            "title": "Play bucket",
+            "lines": [
+              "builds/ per version"
+            ]
+          },
+          {
+            "id": "pg",
+            "kind": "store",
+            "x": 20,
+            "y": 250,
+            "w": 170,
+            "h": 74,
+            "title": "Postgres",
+            "lines": [
+              "projects · versions",
+              "scores · outbox"
+            ]
+          },
+          {
+            "id": "common",
+            "kind": "service",
+            "x": 240,
+            "y": 250,
+            "w": 260,
+            "h": 74,
+            "title": "api/common · Go",
+            "lines": [
+              "CRUD · auth · quotas",
+              "versions · publish · outbox"
+            ]
+          },
+          {
+            "id": "intake",
+            "kind": "service",
+            "x": 560,
+            "y": 250,
+            "w": 220,
+            "h": 74,
+            "title": "api/intake · Node",
+            "lines": [
+              "Stage 2 · asset uploads",
+              "verifies ticket"
+            ]
+          },
+          {
+            "id": "gcs",
+            "kind": "store",
+            "x": 1010,
+            "y": 250,
+            "w": 170,
+            "h": 310,
+            "title": "Cloud Storage",
+            "lines": [
+              "consoless/",
+              "compute/ · 1 day",
+              "tmp/ · 1 day",
+              "blobs/ · sha256"
+            ]
+          },
+          {
+            "id": "kafka",
+            "kind": "bus",
+            "x": 240,
+            "y": 390,
+            "w": 740,
+            "h": 46,
+            "title": "Shared CueLABS Kafka — requests · results · uploads"
+          },
+          {
+            "id": "generate",
+            "kind": "python",
+            "x": 240,
+            "y": 480,
+            "w": 260,
+            "h": 74,
+            "title": "api/generate · Python",
+            "lines": [
+              "policy · generate · refine",
+              "moderate · Vertex AI only"
+            ]
+          },
+          {
+            "id": "verify",
+            "kind": "python",
+            "x": 560,
+            "y": 480,
+            "w": 220,
+            "h": 74,
+            "title": "api/verify · Python",
+            "lines": [
+              "tsc · bundle · headless run",
+              "no model access"
+            ]
+          },
+          {
+            "id": "build",
+            "kind": "python",
+            "x": 820,
+            "y": 480,
+            "w": 160,
+            "h": 74,
+            "title": "api/build",
+            "lines": [
+              "Stage 3 · installers"
+            ]
+          },
+          {
+            "id": "redis",
+            "kind": "store",
+            "x": 20,
+            "y": 600,
+            "w": 170,
+            "h": 74,
+            "title": "Redis",
+            "lines": [
+              "quotas · locks"
+            ]
+          },
+          {
+            "id": "vertex",
+            "kind": "client",
+            "x": 240,
+            "y": 600,
+            "w": 260,
+            "h": 74,
+            "title": "Vertex AI",
+            "lines": [
+              "Gemini over ADC"
+            ]
+          },
+          {
+            "id": "otel",
+            "kind": "client",
+            "x": 560,
+            "y": 600,
+            "w": 260,
+            "h": 74,
+            "title": "Observability gateway",
+            "lines": [
+              "OTLP · counts only"
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "from": "common",
+            "to": "redis",
+            "kind": "cache",
+            "points": [
+              [
+                240,
+                316
+              ],
+              [
+                210,
+                316
+              ],
+              [
+                210,
+                637
+              ],
+              [
+                192,
+                637
+              ]
+            ]
+          },
+          {
+            "from": "common",
+            "to": "otel",
+            "kind": "telemetry",
+            "points": [
+              [
+                500,
+                276
+              ],
+              [
+                530,
+                276
+              ],
+              [
+                530,
+                637
+              ],
+              [
+                558,
+                637
+              ]
+            ]
+          },
+          {
+            "from": "intake",
+            "to": "otel",
+            "kind": "telemetry",
+            "arrow": "none",
+            "join": true,
+            "points": [
+              [
+                560,
+                312
+              ],
+              [
+                530,
+                312
+              ]
+            ]
+          },
+          {
+            "from": "generate",
+            "to": "otel",
+            "kind": "telemetry",
+            "arrow": "none",
+            "join": true,
+            "points": [
+              [
+                500,
+                517
+              ],
+              [
+                530,
+                517
+              ]
+            ]
+          },
+          {
+            "from": "verify",
+            "to": "otel",
+            "kind": "telemetry",
+            "arrow": "none",
+            "join": true,
+            "points": [
+              [
+                560,
+                530
+              ],
+              [
+                530,
+                530
+              ]
+            ]
+          },
+          {
+            "from": "browser",
+            "to": "web",
+            "kind": "request",
+            "points": [
+              [
+                240,
+                57
+              ],
+              [
+                105,
+                57
+              ],
+              [
+                105,
+                138
+              ]
+            ]
+          },
+          {
+            "from": "browser",
+            "to": "iframe",
+            "kind": "request",
+            "points": [
+              [
+                540,
+                57
+              ],
+              [
+                818,
+                57
+              ]
+            ]
+          },
+          {
+            "from": "iframe",
+            "to": "cdn",
+            "kind": "request",
+            "points": [
+              [
+                900,
+                84
+              ],
+              [
+                900,
+                138
+              ]
+            ]
+          },
+          {
+            "from": "cdn",
+            "to": "playbucket",
+            "kind": "storage-read",
+            "points": [
+              [
+                980,
+                167
+              ],
+              [
+                1008,
+                167
+              ]
+            ]
+          },
+          {
+            "from": "web",
+            "to": "common",
+            "kind": "request",
+            "points": [
+              [
+                190,
+                158
+              ],
+              [
+                370,
+                158
+              ],
+              [
+                370,
+                248
+              ]
+            ]
+          },
+          {
+            "from": "web",
+            "to": "intake",
+            "kind": "request-dashed",
+            "points": [
+              [
+                190,
+                180
+              ],
+              [
+                670,
+                180
+              ],
+              [
+                670,
+                248
+              ]
+            ]
+          },
+          {
+            "from": "common",
+            "to": "pg",
+            "kind": "request",
+            "points": [
+              [
+                240,
+                287
+              ],
+              [
+                192,
+                287
+              ]
+            ]
+          },
+          {
+            "from": "common",
+            "to": "playbucket",
+            "kind": "storage-write",
+            "points": [
+              [
+                480,
+                250
+              ],
+              [
+                480,
+                224
+              ],
+              [
+                1150,
+                224
+              ],
+              [
+                1150,
+                196
+              ]
+            ]
+          },
+          {
+            "from": "common",
+            "to": "gcs",
+            "kind": "storage-write",
+            "points": [
+              [
+                500,
+                300
+              ],
+              [
+                515,
+                300
+              ],
+              [
+                515,
+                350
+              ],
+              [
+                1008,
+                350
+              ]
+            ]
+          },
+          {
+            "from": "intake",
+            "to": "gcs",
+            "kind": "storage-write",
+            "points": [
+              [
+                780,
+                287
+              ],
+              [
+                1008,
+                287
+              ]
+            ]
+          },
+          {
+            "from": "common",
+            "to": "kafka",
+            "kind": "kafka",
+            "points": [
+              [
+                280,
+                324
+              ],
+              [
+                280,
+                388
+              ]
+            ]
+          },
+          {
+            "from": "kafka",
+            "to": "common",
+            "kind": "kafka",
+            "points": [
+              [
+                460,
+                390
+              ],
+              [
+                460,
+                326
+              ]
+            ]
+          },
+          {
+            "from": "intake",
+            "to": "kafka",
+            "kind": "kafka",
+            "points": [
+              [
+                670,
+                324
+              ],
+              [
+                670,
+                388
+              ]
+            ]
+          },
+          {
+            "from": "kafka",
+            "to": "generate",
+            "kind": "kafka",
+            "points": [
+              [
+                280,
+                436
+              ],
+              [
+                280,
+                478
+              ]
+            ]
+          },
+          {
+            "from": "generate",
+            "to": "kafka",
+            "kind": "kafka",
+            "points": [
+              [
+                460,
+                480
+              ],
+              [
+                460,
+                438
+              ]
+            ]
+          },
+          {
+            "from": "kafka",
+            "to": "verify",
+            "kind": "kafka",
+            "points": [
+              [
+                600,
+                436
+              ],
+              [
+                600,
+                478
+              ]
+            ]
+          },
+          {
+            "from": "verify",
+            "to": "kafka",
+            "kind": "kafka",
+            "points": [
+              [
+                740,
+                480
+              ],
+              [
+                740,
+                438
+              ]
+            ]
+          },
+          {
+            "from": "kafka",
+            "to": "build",
+            "kind": "kafka",
+            "arrow": "both",
+            "points": [
+              [
+                900,
+                438
+              ],
+              [
+                900,
+                478
+              ]
+            ]
+          },
+          {
+            "from": "generate",
+            "to": "gcs",
+            "kind": "storage-write",
+            "points": [
+              [
+                400,
+                554
+              ],
+              [
+                400,
+                578
+              ],
+              [
+                1095,
+                578
+              ],
+              [
+                1095,
+                562
+              ]
+            ]
+          },
+          {
+            "from": "verify",
+            "to": "gcs",
+            "kind": "storage-write",
+            "arrow": "none",
+            "join": true,
+            "points": [
+              [
+                700,
+                554
+              ],
+              [
+                700,
+                578
+              ]
+            ]
+          },
+          {
+            "from": "build",
+            "to": "gcs",
+            "kind": "storage-write",
+            "arrow": "none",
+            "join": true,
+            "points": [
+              [
+                930,
+                554
+              ],
+              [
+                930,
+                578
+              ]
+            ]
+          },
+          {
+            "from": "generate",
+            "to": "vertex",
+            "kind": "request",
+            "points": [
+              [
+                300,
+                554
+              ],
+              [
+                300,
+                598
+              ]
+            ]
+          }
+        ],
+        "labels": [
+          {
+            "x": 113,
+            "y": 50,
+            "text": "pages · /api/v1"
+          },
+          {
+            "x": 680,
+            "y": 50,
+            "text": "embeds (sandbox)",
+            "anchor": "middle"
+          },
+          {
+            "x": 908,
+            "y": 116,
+            "text": "signed URL"
+          },
+          {
+            "x": 378,
+            "y": 232,
+            "text": "/api/v1 proxy"
+          },
+          {
+            "x": 678,
+            "y": 205,
+            "text": "/api/v1/uploads"
+          },
+          {
+            "x": 678,
+            "y": 218,
+            "text": "Stage 2",
+            "kind": "muted"
+          },
+          {
+            "x": 216,
+            "y": 280,
+            "text": "owns",
+            "anchor": "middle"
+          },
+          {
+            "x": 900,
+            "y": 218,
+            "text": "promote builds/",
+            "anchor": "middle",
+            "kind": "storage"
+          },
+          {
+            "x": 900,
+            "y": 344,
+            "text": "compute/ · blobs/",
+            "anchor": "middle",
+            "kind": "storage"
+          },
+          {
+            "x": 900,
+            "y": 281,
+            "text": "put tmp/",
+            "anchor": "middle",
+            "kind": "storage"
+          },
+          {
+            "x": 286,
+            "y": 362,
+            "text": "requests",
+            "kind": "kafka"
+          },
+          {
+            "x": 454,
+            "y": 378,
+            "text": "results",
+            "anchor": "end",
+            "kind": "kafka"
+          },
+          {
+            "x": 664,
+            "y": 378,
+            "text": "uploads",
+            "anchor": "end",
+            "kind": "kafka"
+          },
+          {
+            "x": 286,
+            "y": 462,
+            "text": "requests",
+            "kind": "kafka"
+          },
+          {
+            "x": 454,
+            "y": 470,
+            "text": "results",
+            "anchor": "end",
+            "kind": "kafka"
+          },
+          {
+            "x": 606,
+            "y": 462,
+            "text": "requests",
+            "kind": "kafka"
+          },
+          {
+            "x": 734,
+            "y": 470,
+            "text": "results",
+            "anchor": "end",
+            "kind": "kafka"
+          },
+          {
+            "x": 860,
+            "y": 592,
+            "text": "compute/ · tmp/",
+            "anchor": "middle",
+            "kind": "storage"
+          },
+          {
+            "x": 308,
+            "y": 584,
+            "text": "model calls"
+          },
+          {
+            "x": 202,
+            "y": 590,
+            "text": "Redis",
+            "anchor": "end",
+            "kind": "storage"
+          },
+          {
+            "x": 536,
+            "y": 596,
+            "text": "OTLP"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rules",
+      "type": "rules",
+      "title": "The rules",
+      "items": [
+        {
+          "title": "Go only does CRUD.",
+          "text": "<code>api/common</code> is the only service that opens Postgres, Redis, <code>blobs/</code> or the play bucket. It saves decisions; it never makes them."
+        },
+        {
+          "title": "Python makes every decision.",
+          "text": "Prompt policy, generation, moderation and the pass-or-fail verdict all happen in <code>api/generate</code> and <code>api/verify</code>."
+        },
+        {
+          "title": "Generated code never runs on our origin.",
+          "text": "Games load only from the play origin in a sandboxed iframe. The runtime never calls the API; scores travel by <code>postMessage</code>."
+        },
+        {
+          "title": "Pointers, not data.",
+          "text": "Prompts, code and reports live under <code>consoless/compute/</code>. Bus messages carry only ids, enums and refs."
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "type": "table",
+      "title": "What each service does",
+      "columns": [
+        "Service",
+        "Language · role",
+        "Job",
+        "Runs as (cloud)",
+        "Port"
+      ],
+      "rows": [
+        [
+          "web",
+          "Next.js · client",
+          "Landing page, Studio, Arcade, My Games, privacy page; <code>/api/v1</code> proxy; hosts the game iframe",
+          "App Hosting",
+          {
+            "text": "3000",
+            "class": "num"
+          }
+        ],
+        [
+          "api/common",
+          "Go · CRUD",
+          "Google sign-in check, projects, versions, status rows, attempts, quotas, publishing, remix, scores, reports, outbox, signed play URLs, export, deletion, sweeps",
+          "Cloud Run, min 0 + wake-ups",
+          {
+            "text": "8080",
+            "class": "num"
+          }
+        ],
+        [
+          "api/generate",
+          "Python · AI",
+          "Prompt policy and IP rewrite, generation, refinement, publish moderation, asset generation (Stage 2). The only holder of Vertex AI access",
+          "Cloud Run, min 0 + wake-ups",
+          {
+            "text": "8081",
+            "class": "num"
+          }
+        ],
+        [
+          "api/verify",
+          "Python · checks",
+          "Type-check, bundle and headless run of every candidate and user edit, with all network blocked; pass or fail with a report",
+          "Cloud Run, 2 vCPU · 4 GiB, min 0 + wake-ups",
+          {
+            "text": "8082",
+            "class": "num"
+          }
+        ],
+        [
+          "api/intake",
+          "Node · gateway",
+          "Stage 2: verifies upload tickets, checks files, writes <code>tmp/</code>, sends a pointer",
+          "Cloud Run, 0–5",
+          {
+            "text": "8083",
+            "class": "num"
+          }
+        ],
+        [
+          "api/build",
+          "Open question",
+          "Stage 3: packages a version as desktop installers",
+          "To be decided",
+          {
+            "text": "8084",
+            "class": "num"
+          }
+        ]
+      ]
+    },
+    {
+      "id": "comms",
+      "type": "table",
+      "title": "How the services talk",
+      "columns": [
+        "Traffic",
+        "Transport",
+        "Why"
+      ],
+      "rows": [
+        [
+          "Browser → API",
+          {
+            "text": "HTTPS/JSON via the web server's /api/v1 proxy",
+            "class": "http"
+          },
+          "The delivery canon; the browser holds no API URL"
+        ],
+        [
+          "Sign-in",
+          {
+            "text": "Firebase ID token (Google only)",
+            "class": "http"
+          },
+          "Verified locally by <code>api/common</code> with ADC"
+        ],
+        [
+          "Service to service",
+          {
+            "text": "Shared Kafka: requests · results · uploads",
+            "class": "kafka"
+          },
+          "Durable handoff; the owner re-sends overdue work"
+        ],
+        [
+          "Wake-up",
+          {
+            "text": "GET /health, no data",
+            "class": "sync"
+          },
+          "Starts a consumer scaled to zero; the only synchronous internal call"
+        ],
+        [
+          "Prompts, code, reports",
+          {
+            "text": "data_ref in consoless/compute/",
+            "class": "store"
+          },
+          "Every product can read the lanes; storage IAM keeps data private"
+        ],
+        [
+          "Game files to players",
+          {
+            "text": "Play CDN, signed URL prefix",
+            "class": "store"
+          },
+          "<code>play.cuesoft.io</code>, sandbox CSP header; no public objects"
+        ],
+        [
+          "Game → host page",
+          {
+            "text": "postMessage",
+            "class": "http"
+          },
+          "The runtime never holds a token or calls the API"
+        ],
+        [
+          "Model calls",
+          {
+            "text": "Vertex AI over ADC from api/generate",
+            "class": "http"
+          },
+          "No consumer keys in the cloud"
+        ],
+        [
+          "Telemetry",
+          {
+            "text": "OTLP to the observability gateway",
+            "class": "sync"
+          },
+          "Counts only; never prompts or code"
+        ]
+      ]
+    },
+    {
+      "id": "changes",
+      "type": "table",
+      "title": "What changes from the prototype",
+      "columns": [
+        "Today (prototype)",
+        "This design",
+        "Finding"
+      ],
+      "rows": [
+        [
+          "Console rental, streaming and wallet screens",
+          "Studio, Arcade, My Games",
+          "F1"
+        ],
+        [
+          "Next.js route handlers call the Gemini proxy with <code>x-api-key</code>",
+          "<code>api/generate</code> calls Vertex AI over ADC",
+          "F2"
+        ],
+        [
+          "In-memory 20-a-minute limiter per instance",
+          "Per-user quotas in shared Redis, behind sign-in",
+          "F3"
+        ],
+        [
+          "Email form backed by a test-mode provider",
+          "Google sign-in only, verified by <code>api/common</code>",
+          "F4"
+        ],
+        [
+          "No place to run generated code",
+          "Play origin, sandboxed iframe, CSP, headless checks",
+          "F5"
+        ],
+        [
+          "React state and seeds only",
+          "Postgres, versions as content-addressed trees",
+          "F6"
+        ]
+      ]
+    },
+    {
+      "id": "flow-generate",
+      "type": "sequence",
+      "title": "Prompt to playable game",
+      "caption": "<strong>Nothing reaches the preview until it has run.</strong> <code>api/common</code> checks quota and creates the status row before any model call. <code>api/generate</code> writes a candidate, <code>api/verify</code> runs it with the network blocked, and only a passing candidate becomes a version. A failed check goes back to the model, up to three attempts.",
+      "sequence": {
+        "aria": "Sequence for one generation: the Studio posts a prompt to api/common, which checks quota, stores the prompt in compute storage, returns 202 and queues generation.requested. api/generate writes a candidate and reports generation.completed. api/common queues check.requested; api/verify bundles and runs the candidate, writes the bundle and report, and reports check.completed. api/common promotes the files and bundle and marks the generation ready; the Studio polls and then fetches a signed play URL.",
+        "lanes": [
+          {
+            "id": "s",
+            "title": "Studio",
+            "sub": "browser",
+            "kind": "client"
+          },
+          {
+            "id": "c",
+            "title": "api/common",
+            "sub": "Go · CRUD",
+            "kind": "service"
+          },
+          {
+            "id": "k",
+            "title": "Kafka",
+            "sub": "shared bus",
+            "kind": "bus"
+          },
+          {
+            "id": "g",
+            "title": "api/generate",
+            "sub": "Python · AI",
+            "kind": "python"
+          },
+          {
+            "id": "v",
+            "title": "api/verify",
+            "sub": "Python · checks",
+            "kind": "python"
+          },
+          {
+            "id": "b",
+            "title": "Storage",
+            "sub": "consoless/",
+            "kind": "store"
+          }
+        ],
+        "steps": [
+          {
+            "from": "s",
+            "to": "c",
+            "text": "POST /generations {prompt, style}"
+          },
+          {
+            "note": "token · owner · quota · one in flight",
+            "at": "c"
+          },
+          {
+            "gap": 14
+          },
+          {
+            "from": "c",
+            "to": "b",
+            "kind": "storage-write",
+            "text": "put compute/prompt"
+          },
+          {
+            "from": "c",
+            "to": "s",
+            "kind": "reply",
+            "text": "202 · queued"
+          },
+          {
+            "from": "c",
+            "to": "k",
+            "kind": "kafka",
+            "text": "generation.requested"
+          },
+          {
+            "from": "k",
+            "to": "g",
+            "kind": "kafka",
+            "text": "generation.requested"
+          },
+          {
+            "note": "policy · IP rewrite · Gemini",
+            "at": "g"
+          },
+          {
+            "gap": 14
+          },
+          {
+            "from": "g",
+            "to": "b",
+            "kind": "storage-write",
+            "text": "put compute/candidate"
+          },
+          {
+            "from": "g",
+            "to": "k",
+            "kind": "kafka",
+            "text": "generation.completed"
+          },
+          {
+            "from": "k",
+            "to": "c",
+            "kind": "kafka",
+            "text": "generation.completed"
+          },
+          {
+            "from": "c",
+            "to": "k",
+            "kind": "kafka",
+            "text": "check.requested"
+          },
+          {
+            "from": "k",
+            "to": "v",
+            "kind": "kafka",
+            "text": "check.requested"
+          },
+          {
+            "note": "tsc · bundle · run, no network",
+            "at": "v"
+          },
+          {
+            "gap": 14
+          },
+          {
+            "from": "v",
+            "to": "b",
+            "kind": "storage-write",
+            "text": "put tmp/bundle"
+          },
+          {
+            "from": "v",
+            "to": "k",
+            "kind": "kafka",
+            "text": "check.completed"
+          },
+          {
+            "from": "k",
+            "to": "c",
+            "kind": "kafka",
+            "text": "check.completed {passed}"
+          },
+          {
+            "note": "promote → blobs/, builds/ · ready",
+            "at": "c"
+          },
+          {
+            "gap": 14
+          },
+          {
+            "from": "s",
+            "to": "c",
+            "text": "GET /generations/{id} → ready"
+          },
+          {
+            "from": "s",
+            "to": "c",
+            "text": "GET /versions/{id}/play"
+          }
+        ],
+        "footer": "On a failed check, common re-queues generation.requested with the candidate and report refs until the third attempt, then marks it failed with a reason and a Retry button."
+      }
+    },
+    {
+      "id": "flow-edit",
+      "type": "sequence",
+      "title": "Code edit to new version",
+      "caption": "<strong>A hand edit gets the same check as a generated one.</strong> The Studio saves changed files; <code>api/common</code> sends them straight to <code>api/verify</code>, skipping the model. A passing edit becomes a version; a failing one returns its errors and keeps the user's text.",
+      "sequence": {
+        "aria": "Sequence for a user code edit: the Studio sends changed files to api/common, which stores them and queues check.requested; api/verify runs the check and reports check.completed; api/common records a new version or returns the report while the Studio polls.",
+        "lanes": [
+          {
+            "id": "s",
+            "title": "Studio",
+            "sub": "code view",
+            "kind": "client"
+          },
+          {
+            "id": "c",
+            "title": "api/common",
+            "sub": "Go · CRUD",
+            "kind": "service"
+          },
+          {
+            "id": "k",
+            "title": "Kafka",
+            "sub": "shared bus",
+            "kind": "bus"
+          },
+          {
+            "id": "v",
+            "title": "api/verify",
+            "sub": "Python · checks",
+            "kind": "python"
+          },
+          {
+            "id": "b",
+            "title": "Storage",
+            "sub": "consoless/",
+            "kind": "store"
+          }
+        ],
+        "steps": [
+          {
+            "from": "s",
+            "to": "c",
+            "text": "PUT /projects/{id}/files"
+          },
+          {
+            "from": "c",
+            "to": "b",
+            "kind": "storage-write",
+            "text": "put compute/candidate"
+          },
+          {
+            "from": "c",
+            "to": "s",
+            "kind": "reply",
+            "text": "202 · checking"
+          },
+          {
+            "from": "c",
+            "to": "k",
+            "kind": "kafka",
+            "text": "check.requested"
+          },
+          {
+            "from": "k",
+            "to": "v",
+            "kind": "kafka",
+            "text": "check.requested"
+          },
+          {
+            "from": "v",
+            "to": "b",
+            "kind": "storage-write",
+            "text": "put tmp/bundle + report"
+          },
+          {
+            "from": "v",
+            "to": "k",
+            "kind": "kafka",
+            "text": "check.completed"
+          },
+          {
+            "from": "k",
+            "to": "c",
+            "kind": "kafka",
+            "text": "check.completed"
+          },
+          {
+            "note": "passed → version (edited)",
+            "at": "c"
+          },
+          {
+            "gap": 14
+          },
+          {
+            "from": "s",
+            "to": "c",
+            "text": "GET /checks/{id}"
+          }
+        ],
+        "footer": "Restoring an old version needs no check: the new head points at a tree and bundle that already passed."
+      }
+    },
+    {
+      "id": "flow-publish",
+      "type": "sequence",
+      "title": "Publish, play and score",
+      "caption": "<strong>Moderation before the link goes live; the game never touches the API.</strong> Publishing queues a review in <code>api/generate</code>. Players load the game from the play CDN with a signed URL. A score goes from the iframe to the Arcade page by <code>postMessage</code>, and the page submits it with the player's own token.",
+      "sequence": {
+        "aria": "Sequence for publishing: the Studio asks api/common to publish; api/common queues publish.requested; api/generate moderates and reports publish.reviewed; api/common marks it live. A player opens the Arcade, gets a signed URL from api/common, loads the game in the play iframe, and the iframe posts the score to the Arcade page, which submits it to api/common.",
+        "lanes": [
+          {
+            "id": "a",
+            "title": "Studio · Arcade",
+            "sub": "browser",
+            "kind": "client"
+          },
+          {
+            "id": "c",
+            "title": "api/common",
+            "sub": "Go · CRUD",
+            "kind": "service"
+          },
+          {
+            "id": "k",
+            "title": "Kafka",
+            "sub": "shared bus",
+            "kind": "bus"
+          },
+          {
+            "id": "g",
+            "title": "api/generate",
+            "sub": "moderation",
+            "kind": "python"
+          },
+          {
+            "id": "p",
+            "title": "Game iframe",
+            "sub": "play origin",
+            "kind": "client"
+          }
+        ],
+        "steps": [
+          {
+            "from": "a",
+            "to": "c",
+            "text": "POST /projects/{id}/publish"
+          },
+          {
+            "from": "c",
+            "to": "a",
+            "kind": "reply",
+            "text": "202 · in_review"
+          },
+          {
+            "from": "c",
+            "to": "k",
+            "kind": "kafka",
+            "text": "publish.requested"
+          },
+          {
+            "from": "k",
+            "to": "g",
+            "kind": "kafka",
+            "text": "publish.requested"
+          },
+          {
+            "from": "g",
+            "to": "k",
+            "kind": "kafka",
+            "text": "publish.reviewed {approved}"
+          },
+          {
+            "from": "k",
+            "to": "c",
+            "kind": "kafka",
+            "text": "publish.reviewed"
+          },
+          {
+            "note": "publication live · slug",
+            "at": "c"
+          },
+          {
+            "gap": 14
+          },
+          {
+            "from": "a",
+            "to": "c",
+            "text": "GET /arcade/games/{slug}/play"
+          },
+          {
+            "from": "c",
+            "to": "a",
+            "kind": "reply",
+            "text": "signed URL prefix · 1 h"
+          },
+          {
+            "from": "a",
+            "to": "p",
+            "text": "iframe src (sandbox)"
+          },
+          {
+            "from": "p",
+            "to": "a",
+            "kind": "reply",
+            "text": "postMessage {score}"
+          },
+          {
+            "from": "a",
+            "to": "c",
+            "text": "POST /scores + Idempotency-Key"
+          }
+        ],
+        "footer": "Anonymous players can play but not submit scores; remix copies the published tree into a new project."
+      }
+    },
+    {
+      "id": "topics",
+      "type": "table",
+      "title": "Events on the shared bus",
+      "intro": "Lanes, envelope and limits come from the CueLABS shared-messaging contract. Every type starts with <code>consoless.</code>, is validated against a schema in <code>api/common/contract/</code>, and is keyed by project id so one project's steps stay in order.",
+      "columns": [
+        "Event",
+        "Lane",
+        "Key",
+        "Producer → consumers"
+      ],
+      "rows": [
+        [
+          "consoless.generation.requested",
+          {
+            "text": "cuelabs.requests",
+            "class": "kafka"
+          },
+          "project id",
+          "common (outbox) → generate"
+        ],
+        [
+          "consoless.generation.completed",
+          {
+            "text": "cuelabs.results",
+            "class": "kafka"
+          },
+          "project id",
+          "generate → common"
+        ],
+        [
+          "consoless.check.requested",
+          {
+            "text": "cuelabs.requests",
+            "class": "kafka"
+          },
+          "project id",
+          "common (outbox) → verify"
+        ],
+        [
+          "consoless.check.completed",
+          {
+            "text": "cuelabs.results",
+            "class": "kafka"
+          },
+          "project id",
+          "verify → common"
+        ],
+        [
+          "consoless.publish.requested",
+          {
+            "text": "cuelabs.requests",
+            "class": "kafka"
+          },
+          "project id",
+          "common (outbox) → generate"
+        ],
+        [
+          "consoless.publish.reviewed",
+          {
+            "text": "cuelabs.results",
+            "class": "kafka"
+          },
+          "project id",
+          "generate → common"
+        ],
+        [
+          "consoless.asset.received (Stage 2)",
+          {
+            "text": "cuelabs.uploads",
+            "class": "kafka"
+          },
+          "project id",
+          "intake → common"
+        ],
+        [
+          "consoless.build.requested / .completed (Stage 3)",
+          {
+            "text": "requests / results",
+            "class": "kafka"
+          },
+          "project id",
+          "common ↔ build"
+        ]
+      ]
+    },
+    {
+      "id": "phases",
+      "type": "table",
+      "title": "Delivery phases",
+      "intro": "Phase 0 is clean-up only. The Figma designs (Phase D) land before any Phase 1 web UI work; engine and backend work run alongside them.",
+      "columns": [
+        "Phase",
+        "Delivers",
+        "Exit criteria"
+      ],
+      "rows": [
+        [
+          "0",
+          "Clean-up only: prototype screens retired, one “Continue with Google” button, README and decisions rewritten",
+          "No rental code; build-and-test green"
+        ],
+        [
+          "D",
+          "Figma designs for landing, Studio, Arcade, My Games and console-style frames, per the CueLABS design standard; <code>docs/design.md</code>",
+          "Designs signed off before Phase 1 web UI starts"
+        ],
+        [
+          "1a",
+          "<code>engine/</code>, <code>api/common</code>, <code>api/generate</code>, <code>api/verify</code>, the bus. In parallel with Phase D",
+          "A prompt produces a checked version in <code>stg</code> through the API"
+        ],
+        [
+          "1b",
+          "Studio from the Phase D designs; play origin; versions",
+          "A prompt produces a playable version in the Studio preview"
+        ],
+        [
+          "1c",
+          "Publishing, Arcade, remix, leaderboards, export, reports, privacy page",
+          "A published game plays from a public link and records scores"
+        ],
+        [
+          "2",
+          "3D, <code>api/intake</code>, asset generation, per-file patches; online multiplayer via <code>api/realtime</code> (S-26)",
+          "A 3D prompt runs smoothly on a mid-range laptop"
+        ],
+        [
+          "3",
+          "<code>api/build</code>, desktop installers, collaboration",
+          "A Stage 1 game exports to three desktop platforms unchanged"
+        ]
+      ]
+    },
+    {
+      "id": "decisions",
+      "type": "table",
+      "title": "Decisions, ratified",
+      "columns": [
+        "ID",
+        "Decision",
+        "Replaces",
+        "Status"
+      ],
+      "rows": [
+        [
+          "S-1",
+          "Units: web, Go <code>common</code>, Python <code>generate</code> and <code>verify</code>; later <code>intake</code> and <code>build</code>",
+          "AI calls inside Next.js",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-2",
+          "<code>generate</code> and <code>verify</code> are separate services; moderation runs inside <code>generate</code>",
+          "One processing service",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-3",
+          "Shared CueLABS bus; P-17 = user <code>consoless</code>, not the keep-alive owner",
+          "P-11 n/a",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-4",
+          "Aiven Postgres (P-09)",
+          "P-09 n/a",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-5",
+          "Game format: manifest plus <code>path → sha256</code> tree; content-addressed blobs",
+          "—",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-6",
+          "Play origin at <code>play.cuesoft.io</code> with a sandbox CSP header; dedicated play bucket behind signed Cloud CDN",
+          "Shared default bucket",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-7",
+          "Runtime never calls the API; scores by <code>postMessage</code>",
+          "—",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-8",
+          "Every version passes <code>verify</code>; at most 3 attempts, counted by <code>common</code>",
+          "—",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-9",
+          "Sign-in required; quotas and locks in shared Redis",
+          "In-memory limiter",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-10",
+          "Vertex AI over ADC in <code>generate</code> only; bring-your-own key for self-hosters",
+          "Gemini proxy key",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-11",
+          "Studio polls status rows; no token streaming in Stage 1",
+          "—",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-12",
+          "Every service at min 0 with wake-ups; Cloud Scheduler sweeps",
+          "—",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-13",
+          "Top-level <code>engine/</code> workspace (MIT)",
+          "Canonical layout",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-14",
+          "Browser reaches the API through the web <code>/api/v1</code> proxy",
+          "Direct browser-to-API",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-15",
+          "P-07 relative dates for activity and versions; P-12 drops the wallet; creators attest 16+, players need no account",
+          "P-07, P-12",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-16",
+          "Existing MIT WebGL renderer behind the engine API",
+          "Open question 1",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-17",
+          "Online multiplayer in Stage 2; realtime service designed in v2",
+          "Open question 6",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-18",
+          "Stage 1 scores: rate limits, max score, owner and report removal",
+          "Open question 9",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-19",
+          "Keep polling; revisit streaming with data",
+          "Open question 10",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-20",
+          "Desktop: webview shell (Tauri-style); <code>api/build</code> in Python",
+          "Open question 3",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-21",
+          "Free service; 20 generations per user per day to start",
+          "Open question 4",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-22",
+          "Keep the name Consoless",
+          "Open question 8",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-23",
+          "OpenTelemetry counters until the analytics event API exists",
+          "Open question 13",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-24",
+          "three.js for 2D and 3D",
+          "Open question",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-25",
+          "$500/month AI cap; quota halves at 80%, pauses at 100%",
+          "Open question",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-26",
+          "Go WebSocket relay <code>api/realtime</code> (Stage 2)",
+          "Open question",
+          "Ratified 2026-10-30"
+        ]
+      ]
+    },
+    {
+      "id": "open",
+      "type": "list",
+      "title": "Still open",
+      "items": [
+        {
+          "title": "Redis index.",
+          "text": "Assigned as the next free index when <code>api/common</code> is provisioned, then recorded in P-09."
+        },
+        {
+          "title": "Realtime details.",
+          "text": "Rooms, reconnection and capacity for <code>api/realtime</code>, designed in system design v2 (S-26)."
+        }
+      ]
+    }
+  ],
+  "footer": "Ratified design for Consoless. It replaces the rental prototype's architecture and keeps the dark theme, the leaderboard screen and the TEST_MODE contract."
+}

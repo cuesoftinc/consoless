@@ -1,4 +1,3 @@
-import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
@@ -10,15 +9,6 @@ import { defineConfig } from "vitest/config";
  */
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
-  // Repo-specific: route handlers import `server-only`, which Next resolves
-  // at build time; tests alias it to an empty module.
-  resolve: {
-    alias: {
-      "server-only": fileURLToPath(
-        new URL("./vitest.server-only.ts", import.meta.url),
-      ),
-    },
-  },
   test: {
     environment: "jsdom",
     globals: true,

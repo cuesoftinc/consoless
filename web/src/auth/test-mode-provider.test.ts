@@ -10,7 +10,7 @@ describe("TestModeAuthProvider", () => {
     const provider = new TestModeAuthProvider();
     expect(provider.currentUser()).toBeNull();
 
-    const user = await provider.signIn("player@example.com");
+    const user = await provider.signInWithGoogle();
 
     expect(user.email).toBe("player@example.com");
     expect(

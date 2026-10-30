@@ -39,12 +39,8 @@ const REPO_RULES = {
       viewForbiddenImports: [/from\s+["']@\/models\/repositories/],
     }),
     fetchOnlyIn({
-      // Browser calls go through the client; the Gemini proxy call is
-      // server-only and lives beside it in the repositories.
-      files: [
-        "src/models/repositories/client.ts",
-        "src/models/repositories/gemini-proxy.ts",
-      ],
+      // Browser calls go through the repositories client only.
+      files: ["src/models/repositories/client.ts"],
       prefixes: [],
     }),
     rawHex({
@@ -54,7 +50,9 @@ const REPO_RULES = {
         path.startsWith("src/components/") || path.startsWith("src/app/"),
       allowLinePatterns: [],
       commentedException: "none",
-      allowFileSuffixes: [],
+      // The GoogleAuthButton brand glyph is the documented file-level
+      // exception.
+      allowFileSuffixes: ["GoogleAuthButton.tsx"],
       colorFunctions: true,
     }),
   ],

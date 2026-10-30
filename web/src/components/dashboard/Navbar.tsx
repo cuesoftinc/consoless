@@ -3,24 +3,11 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutGrid,
-  Gamepad2,
-  Library,
-  MonitorPlay,
-  UserCircle,
-  Trophy,
-  Wallet,
-  BarChart2,
-} from "lucide-react";
+import { LayoutGrid, Gamepad2, UserCircle, BarChart2 } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Hub", icon: LayoutGrid },
-  { href: "/dashboard/rentals", label: "Rentals", icon: MonitorPlay },
-  { href: "/dashboard/library", label: "Game Library", icon: Library },
-  { href: "/dashboard/tournaments", label: "Tournaments", icon: Trophy },
   { href: "/dashboard/leaderboard", label: "Leaderboard", icon: BarChart2 },
-  { href: "/dashboard/wallet", label: "Wallet", icon: Wallet },
 ];
 
 const Navbar: React.FC = () => {
@@ -34,7 +21,7 @@ const Navbar: React.FC = () => {
             <Gamepad2 className="text-white w-6 h-6" />
           </div>
           <span className="hidden md:block font-retro text-sm tracking-tighter text-gaming-neon drop-shadow-[0_0_5px_color-mix(in_oklab,var(--gaming-neon)_50%,transparent)]">
-            V-CONSOLE
+            CONSOLESS
           </span>
         </div>
 
@@ -77,7 +64,7 @@ const Navbar: React.FC = () => {
 
       <div className="p-4 border-t border-gaming-800 bg-black/20">
         <button
-          aria-label="PlayerOne, Pro Member"
+          aria-label="PlayerOne, Creator"
           className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gaming-800/50 text-gray-400 hover:text-white transition-colors group border border-transparent hover:border-gaming-700"
         >
           <div className="relative">
@@ -89,7 +76,7 @@ const Navbar: React.FC = () => {
               PlayerOne
             </p>
             <p className="text-[10px] uppercase tracking-wider text-gaming-neon bg-gaming-neon/10 px-2 py-0.5 rounded-sm mt-0.5 inline-block border border-gaming-neon/20">
-              Pro Member
+              Creator
             </p>
           </div>
         </button>

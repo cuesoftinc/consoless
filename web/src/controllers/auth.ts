@@ -8,13 +8,10 @@ import { getAuthProvider, type AuthUser } from "@/auth";
 export function useAuthController() {
   const router = useRouter();
 
-  const signIn = useCallback(
-    async (email: string) => {
-      await getAuthProvider().signIn(email);
-      router.push("/dashboard");
-    },
-    [router],
-  );
+  const signIn = useCallback(async () => {
+    await getAuthProvider().signInWithGoogle();
+    router.push("/dashboard");
+  }, [router]);
 
   return { signIn };
 }

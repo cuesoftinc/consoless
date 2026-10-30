@@ -7,12 +7,7 @@ import {
   Globe,
   Cpu,
   ChevronRight,
-  Play,
   ShieldCheck,
-  X,
-  Mail,
-  Lock,
-  User,
   ArrowRight,
   ChevronLeft,
   Bot,
@@ -20,18 +15,19 @@ import {
   Cloud,
   Smartphone,
   ChevronDown,
-  Calendar,
+  GitFork,
 } from "lucide-react";
-import { useToast } from "@/controllers/toast";
-import { useAuthController } from "@/controllers/auth";
+import GoogleAuthButton from "@/components/ui/GoogleAuthButton";
+
+const REPO_URL = "https://github.com/cuesoftinc/consoless";
 
 const FEATURE_SLIDES = [
   {
     id: 1,
-    tag: "AI ENHANCED",
-    title: "Gemini AI Coaching",
+    tag: "PROMPT TO PLAYABLE",
+    title: "Describe It, Play It",
     description:
-      "Stuck on a boss? Our real-time AI analyzes your screen to provide strategy guides, hidden item locations, and tactical advice instantly without leaving the game.",
+      "Type the game you want in plain language. Consoless writes it against an open engine, checks that it runs, and puts it in your browser preview within minutes.",
     image:
       "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80",
     icon: Bot,
@@ -40,10 +36,10 @@ const FEATURE_SLIDES = [
   },
   {
     id: 2,
-    tag: "MULTIPLAYER EVOLVED",
-    title: "Virtual Couch Co-op",
+    tag: "CHAT TO REFINE",
+    title: "Keep Changing It",
     description:
-      "Share your session link and pass the controller. Turn any single-player retro classic into an online multiplayer experience with friends halfway across the world.",
+      "“Make the blocks fall faster.” Every message edits the same game and saves a version you can preview, compare and restore.",
     image:
       "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1600&q=80",
     icon: Users,
@@ -52,10 +48,10 @@ const FEATURE_SLIDES = [
   },
   {
     id: 3,
-    tag: "SEAMLESS CONTINUITY",
-    title: "Universal Cloud Saves",
+    tag: "CONSOLE STYLES",
+    title: "Pick a Look",
     description:
-      "Start on your PC, resume on your phone. Your precise save states and memory cards sync automatically across all devices in real-time.",
+      "Handheld, 8-bit or 16-bit home console, arcade cabinet, or modern. A style sets the frame, palette, controls and sound, and switching keeps your game logic.",
     image:
       "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1600&q=80",
     icon: Cloud,
@@ -64,10 +60,10 @@ const FEATURE_SLIDES = [
   },
   {
     id: 4,
-    tag: "ANY DEVICE",
-    title: "Play Anywhere",
+    tag: "PUBLISH & REMIX",
+    title: "Share It",
     description:
-      "No console required. Stream AAA titles to your browser, tablet, or smart TV with ultra-low latency edge computing nodes.",
+      "Publish to a public link anyone can play without an account. Others can remix your game into their own copy, with credit to you.",
     image:
       "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=1600&q=80",
     icon: Smartphone,
@@ -77,15 +73,7 @@ const FEATURE_SLIDES = [
 ];
 
 const LandingPage: React.FC = () => {
-  const { addToast } = useToast();
-  const { signIn } = useAuthController();
   const [scrolled, setScrolled] = useState(false);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<"LOGIN" | "SIGNUP">("LOGIN");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [dob, setDob] = useState("");
-  const [loading, setLoading] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -123,39 +111,6 @@ const LandingPage: React.FC = () => {
     sliderRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
-  const handleAuthSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    if (authMode === "SIGNUP") {
-      const birthDate = new Date(dob);
-      const today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-
-      if (age < 16) {
-        addToast("You must be 16 years or older to sign up.", "error");
-        setLoading(false);
-        return;
-      }
-    }
-
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      setAuthModalOpen(false);
-      void signIn(email);
-      if (authMode === "SIGNUP") {
-        addToast("Welcome to V-Console Hub!", "success");
-      } else {
-        addToast("Successfully logged in", "success");
-      }
-    }, 1500);
-  };
-
   return (
     <div
       ref={containerRef}
@@ -178,29 +133,18 @@ const LandingPage: React.FC = () => {
               <Gamepad2 className="text-white w-6 h-6" />
             </div>
             <span className="font-retro text-lg tracking-tighter text-white">
-              V-CONSOLE <span className="text-gaming-neon">HUB</span>
+              CONSOLE<span className="text-gaming-neon">SS</span>
             </span>
           </div>
 
           <div className="flex items-center gap-6">
-            <button
-              onClick={() => {
-                setAuthMode("LOGIN");
-                setAuthModalOpen(true);
-              }}
+            <a
+              href={REPO_URL}
               className="hidden md:block text-sm font-bold text-gray-300 hover:text-white transition-colors uppercase tracking-wider"
             >
-              Log In
-            </button>
-            <button
-              onClick={() => {
-                setAuthMode("SIGNUP");
-                setAuthModalOpen(true);
-              }}
-              className="bg-white text-gaming-900 px-6 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-gaming-neon hover:shadow-[0_0_20px_color-mix(in_oklab,var(--gaming-neon)_50%,transparent)] transition-all transform hover:-translate-y-0.5"
-            >
-              Get Started
-            </button>
+              GitHub
+            </a>
+            <GoogleAuthButton className="py-2.5" />
           </div>
         </div>
       </nav>
@@ -216,15 +160,15 @@ const LandingPage: React.FC = () => {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-gaming-neon"></span>
                 </span>
                 <span className="text-xs font-bold text-gaming-neon tracking-wider uppercase">
-                  Next Gen Cloud Gaming
+                  Open-Source Game Studio
                 </span>
               </div>
 
               <h1 className="text-5xl lg:text-7xl font-bold leading-[1.1] lg:leading-none tracking-tight">
-                Play Anything.
+                Describe It.
                 <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-gaming-accent to-purple-600">
-                  Anywhere.
+                  Play It.
                 </span>
               </h1>
 
@@ -232,39 +176,37 @@ const LandingPage: React.FC = () => {
               <div className="flex items-center gap-4 py-2 border-l-4 border-gaming-neon pl-4 bg-gradient-to-r from-gaming-neon/10 to-transparent rounded-r-xl">
                 <Zap className="w-6 h-6 text-gaming-neon fill-gaming-neon animate-pulse" />
                 <p className="text-xl md:text-2xl font-retro text-white tracking-tighter">
-                  PLAY AS YOU <span className="text-gaming-accent">GO</span>
+                  SHARE <span className="text-gaming-accent">IT</span>
                 </p>
               </div>
 
               <p className="text-lg text-gray-400 max-w-xl leading-relaxed">
-                Rent high-end virtual consoles or relive the classics. No
-                hardware required. Stream 4K gaming directly to your browser
-                with zero latency.
+                Tell Consoless the game you want and play it in your browser
+                within minutes. Keep chatting to change it, then share it with
+                anyone. No code and no console needed.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => {
-                    setAuthMode("SIGNUP");
-                    setAuthModalOpen(true);
-                  }}
-                  className="bg-gaming-accent text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-red-600 transition-all shadow-[0_0_30px_color-mix(in_oklab,var(--gaming-accent)_40%,transparent)] flex items-center justify-center gap-2 group"
+                <GoogleAuthButton
+                  className="px-8 py-4 uppercase tracking-wider"
+                  label="Start Building"
+                />
+                <a
+                  href={REPO_URL}
+                  className="bg-gaming-800 border border-gaming-700 text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:border-gaming-neon hover:text-gaming-neon transition-all flex items-center justify-center gap-2"
                 >
-                  Start Free Trial{" "}
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button className="bg-gaming-800 border border-gaming-700 text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:border-gaming-neon hover:text-gaming-neon transition-all flex items-center justify-center gap-2">
-                  <Play className="w-4 h-4" /> Watch Demo
-                </button>
+                  <GitFork className="w-4 h-4" /> View on GitHub
+                </a>
               </div>
 
               <div className="pt-8 flex items-center gap-6 text-gray-500 text-sm font-mono">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-gaming-neon" /> AES-256
-                  ENCRYPTED
+                  <ShieldCheck className="w-4 h-4 text-gaming-neon" /> MIT
+                  LICENSED
                 </div>
                 <div className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-gaming-neon" /> 12 REGIONS
+                  <Globe className="w-4 h-4 text-gaming-neon" /> RUNS IN THE
+                  BROWSER
                 </div>
               </div>
             </div>
@@ -288,10 +230,10 @@ const LandingPage: React.FC = () => {
                       </h3>
                       <div className="flex gap-2 mt-2">
                         <span className="px-2 py-1 bg-gaming-accent text-white text-[10px] font-bold rounded-sm uppercase">
-                          Live
+                          Playable
                         </span>
                         <span className="px-2 py-1 bg-gaming-neon/20 text-gaming-neon border border-gaming-neon/30 text-[10px] font-bold rounded-sm uppercase">
-                          120 FPS
+                          Version 3
                         </span>
                       </div>
                     </div>
@@ -408,11 +350,11 @@ const LandingPage: React.FC = () => {
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Power Beyond Hardware
+                Made to Be Taken Further
               </h2>
               <p className="text-gray-400 max-w-2xl mx-auto">
-                Access a fleet of supercomputers and retro consoles instantly.
-                Switch devices seamlessly without losing progress.
+                Anyone can make a game, and developers can take the code
+                further.
               </p>
             </div>
 
@@ -420,20 +362,20 @@ const LandingPage: React.FC = () => {
               {[
                 {
                   icon: Cpu,
-                  title: "Cloud Power",
-                  desc: "RTX 4090 equivalent performance streamed to any device.",
+                  title: "Readable Code",
+                  desc: "Games use an open engine API. Read and edit the code, or download the project.",
                   color: "text-gaming-neon",
                 },
                 {
                   icon: Globe,
-                  title: "Zero Latency",
-                  desc: "Edge computing nodes ensure <20ms ping globally.",
+                  title: "Open Source",
+                  desc: "Engine, runtime and game format are MIT-licensed. Self-host with your own keys.",
                   color: "text-purple-400",
                 },
                 {
                   icon: Zap,
-                  title: "Instant Access",
-                  desc: "No downloads. No updates. Click and play in seconds.",
+                  title: "Checked Before Shown",
+                  desc: "Every version is type-checked and test-run before it reaches your preview.",
                   color: "text-yellow-400",
                 },
               ].map((feature, idx) => (
@@ -465,18 +407,12 @@ const LandingPage: React.FC = () => {
                 Ready Player One?
               </h2>
               <p className="text-xl text-gray-300 mb-10">
-                Join 50,000+ gamers renting high-end rigs and hosting retro
-                tournaments today.
+                Your first game is one sentence away.
               </p>
-              <button
-                onClick={() => {
-                  setAuthMode("SIGNUP");
-                  setAuthModalOpen(true);
-                }}
-                className="bg-white text-gaming-900 px-10 py-4 rounded-xl font-bold text-lg uppercase tracking-wider hover:bg-gaming-neon transition-all shadow-[0_0_40px_color-mix(in_oklab,var(--white)_20%,transparent)] transform hover:-translate-y-1"
-              >
-                Create Free Account
-              </button>
+              <GoogleAuthButton
+                className="px-10 py-4 text-lg uppercase tracking-wider"
+                label="Start Building"
+              />
             </div>
           </div>
         </section>
@@ -484,164 +420,11 @@ const LandingPage: React.FC = () => {
 
       {/* Footer */}
       <footer className="bg-gaming-900 border-t border-gaming-800 py-12 text-center text-gray-500 text-sm relative z-10">
-        <p>© 2024 V-Console Hub. All rights reserved.</p>
+        <p>
+          Consoless is a CueLABS™ project. The engine and runtime are
+          MIT-licensed.
+        </p>
       </footer>
-
-      {/* Auth Modal */}
-      {authModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="auth-dialog-title"
-            className="bg-gaming-900 border border-gaming-700 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative animate-fade-in-up"
-          >
-            <button
-              onClick={() => setAuthModalOpen(false)}
-              aria-label="Close"
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-
-            <div className="p-8">
-              <div className="text-center mb-8">
-                <h2
-                  id="auth-dialog-title"
-                  className="text-2xl font-bold text-white mb-2"
-                >
-                  {authMode === "LOGIN" ? "Welcome Back" : "Create Account"}
-                </h2>
-                <p className="text-gray-400 text-sm">
-                  {authMode === "LOGIN"
-                    ? "Enter your credentials to access the hub."
-                    : "Join the future of cloud gaming today."}
-                </p>
-              </div>
-
-              <form onSubmit={handleAuthSubmit} className="space-y-4">
-                {authMode === "SIGNUP" && (
-                  <>
-                    <div className="space-y-1">
-                      <label
-                        htmlFor="auth-username"
-                        className="text-xs font-bold text-gray-400 uppercase ml-1"
-                      >
-                        Username
-                      </label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                        <input
-                          id="auth-username"
-                          type="text"
-                          placeholder="PlayerOne"
-                          className="w-full bg-gaming-800 border border-gaming-700 rounded-lg pl-10 pr-4 py-3 text-white focus:border-gaming-neon focus:outline-hidden transition-colors"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <label
-                        htmlFor="auth-dob"
-                        className="text-xs font-bold text-gray-400 uppercase ml-1"
-                      >
-                        Date of Birth
-                      </label>
-                      <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                        <input
-                          id="auth-dob"
-                          type="date"
-                          value={dob}
-                          onChange={(e) => setDob(e.target.value)}
-                          className="w-full bg-gaming-800 border border-gaming-700 rounded-lg pl-10 pr-4 py-3 text-white focus:border-gaming-neon focus:outline-hidden transition-colors"
-                          required
-                        />
-                      </div>
-                      <p className="text-[10px] text-gray-500 ml-1">
-                        You must be 16 or older to join.
-                      </p>
-                    </div>
-                  </>
-                )}
-
-                <div className="space-y-1">
-                  <label
-                    htmlFor="auth-email"
-                    className="text-xs font-bold text-gray-400 uppercase ml-1"
-                  >
-                    Email
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input
-                      id="auth-email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="w-full bg-gaming-800 border border-gaming-700 rounded-lg pl-10 pr-4 py-3 text-white focus:border-gaming-neon focus:outline-hidden transition-colors"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label
-                    htmlFor="auth-password"
-                    className="text-xs font-bold text-gray-400 uppercase ml-1"
-                  >
-                    Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input
-                      id="auth-password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full bg-gaming-800 border border-gaming-700 rounded-lg pl-10 pr-4 py-3 text-white focus:border-gaming-neon focus:outline-hidden transition-colors"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-gaming-accent hover:bg-red-600 text-white font-bold py-3.5 rounded-lg uppercase tracking-wider text-sm shadow-[0_0_20px_color-mix(in_oklab,var(--gaming-accent)_40%,transparent)] hover:shadow-[0_0_30px_color-mix(in_oklab,var(--gaming-accent)_60%,transparent)] transition-all mt-6 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? (
-                    <span className="animate-pulse">Processing...</span>
-                  ) : (
-                    <>
-                      {authMode === "LOGIN" ? "Log In" : "Sign Up"}{" "}
-                      <ChevronRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </form>
-
-              <div className="mt-6 text-center">
-                <p className="text-gray-500 text-sm">
-                  {authMode === "LOGIN"
-                    ? "Don't have an account? "
-                    : "Already have an account? "}
-                  <button
-                    onClick={() =>
-                      setAuthMode(authMode === "LOGIN" ? "SIGNUP" : "LOGIN")
-                    }
-                    className="text-gaming-neon hover:text-white font-bold transition-colors"
-                  >
-                    {authMode === "LOGIN" ? "Sign Up" : "Log In"}
-                  </button>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { ApiError, type ApiErrorBody } from "../errors";
 /**
  * HTTP client for the repository layer: the only place the browser talks to
  * the network. TEST_MODE targets the in-app mock routes at `/api/mock`;
- * otherwise the app's own route handlers at `/api`.
+ * otherwise `/api`.
  */
 export function apiBase(): string {
   return env.testMode ? "/api/mock" : "/api";

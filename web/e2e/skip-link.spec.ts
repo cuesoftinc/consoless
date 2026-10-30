@@ -22,11 +22,7 @@ test("dashboard: first Tab lands on the skip link; activating it focuses #main",
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Log In" }).first().click();
-  const dialog = page.getByRole("dialog", { name: "Welcome Back" });
-  await dialog.getByLabel("Email").fill("player@example.com");
-  await dialog.getByLabel("Password").fill("password");
-  await dialog.getByRole("button", { name: /Log In/ }).click();
+  await page.getByRole("button", { name: "Continue with Google" }).click();
   await page.waitForURL("**/dashboard");
 
   await page.goto("/dashboard");
