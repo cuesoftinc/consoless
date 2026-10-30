@@ -19,7 +19,7 @@ decided; a parameter whose surface is `absent` or `planned` may read `n/a`.
 | P-06 | Settings IA | tabs | |
 | P-07 | Date idiom per surface class | relative for activity and versions | Ratified S-15; bookings are retired (C-2) |
 | P-08 | Command palette | none | |
-| P-09 | Data store | postgres (Aiven, database `consoless`); `REDIS_DB` index — | Ratified S-4; the shared Redis index is assigned when `api/common` is provisioned |
+| P-09 | Data store | postgres (Aiven, database `consoless`); `REDIS_DB` index — | Ratified S-4; the index is the next free one, assigned and recorded here by whoever provisions `api/common` |
 | P-10 | Services and host ports | web 3000; api/common 8080, api/generate 8081, api/verify 8082 when built; api/intake 8083 (Stage 2) and api/build 8084 (Stage 3) | Ports in the order services were added (S-1) |
 | P-11 | Service transport | web → api/common `http` (through the `/api/v1` proxy); api/common ↔ api/generate and api/verify `pubsub` (the shared Kafka bus, so services never call each other synchronously); data-free wake-ups over `http` | Ratified S-3, S-12, S-14 |
 | P-12 | KYC tier contents | Tier 0: Google identity; tier 1: a one-time 16-or-older attestation for creators (playing a published game needs no account); tier 2 n/a | Ratified S-15; the wallet is retired (C-2) |
@@ -102,3 +102,6 @@ The full text, reasons and alternatives are in
 | S-21 | The hosted service is free; Stage 1 starts with 20 generations and refinements per user per day, held as configuration in `api/common` and tuned once model cost per generation is measured; paid tiers are decided later |
 | S-22 | The product keeps the name Consoless |
 | S-23 | Until the analytics event API exists, `api/common` emits Game Generated, Game Published and Game Played as OpenTelemetry counters (counts only) and forwards them once it does |
+| S-24 | The engine wraps three.js for both 2D (orthographic camera and sprites) and 3D, behind the engine API (refines S-16) |
+| S-25 | Stage 1 AI spend stays under $500 a month. `api/generate` reports the estimated cost of each model call in its completed events; `api/common` keeps month-to-date spend and applies two configured thresholds: at 80% the daily quota halves, and at 100% new generations pause until the month resets. A Google Cloud billing budget alert at the same thresholds is the backstop |
+| S-26 | Stage 2 multiplayer uses `api/realtime`, a Go WebSocket relay that forwards player inputs between browsers and makes no decisions; room state lives in memory and Redis, and results go to `api/common` over the bus. A relay is a gateway role, which the standard gives to Node; this exception is documented in system design v2 |

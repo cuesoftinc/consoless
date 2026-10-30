@@ -2,7 +2,7 @@
   "title": "Consoless System Design",
   "eyebrow": "Consoless · system design v1",
   "lead": "Go <code>api/common</code> owns every byte of data, Python makes every decision, and generated games run only on a separate play origin. <code>api/generate</code> writes the game, <code>api/verify</code> proves it runs, and the shared Kafka bus carries pointers between them. The full write-up is <code>docs/system-design.md</code>.",
-  "status": "Ratified v1 · signed off 2026-10-30 (S-1 to S-23)",
+  "status": "Ratified v1 · signed off 2026-10-30 (S-1 to S-26)",
   "theme": {
     "light": {
       "accent": "#C8304B",
@@ -1562,7 +1562,7 @@
         ],
         [
           "2",
-          "3D, <code>api/intake</code>, asset generation, per-file patches; online multiplayer (S-17)",
+          "3D, <code>api/intake</code>, asset generation, per-file patches; online multiplayer via <code>api/realtime</code> (S-26)",
           "A 3D prompt runs smoothly on a mid-range laptop"
         ],
         [
@@ -1720,6 +1720,24 @@
           "OpenTelemetry counters until the analytics event API exists",
           "Open question 13",
           "Ratified 2026-10-30"
+        ],
+        [
+          "S-24",
+          "three.js for 2D and 3D",
+          "Open question",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-25",
+          "$500/month AI cap; quota halves at 80%, pauses at 100%",
+          "Open question",
+          "Ratified 2026-10-30"
+        ],
+        [
+          "S-26",
+          "Go WebSocket relay <code>api/realtime</code> (Stage 2)",
+          "Open question",
+          "Ratified 2026-10-30"
         ]
       ]
     },
@@ -1729,20 +1747,12 @@
       "title": "Still open",
       "items": [
         {
-          "title": "Renderer library.",
-          "text": "Which MIT renderer the engine wraps (S-16); chosen in Phase 1a, three.js is the default candidate."
-        },
-        {
-          "title": "Model cost.",
-          "text": "Measured cost per generation and refinement, which tunes the daily quota (S-21)."
-        },
-        {
-          "title": "Realtime service.",
-          "text": "The Stage 2 multiplayer service's shape, designed in system design v2 (S-17)."
-        },
-        {
           "title": "Redis index.",
-          "text": "The shared Redis index for Consoless (P-09), assigned at provisioning."
+          "text": "Assigned as the next free index when <code>api/common</code> is provisioned, then recorded in P-09."
+        },
+        {
+          "title": "Realtime details.",
+          "text": "Rooms, reconnection and capacity for <code>api/realtime</code>, designed in system design v2 (S-26)."
         }
       ]
     }

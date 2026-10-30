@@ -1,6 +1,6 @@
 # Consoless — System Design
 
-> **Status:** [Ratified] v1 — signed off 2026-10-30; decisions S-1 to S-23 are
+> **Status:** [Ratified] v1 — signed off 2026-10-30; decisions S-1 to S-26 are
 > recorded in `docs/decisions.md`.
 > This document is the source for `docs/architecture.md`,
 > `docs/data-model.md` and `docs/api.md`. None of them exist yet; each is
@@ -515,8 +515,11 @@ deploy/  docs/  scripts/
 | S-21 | The hosted service is free; Stage 1 starts with 20 generations and refinements per user per day, held as configuration in `api/common` and tuned once model cost per generation is measured; paid tiers are decided later | Open question Q4 | ✅ Ratified 2026-10-30 |
 | S-22 | The product keeps the name Consoless | Open question Q8 | ✅ Ratified 2026-10-30 |
 | S-23 | Until the analytics event API exists, `api/common` emits Game Generated, Game Published and Game Played as OpenTelemetry counters (counts only) and forwards them once it does | Open question Q13 | ✅ Ratified 2026-10-30 |
+| S-24 | The engine wraps three.js for both 2D (orthographic camera and sprites) and 3D, behind the engine API (refines S-16) | Open question | ✅ Ratified 2026-10-30 |
+| S-25 | Stage 1 AI spend stays under $500 a month. `api/generate` reports the estimated cost of each model call in its completed events; `api/common` keeps month-to-date spend and applies two configured thresholds: at 80% the daily quota halves, and at 100% new generations pause until the month resets. A Google Cloud billing budget alert at the same thresholds is the backstop | Open question | ✅ Ratified 2026-10-30 |
+| S-26 | Stage 2 multiplayer uses `api/realtime`, a Go WebSocket relay that forwards player inputs between browsers and makes no decisions; room state lives in memory and Redis, and results go to `api/common` over the bus. A relay is a gateway role, which the standard gives to Node; this exception is documented in system design v2 | Open question | ✅ Ratified 2026-10-30 |
 
-Ratified 2026-10-30: S-1 to S-23 are in `docs/decisions.md` and P-07, P-09, P-11,
+Ratified 2026-10-30: S-1 to S-26 are in `docs/decisions.md` and P-07, P-09, P-11,
 P-12 and P-17 are set. Still to do: update `.cuelabs/project.yaml`, and write the docs in §12.
 
 ## 14. Migration plan
@@ -528,7 +531,7 @@ P-12 and P-17 are set. Still to do: update `.cuelabs/project.yaml`, and write th
 | 1a | `engine/` runtime, format and styles; `api/common`, `api/generate` and `api/verify` skeletons and the bus. **Runs in parallel with Phase D**: none of it depends on the designs | A hand-written game in the format runs headlessly in `api/verify`; a prompt produces a checked version in `stg` through the API | PRD Phase 1; CON-001, CON-003, CON-004 |
 | 1b | The web Studio, built from the Phase D designs on mocks (the contract) and then the real API; the play origin; versions | A prompt produces a checked, playable version in the Studio preview in `stg` | CON-001 to CON-005 |
 | 1c | Publishing, the Arcade, remix, leaderboards, export, reports and the privacy page (UI from the Phase D designs) | A published game plays from a public link and records scores | CON-006, 007, 008, 014 |
-| 2 | 3D in the engine; `api/intake`; asset generation; per-file patches; online multiplayer with a realtime service (S-17, designed in system design v2) | A 3D prompt runs at a stable frame rate on a mid-range laptop | CON-009 to CON-011 |
+| 2 | 3D in the engine; `api/intake`; asset generation; per-file patches; online multiplayer through `api/realtime`, a Go WebSocket relay (S-17, S-26, designed in system design v2) | A 3D prompt runs at a stable frame rate on a mid-range laptop | CON-009 to CON-011 |
 | 3 | `api/build`, installers, collaboration | A Stage 1 game exports to all three desktop platforms unchanged | CON-012, CON-013 |
 
 No data migration is needed: the prototype stores nothing.
@@ -541,15 +544,14 @@ multiplayer (S-17), minimum age (S-15), the name (S-22), anti-cheat (S-18),
 streaming (S-19), bus availability and keep-alive ownership (S-3), and
 analytics (S-23).
 
+Also resolved: the renderer library (three.js, S-24), the Stage 1 AI
+budget ($500 a month, S-25) and the shape of the multiplayer service (a Go
+WebSocket relay, S-26).
+
 Still open:
 
-1. **Renderer library.** Which MIT renderer the engine wraps (S-16).
-   Decided in Phase 1a with a small spike; three.js is the default
-   candidate because Stage 2 needs 3D.
-2. **Model cost.** The measured cost per generation and refinement for 2D
-   and 3D, which tunes the daily quota (S-21).
-3. **Realtime service.** The shape of the Stage 2 multiplayer service
-   (language, transport, who owns room state), designed in system design
-   v2 before Stage 2 (S-17).
-4. **Redis index.** The shared Redis database index for Consoless (P-09),
-   assigned when `api/common` is provisioned.
+1. **Redis index.** The shared Redis database index for Consoless (P-09) is
+   assigned by whoever provisions `api/common`, as the next free index, and
+   recorded in P-09.
+2. **Realtime details.** `api/realtime`'s rooms, reconnection and capacity
+   are designed in system design v2 before Stage 2 (S-26).
