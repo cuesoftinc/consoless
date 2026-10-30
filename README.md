@@ -1,121 +1,107 @@
-# 🎮 Virtual Console Hub
+# Consoless
 
-> **"Play as you Go"**
+> **Describe it. Play it. Share it.**
 
-Virtual Console Hub is a next-generation cloud gaming platform concept. It allows users to rent high-end virtual machines or retro console emulators on-demand, enabling gameplay on any device via low-latency streaming.
+Consoless is an open-source platform where anyone can make a game by describing it. You type "a falling-block puzzle on a handheld with a green screen", pick a look, and play the result in your browser within minutes. Each follow-up message ("make the blocks fall faster", "switch to an arcade cabinet") edits the same game and saves a new version. Finished games can be published to a public link, played by anyone and remixed.
 
-![Status](https://img.shields.io/badge/Status-Prototype-blue)
-![Tech](https://img.shields.io/badge/Tech-Next.js_|_React_|_Tailwind-0ff0fc)
-![AI](https://img.shields.io/badge/AI-Gemini_2.0-e94560)
+The platform has two layers:
 
----
+- **An open-source game engine** (MIT): a TypeScript runtime, one game format and console styles defined as data. Every generated game is written against it, so you can read the code, change it and keep building locally.
+- **A hosted service** run by CueLABS™: it turns prompts into games, checks and previews them, and stores, versions and publishes them.
 
-## 🚀 Features
-
-### 🕹️ Console Marketplace
-- **Rent on Demand**: Spin up PS5, Xbox, or High-End PC rigs instantly.
-- **Retro Emulation**: Access NES, SNES, N64, Sega, and PS1/PS2 classics.
-- **Tiered Performance**: Choose between Standard, Pro, and Ultra streaming tiers.
-
-### 📺 Active Session Stream
-- **Interactive Overlay**: Virtual touch controllers and input visualization.
-- **AI Coaching**: Real-time gameplay analysis and strategy tips powered by **Google Gemini**.
-- **P2P Peering**: Connect with friends or lobby members for virtual couch co-op.
-- **Retro Features**: CRT Filters, Save States, and Rewind capabilities.
-- **Stats HUD**: Monitor FPS, Latency, and Bitrate in real-time.
-
-### 💰 Virtual Wallet
-- **Crypto & Fiat**: Simulate deposits via Bitcoin/Solana or Credit Card.
-- **Transaction History**: Track rentals and tournament prizes.
-
-### 🏆 Social & Competitive
-- **Tournaments**: Host or join Tag Team and Squad events.
-- **Leaderboards**: Global rankings with tiered progression.
-- **Chat**: Real-time party chat with system alerts.
+![Status](https://img.shields.io/badge/Status-Phase_0-blue)
+![Tech](https://img.shields.io/badge/Tech-Next.js_|_Go_|_Python-0ff0fc)
+![License](https://img.shields.io/badge/License-MIT-e94560)
 
 ---
 
-## 🛠️ Getting Started
+## Roadmap
 
-The app lives in [`web/`](web/), a Next.js App Router project.
+| Stage | What you can make |
+| --- | --- |
+| **1. Retro & 2D** | Puzzles, platformers, shooters and top-down adventures in a console style (handheld, 8-bit and 16-bit home console, arcade cabinet, modern), played in the browser |
+| **2. 3D** | Games with scenes, cameras, lighting, physics, models and characters, played in the browser |
+| **3. Installable** | Any Consoless game packaged as a desktop app for Windows, macOS and Linux |
+
+### Where things stand
+
+The repository is in **Phase 0**: the earlier console-rental prototype has been retired, and the new direction is recorded in [`docs/decisions.md`](docs/decisions.md) (C-1 to C-4).
+
+- **Design first.** The landing page, Studio, Arcade, My Games and console-style frames are designed in Figma before any new UI is built (C-4). Until then the web app keeps the prototype's layouts with updated copy.
+- **Architecture.** The proposed system is in [`docs/system-design.md`](docs/system-design.md) (open [`docs/system-design.html`](docs/system-design.html) for the diagrams). It is a draft awaiting ratification (S-1 to S-15).
+
+---
+
+## Architecture (proposed)
+
+```mermaid
+flowchart TB
+  browser[Browser] --> web[web · Next.js]
+  web --> common[api/common · Go · CRUD owner]
+  common --> pg[(Postgres)]
+  common <--> bus[[Shared Kafka bus]]
+  bus <--> generate[api/generate · Python · model calls]
+  bus <--> verify[api/verify · Python · checks every version]
+  browser -. sandboxed iframe .-> play[Play origin · separate domain]
+```
+
+- `api/common` owns all data: users, projects, versions, publishing and leaderboards.
+- `api/generate` makes every model call (Gemini through Vertex AI), applies the content and IP policy, and moderates games before publishing.
+- `api/verify` type-checks and runs each version headlessly before anyone sees it. It holds no model credentials.
+- Generated games only ever run on a separate play origin, never on the main site.
+
+See the [system design](docs/system-design.md) for services, data ownership, flows and open questions.
+
+---
+
+## Repository structure
+
+| Path | Contents |
+| --- | --- |
+| [`web/`](web/) | Next.js App Router app: the landing page (`/`), the hub (`/dashboard`) and the leaderboard (`/dashboard/leaderboard`) |
+| [`docs/`](docs/) | Decisions register and system design |
+| [`.cuelabs/project.yaml`](.cuelabs/project.yaml) | CueLABS project manifest: which surfaces are active or planned |
+
+`engine/` and the `api/` services are planned; they are created when their phase starts.
+
+---
+
+## Getting started
 
 ### Prerequisites
+
 - **Node.js** 24 (see [`web/.nvmrc`](web/.nvmrc))
 - **npm**
 
-### Run Locally
+### Run locally
 
 ```bash
 git clone https://github.com/cuesoftinc/consoless.git
 cd consoless/web
 npm ci
-npm run dev
+NEXT_PUBLIC_TEST_MODE=true npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open `http://localhost:3000`. In TEST_MODE, "Continue with Google" signs you in as a local test user without contacting Google.
 
-### Configure AI Coaching
+### Test
 
-AI coaching and lobby chatter run on the server through a hosted Gemini proxy, so no key reaches the browser. Copy [`web/.env.example`](web/.env.example) to `web/.env.local` and set `GEMINI_PROXY_API_KEY`. Without a key the app falls back to generic coaching messages.
-
-Set `NEXT_PUBLIC_TEST_MODE=true` to answer every AI call from the in-app mocks instead.
-
----
-
-## 📖 User Guide
-
-### 1. Authentication
-- **Sign Up**: You must be **16 years or older** to create an account.
-- **Login**: Use any credentials for the prototype (e.g., `user` / `password`).
-
-### 2. The Dashboard
-- Customize your **Persona** (Avatar & Title) by clicking your profile card.
-- View your weekly activity stats and active quests.
-- Claim **Daily Rewards** to boost your XP.
-
-### 3. Renting a Console
-1. Navigate to **Rentals**.
-2. Filter by **Modern**, **Retro**, or **PC**.
-3. Select a console (e.g., "Nintendo 64").
-4. Choose a game from the supported library (e.g., "GoldenEye 007").
-5. Click **Deploy**.
-
-### 4. In-Game Controls (Active Session)
-- **AI Coach**: Click the "Ask AI" bot icon to analyze the current game state and get tips.
-- **Controls**:
-  - **Keyboard**: Standard WASD/Arrow keys.
-  - **Virtual**: Toggle the `Gamepad` icon to show on-screen touch controls.
-  - **Physical**: Connect a Bluetooth controller via the `Plug` icon menu.
-- **Microphone**: Toggle the Mic icon to simulate voice chat.
-- **Save State**: (Retro Only) Click the Save icon to store your progress to the cloud.
-
-### 5. Peer-to-Peer (Multiplayer)
-1. In a session, click the **Peers** button.
-2. Scan for players on similar consoles.
-3. Click **Connect** to link sessions (simulates local multiplayer over IP).
+```bash
+cd web
+npm run lint
+npm run typecheck
+npm test
+npm run test:e2e
+```
 
 ---
 
-## 📂 Project Structure
+## Contributing
 
-- **`web/src/app`**: Routes (`/` landing, `/dashboard/*` app screens) and the AI route handlers under `api/`.
-- **`web/src/components`**: React UI components (Navbar, ActiveSession, Market, etc.).
-- **`web/src/controllers`**: State and orchestration (app state, auth, toasts, AI).
-- **`web/src/models`**: Types and repositories, the only code that talks to the network.
-- **`web/src/mocks`**: Mock data for Games, Consoles, Leaderboards and TEST_MODE AI replies.
+Contributions to the engine, console styles and the generation pipeline are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md) first. Report security issues as described in [SECURITY.md](SECURITY.md).
 
----
+Questions about the hosted service go to [cuelabs.cuesoft.io](https://cuelabs.cuesoft.io).
 
-## 🎨 Design System
+## License
 
-The app uses a "Cyber-Gamer" aesthetic:
-- **Primary**: Deep Navy (`#0f0e17`)
-- **Neon**: Cyan (`#0ff0fc`)
-- **Accent**: Red/Pink (`#e94560`)
-- **Retro**: Orange (`#ff8e3c`)
-
----
-
-## 📜 License
-
-This project is a concept prototype. All game images and titles are property of their respective owners and used for demonstration purposes.
+[MIT](LICENSE).

@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | Consoless",
   },
   description:
-    "A console-less gaming platform: rent cloud and virtual consoles, retro and modern, and stream games with AI-enhanced features.",
+    "Describe a game and play it in your browser. Consoless is an open-source platform for making retro, 2D and 3D games by chatting.",
 };
 
 export const viewport: Viewport = {

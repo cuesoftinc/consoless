@@ -1,19 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
-import { GAMES } from "@/mocks/seed";
-import {
-  Edit3,
-  Clock,
-  Trophy,
-  Activity,
-  ChevronRight,
-  Play,
-  Settings,
-  Target,
-  X,
-} from "lucide-react";
+import { Edit3, Clock, Trophy, Activity, Settings, X } from "lucide-react";
 import { AreaChart } from "@/components/ui/charts/AreaChart";
 import { useToast } from "@/controllers/toast";
 
@@ -44,22 +32,13 @@ const AVATAR_OPTIONS = [
 const DashboardHub: React.FC = () => {
   const { addToast } = useToast();
   const username = "PlayerOne";
-  const title = "Cloud Pioneer";
+  const title = "Game Maker";
   const [avatar, setAvatar] = useState(AVATAR_OPTIONS[0]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-  const recentGames = [GAMES[0], GAMES[7], GAMES[12], GAMES[3]];
 
   const handleSaveProfile = () => {
     setIsEditModalOpen(false);
     addToast("Profile updated successfully", "success");
-  };
-
-  const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>,
-    title: string,
-  ) => {
-    e.currentTarget.src = `https://placehold.co/600x800/1a1a2e/ffffff?text=${encodeURIComponent(title)}`;
   };
 
   return (
@@ -142,75 +121,9 @@ const DashboardHub: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="bg-gaming-800 rounded-2xl p-6 border border-gaming-700">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
-              <Activity className="w-4 h-4 text-green-400" /> Network Status
-            </h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-400">Region</span>
-                <span className="text-white font-mono">US-EAST-1</span>
-              </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-400">Latency</span>
-                <span className="text-green-400 font-mono">14ms</span>
-              </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-400">Packet Loss</span>
-                <span className="text-green-400 font-mono">0.0%</span>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="lg:col-span-2 space-y-8">
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <Clock className="w-5 h-5 text-gaming-neon" /> Jump Back In
-              </h2>
-              <Link
-                href="/dashboard/library"
-                className="text-xs font-bold text-gray-500 hover:text-white flex items-center gap-1 transition-colors"
-              >
-                View All <ChevronRight className="w-3 h-3" />
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {recentGames.map((game, idx) => (
-                <div
-                  key={game.id}
-                  className="group relative aspect-[3/4] rounded-xl overflow-hidden bg-gaming-800 border border-gaming-700 hover:border-gaming-neon transition-all"
-                >
-                  <img
-                    src={game.coverUrl}
-                    alt={game.title}
-                    onError={(e) => handleImageError(e, game.title)}
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gaming-900 via-transparent to-transparent opacity-90" />
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <p className="text-xs font-bold text-white truncate mb-1">
-                      {game.title}
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[9px] text-gray-400">
-                        {idx === 0 ? "2h ago" : "Yesterday"}
-                      </span>
-                      <Link
-                        href="/dashboard/rentals"
-                        aria-label={`Play ${game.title}`}
-                        className="bg-gaming-accent p-1.5 rounded-full text-white opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transform translate-y-2 group-hover:translate-y-0 focus-visible:translate-y-0 transition-all shadow-lg"
-                      >
-                        <Play className="w-3 h-3 fill-current" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
           <section className="bg-gaming-800 rounded-2xl p-6 border border-gaming-700">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
@@ -224,31 +137,6 @@ const DashboardHub: React.FC = () => {
                 series={ACTIVITY_SERIES}
                 label="Hours played and XP gained per day this week"
               />
-            </div>
-          </section>
-
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gaming-800/50 rounded-xl p-5 border border-gaming-700">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
-                <Target className="w-4 h-4 text-gaming-retro" /> Active Quest
-              </h3>
-              <div className="flex items-start gap-3">
-                <img
-                  src={GAMES[0].coverUrl}
-                  alt="Quest"
-                  onError={(e) => handleImageError(e, GAMES[0].title)}
-                  className="w-12 h-12 rounded-sm object-cover opacity-80"
-                />
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-white">Cyber Samurai</p>
-                  <p className="text-xs text-gray-400 mb-2">
-                    Complete 3 missions without dying.
-                  </p>
-                  <div className="w-full h-1.5 bg-gaming-900 rounded-full overflow-hidden">
-                    <div className="h-full bg-gaming-retro w-2/3"></div>
-                  </div>
-                </div>
-              </div>
             </div>
           </section>
         </div>

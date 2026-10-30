@@ -16,8 +16,8 @@
   --black: #000000;
   --white: #ffffff;
 
-  --stream-canvas: #16161d;
-  --stream-trail: #101018;
+  /* Handheld console style: the green screen of the landing-page frame. */
+  --handheld-screen: #9bbc0f;
 
   --chart-axis: #4a5568;
   --chart-border: #2d3748;
@@ -27,13 +27,4 @@
   --glow-silver: #9ca3af;
   --glow-gold: #eab308;
   --glow-bronze: #c2410c;
-  --glow-green: #22c55e;
-  --glow-purple: #a855f7;
-  --glow-amber: #fbbf24;
-
-  --platform-steam: #171a21;
-  --platform-psn: #003791;
-  --platform-retro: #d35400;
-  --platform-epic: #313131;
-  --platform-ubisoft: #00589d;
 }

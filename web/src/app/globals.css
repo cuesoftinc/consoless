@@ -11,22 +11,13 @@
   --color-gaming-retro: var(--gaming-retro);
   --color-black: var(--black);
   --color-white: var(--white);
-  --color-stream-canvas: var(--stream-canvas);
-  --color-stream-trail: var(--stream-trail);
+  --color-handheld-screen: var(--handheld-screen);
   --color-chart-axis: var(--chart-axis);
   --color-chart-border: var(--chart-border);
   --color-chart-cursor: var(--chart-cursor);
   --color-glow-silver: var(--glow-silver);
   --color-glow-gold: var(--glow-gold);
   --color-glow-bronze: var(--glow-bronze);
-  --color-glow-green: var(--glow-green);
-  --color-glow-purple: var(--glow-purple);
-  --color-glow-amber: var(--glow-amber);
-  --color-platform-steam: var(--platform-steam);
-  --color-platform-psn: var(--platform-psn);
-  --color-platform-retro: var(--platform-retro);
-  --color-platform-epic: var(--platform-epic);
-  --color-platform-ubisoft: var(--platform-ubisoft);
 
   --font-sans: var(--font-inter), sans-serif;
   --font-retro: var(--font-press-start-2p), cursive;

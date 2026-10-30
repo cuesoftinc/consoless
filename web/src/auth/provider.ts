@@ -1,7 +1,8 @@
 /**
- * AuthProvider: the seam behind the landing page's log-in and sign-up form.
- * TestModeAuthProvider is the only provider until the backend lands; a real
- * provider slots in behind the same interface.
+ * AuthProvider: the seam behind the single "Continue with Google" CTA.
+ * Google sign-in is the only credential. TestModeAuthProvider is the only
+ * provider until the backend lands; FirebaseAuthProvider (Google-only) slots
+ * in behind the same interface.
  */
 export interface AuthUser {
   id: string;
@@ -10,8 +11,8 @@ export interface AuthUser {
 }
 
 export interface AuthProvider {
-  /** Resolves once a session exists. */
-  signIn(email: string): Promise<AuthUser>;
+  /** Runs the Google sign-in flow; resolves once a session exists. */
+  signInWithGoogle(): Promise<AuthUser>;
   signOut(): Promise<void>;
   /** Synchronous snapshot of the current session; null on any failure. */
   currentUser(): AuthUser | null;
