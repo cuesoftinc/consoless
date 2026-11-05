@@ -1,0 +1,126 @@
+apiVersion: v3
+kind: service
+metadata:
+  name: consoless-website
+  displayName: consoless-website
+  description: Consoless website
+  owner: cuesoft
+  tags:
+    - app:consoless
+    - component:website
+  contacts:
+    - type: email
+      contact: cuelabs@cuesoft.io
+  additionalOwners:
+    - name: platform
+      type: SRE
+  links:
+    - name: Repository
+      type: repo
+      provider: github
+      url: https://github.com/cuesoftinc/consoless
+    - name: Website
+      type: other
+      url: https://consoless.cuesoft.io
+spec:
+  lifecycle: production
+  tier: "1"
+  type: web
+  languages:
+    - typescript
+---
+apiVersion: v3
+kind: repository
+metadata:
+  name: github.com/cuesoftinc/consoless
+  displayName: consoless
+  description: Consoless platform
+  owner: cuesoft
+  tags:
+    - app:consoless
+    - component:website
+  contacts:
+    - type: email
+      contact: cuelabs@cuesoft.io
+  additionalOwners:
+    - name: platform
+      type: SRE
+  links:
+    - name: Repository
+      type: repo
+      provider: github
+      url: https://github.com/cuesoftinc/consoless
+    - name: Website
+      type: other
+      url: https://consoless.cuesoft.io
+datadog:
+  codeLocations:
+    - repositoryURL: github.com/cuesoftinc/consoless
+spec:
+  lifecycle: production
+  tier: "1"
+  type: web
+  componentOf:
+    - service:consoless-website
+---
+apiVersion: v3
+kind: frontend
+metadata:
+  name: consoless-website
+  displayName: consoless-website
+  description: Consoless website
+  owner: cuesoft
+  tags:
+    - app:consoless
+    - component:frontend
+  contacts:
+    - type: email
+      contact: cuelabs@cuesoft.io
+  additionalOwners:
+    - name: platform
+      type: SRE
+  links:
+    - name: Repository
+      type: repo
+      provider: github
+      url: https://github.com/cuesoftinc/consoless
+    - name: Website
+      type: other
+      url: https://consoless.cuesoft.io
+spec:
+  type: browser
+  lifecycle: production
+  tier: "1"
+  componentOf:
+    - service:consoless-website
+---
+apiVersion: v3
+kind: system
+metadata:
+  name: consoless
+  displayName: consoless
+  description: Consoless website
+  owner: cuesoft
+  tags:
+    - app:consoless
+    - component:system
+  contacts:
+    - type: email
+      contact: cuelabs@cuesoft.io
+  additionalOwners:
+    - name: platform
+      type: SRE
+  links:
+    - name: Repository
+      type: repo
+      provider: github
+      url: https://github.com/cuesoftinc/consoless
+    - name: Website
+      type: other
+      url: https://consoless.cuesoft.io
+spec:
+  lifecycle: production
+  tier: "1"
+  components:
+    - service:consoless-website
+    - frontend:consoless-website
