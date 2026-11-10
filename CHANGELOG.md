@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Landing page rebuilt from the designs: the marketing navigation and footer, hero, how it works, console style picker, example games, a contributor band, hosted and self-hosted options and an FAQ, in Light and Dark.
 - Sign-in page at `/signin`. Signed-out visitors to the dashboard are sent there, and signed-in visitors skip it.
 - `sitemap.xml`, and analytics events for the landing page that queue locally until an analytics endpoint is configured.
+- GitBook setup: `.gitbook.yaml`, the `docs/SUMMARY.md` navigation, and the overview and setup pages.
 - Web component library: 35 components in `web/src/components/ui/`, built from the design tokens with a test file each, and a dev-only gallery at `/dev/components`.
 - Web foundations: semantic design tokens with Light as the default theme and a Dark mode, the theme provider and toggle, the mock server base with a reset route, a request hook for controllers, and an HTTP client that sends bearer tokens and idempotency keys.
 - Decision C-5: the Figma designs are the basis for the web build.
