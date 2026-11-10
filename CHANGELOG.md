@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The Arcade at `/arcade`: published games with search and a console-style filter, open to everyone.
+- Game pages at `/arcade/{slug}`: the console frame, the prompt that made the game, the leaderboard, share, report and remix. Remixing needs an account and creates a draft in My Games.
+- Mock API for the Arcade: games, scores, reports and remix.
 - My Games at `/dashboard`: the user's games with their status, and rename, unpublish and delete (delete asks for the username).
 - Settings at `/dashboard/settings`: Profile, Appearance and Data and privacy, including account deletion.
 - The signed-in app bar with today's generations and the account menu, and the one-time 16-or-older check for creators.
@@ -46,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Removed
 
-- The prototype's hub and ratings leaderboard. The per-game leaderboard returns with the Arcade.
+- The prototype's hub and ratings leaderboard. The leaderboard is now per game, on the game page.
 - Console rentals, the streaming session, the wallet, tournaments and the commercial game library.
 - The AI coaching and lobby routes, the Gemini proxy client and `GEMINI_PROXY_*` variables. Model calls move to the backend.
 - The email and password sign-in form.
