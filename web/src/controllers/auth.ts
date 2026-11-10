@@ -100,3 +100,13 @@ export function useRedirectAuthed(): SessionState {
   );
   return useSession(onSettled);
 }
+
+const noop = () => {};
+
+/**
+ * The session on public pages: no redirect either way. `user` is null for
+ * a visitor and while the read is in flight; `checked` tells them apart.
+ */
+export function useSessionUser(): SessionState {
+  return useSession(noop);
+}

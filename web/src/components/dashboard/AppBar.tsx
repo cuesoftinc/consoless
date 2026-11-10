@@ -26,6 +26,7 @@ export interface AppBarLink {
 
 export const APP_LINKS: AppBarLink[] = [
   { href: "/dashboard", label: "My Games" },
+  { href: "/arcade", label: "Arcade", nested: true },
   { href: "/dashboard/settings", label: "Settings", nested: true },
 ];
 

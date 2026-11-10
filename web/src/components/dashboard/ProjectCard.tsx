@@ -13,8 +13,9 @@ import IconButton from "@/components/ui/IconButton";
 import { MenuItem } from "@/components/ui/Menu";
 import PopoverMenu from "@/components/ui/PopoverMenu";
 import { cn } from "@/lib/cn";
+import { paletteOf, STYLE_LABEL } from "@/lib/console-styles";
 import { relativeTime } from "@/lib/relative-time";
-import type { ConsoleStyleId, Project, ProjectStatus } from "@/models";
+import type { Project, ProjectStatus } from "@/models";
 
 export const STATUS_LABEL: Record<ProjectStatus, string> = {
   draft: "Draft",
@@ -28,14 +29,6 @@ const STATUS_KIND: Record<ProjectStatus, BadgeKind> = {
   in_review: "warning",
   published: "success",
   rejected: "danger",
-};
-
-export const STYLE_LABEL: Record<ConsoleStyleId, string> = {
-  handheld: "Handheld",
-  "8bit": "8-bit",
-  "16bit": "16-bit",
-  arcade: "Arcade",
-  modern: "Modern",
 };
 
 export interface ProjectCardProps {
@@ -70,7 +63,7 @@ export default function ProjectCard({
       <div className="aspect-[296/176] w-full overflow-hidden bg-bg-inset">
         <GameScreen
           game={project.artwork}
-          palette={project.style_id === "handheld" ? "green" : "colour"}
+          palette={paletteOf(project.style_id)}
           className="h-full w-full"
         />
       </div>

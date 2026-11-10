@@ -73,6 +73,14 @@ export function requireUser(
   return { userId, state: userState(userId) };
 }
 
+/** The caller when a token is present; null for an anonymous request. */
+export function optionalUser(
+  req: Request,
+): { userId: string; state: UserState } | null {
+  const auth = requireUser(req);
+  return isResponse(auth) ? null : auth;
+}
+
 export function isResponse(value: unknown): value is NextResponse {
   return value instanceof NextResponse;
 }

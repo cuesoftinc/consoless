@@ -54,3 +54,44 @@ export interface Page<T> {
   items: T[];
   next_cursor: string | null;
 }
+
+/** A public name: the author of a game or a player on a leaderboard. */
+export interface PublicUser {
+  username: string;
+  display_name: string;
+}
+
+/** The game a remix was made from. */
+export interface RemixSource {
+  slug: string;
+  title: string;
+  author: PublicUser;
+}
+
+/** A published game in the Arcade (`GET /arcade/games`). */
+export interface ArcadeGame {
+  /** Same as the slug; cursors use it. */
+  id: string;
+  slug: string;
+  title: string;
+  author: PublicUser;
+  style_id: ConsoleStyleId;
+  /** The prompt that made the game. */
+  prompt: string;
+  artwork: ProjectArtwork;
+  plays: number;
+  published_at: string;
+  remixed_from: RemixSource | null;
+}
+
+/** One leaderboard row: a player's best score in a game (CON-008). */
+export interface Score {
+  rank: number;
+  player: PublicUser;
+  value: number;
+  submitted_at: string;
+  /** True on the signed-in player's own row. */
+  you: boolean;
+}
+
+export type ReportReason = "copied" | "inappropriate" | "broken" | "other";

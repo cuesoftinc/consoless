@@ -24,6 +24,8 @@ signs you in without contacting Google.
 | --- | --- |
 | `/` | The landing page |
 | `/signin` | Sign-in (Google only) |
+| `/arcade` | The Arcade: published games, open to everyone |
+| `/arcade/{slug}` | A game's page: leaderboard, share, remix and report |
 | `/dashboard` | My Games, behind the one-time 16-or-older check |
 | `/dashboard/settings` | Settings: Profile, Appearance, Data and privacy |
 | `/dev/components` | The component gallery (dev and TEST_MODE builds only) |

@@ -3,8 +3,8 @@
 > **Status:** [Proposed] — this is the screen inventory of the Figma file
 > [Consoless](https://www.figma.com/design/vy0wG6WXNLMq48GJgjUdHk), which
 > is the basis for the web build (decision C-5). The web app has the
-> landing page, sign-in, the age check, My Games and Settings built from
-> it. The Arcade and the Studio follow.
+> landing page, sign-in, the age check, the Arcade, My Games and Settings
+> built from it. The Studio follows.
 
 Screen names below are the frame names in the Figma file. `MI-n` refers to
 the microinteraction catalog in [`design.md`](design.md) §4. `CON-nnn` refers
@@ -101,6 +101,16 @@ Behaviour the frames record:
 - A remix credits the original game and its author.
 - The game page shows the prompt that made the game.
 
+[Current] Built in the web app as public routes: the Arcade at `/arcade`
+(search, console-style filter, loading, empty, no-results and error
+states) and the game page at `/arcade/{slug}` (the console frame, the
+prompt, the remix credit, the leaderboard, share, report, remix, and the
+not-available state). Signed-in players get a link back to My Games, and
+remixing creates a draft there. Not built yet: playing. The frame shows a
+picture of the game until the engine and the play origin exist, so score
+submission has an API mock but no screen, and the phone touch controls
+(`Play / Mobile`) wait for it too.
+
 ### My Games and account
 
 | Group | Frames | Refs |
@@ -121,9 +131,9 @@ and Settings at `/dashboard/settings` with routed tabs for Profile,
 Appearance and Data and privacy, including account deletion. The app bar
 carries the area links, today's generations, the theme toggle and the
 account menu. Not built yet: opening a game (it needs the Studio), the
-in-app Privacy page (Settings link to privacy.cuesoft.io) and the Arcade.
-The prototype's hub and its ratings leaderboard are removed; the per-game
-leaderboard returns with the Arcade.
+in-app Privacy page (Settings link to privacy.cuesoft.io). The prototype's
+hub and its ratings leaderboard are removed; the leaderboard is now per
+game, on the game page.
 
 ### Stage 2 — 3D and assets
 
