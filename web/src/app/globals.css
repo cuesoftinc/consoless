@@ -4,8 +4,7 @@
 /*
  * Tokens (src/design/tokens.css) mapped into Tailwind's namespaces. The
  * gaming-*, chart-* and glow-* entries serve the prototype screens only and
- * go when those screens are rebuilt; the radius and shadow scales are
- * mapped to the tokens in that same change.
+ * go when those screens are rebuilt.
  */
 @theme inline {
   --color-gaming-900: var(--gaming-900);
@@ -34,6 +33,60 @@
    * `inline` keeps Tailwind from re-emitting the variables, so tokens.css
    * stays the single source and the theme switch needs no extra CSS.
    */
+  --color-bg-base: var(--color-bg-base);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-bg-raised: var(--color-bg-raised);
+  --color-bg-inset: var(--color-bg-inset);
+  --color-bg-hover: var(--color-bg-hover);
+  --color-border-default: var(--color-border-default);
+  --color-border-strong: var(--color-border-strong);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-accent-default: var(--color-accent-default);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-on-accent: var(--color-accent-on-accent);
+  --color-accent-text: var(--color-accent-text);
+  --color-accent-subtle: var(--color-accent-subtle);
+  --color-brand-default: var(--color-brand-default);
+  --color-brand-on-brand: var(--color-brand-on-brand);
+  --color-brand-text: var(--color-brand-text);
+  --color-brand-subtle: var(--color-brand-subtle);
+  --color-retro-default: var(--color-retro-default);
+  --color-retro-on-retro: var(--color-retro-on-retro);
+  --color-retro-text: var(--color-retro-text);
+  --color-retro-subtle: var(--color-retro-subtle);
+  --color-success-text: var(--color-success-text);
+  --color-success-subtle: var(--color-success-subtle);
+  --color-warning-text: var(--color-warning-text);
+  --color-warning-subtle: var(--color-warning-subtle);
+  --color-danger-default: var(--color-danger-default);
+  --color-danger-on-danger: var(--color-danger-on-danger);
+  --color-danger-text: var(--color-danger-text);
+  --color-danger-subtle: var(--color-danger-subtle);
+  --color-focus-ring: var(--color-focus-ring);
+  --color-overlay-scrim: var(--color-overlay-scrim);
+  --color-rank-gold: var(--color-rank-gold);
+  --color-rank-silver: var(--color-rank-silver);
+  --color-rank-bronze: var(--color-rank-bronze);
+  --color-console-screen-green: var(--color-console-screen-green);
+  --color-console-screen-green-mid: var(--color-console-screen-green-mid);
+  --color-console-screen-ink: var(--color-console-screen-ink);
+  --color-console-screen-black: var(--color-console-screen-black);
+  --color-console-shell-cream: var(--color-console-shell-cream);
+  --color-console-shell-grey: var(--color-console-shell-grey);
+  --color-console-shell-charcoal: var(--color-console-shell-charcoal);
+  --color-console-shell-plum: var(--color-console-shell-plum);
+  --color-console-shell-wood: var(--color-console-shell-wood);
+  --color-console-px-pink: var(--color-console-px-pink);
+  --color-console-px-cyan: var(--color-console-px-cyan);
+  --color-console-px-orange: var(--color-console-px-orange);
+  --color-console-px-yellow: var(--color-console-px-yellow);
+  --color-console-px-green: var(--color-console-px-green);
+  --color-console-px-white: var(--color-console-px-white);
+  --color-console-px-sky: var(--color-console-px-sky);
+  --color-console-px-grey: var(--color-console-px-grey);
+  --color-console-px-dirt: var(--color-console-px-dirt);
 
   /* motion: duration-fast, duration-base, ease-enter and so on */
   --transition-duration-fast: var(--duration-fast);
@@ -43,6 +96,17 @@
   --ease-enter: var(--ease-enter);
   --ease-exit: var(--ease-exit);
   --ease-move: var(--ease-move);
+
+  /* radius and elevation scales (docs/design.md section 2.3) */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-full: var(--radius-full);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-glow: var(--glow-accent);
 
   /* layers: z-raised, z-sticky, z-overlay, z-modal, z-toast */
   --z-index-base: var(--z-base);
@@ -54,6 +118,53 @@
 }
 
 @theme {
+  /*
+   * Type scale (docs/design.md section 2.2): text-display-xl, text-heading-md,
+   * text-body-sm and so on. Each sets size, line height, weight and tracking.
+   * Code styles pair with font-mono, retro styles with font-retro.
+   */
+  --text-display-xl: 56px;
+  --text-display-xl--line-height: 64px;
+  --text-display-xl--font-weight: 700;
+  --text-display-xl--letter-spacing: -1px;
+  --text-display-lg: 40px;
+  --text-display-lg--line-height: 48px;
+  --text-display-lg--font-weight: 700;
+  --text-display-lg--letter-spacing: -0.5px;
+  --text-heading-lg: 28px;
+  --text-heading-lg--line-height: 36px;
+  --text-heading-lg--font-weight: 600;
+  --text-heading-md: 20px;
+  --text-heading-md--line-height: 28px;
+  --text-heading-md--font-weight: 600;
+  --text-heading-sm: 16px;
+  --text-heading-sm--line-height: 24px;
+  --text-heading-sm--font-weight: 600;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+  --text-caption: 12px;
+  --text-caption--line-height: 16px;
+  --text-label-md: 14px;
+  --text-label-md--line-height: 20px;
+  --text-label-md--font-weight: 500;
+  --text-label-sm: 12px;
+  --text-label-sm--line-height: 16px;
+  --text-label-sm--font-weight: 500;
+  --text-code-md: 13px;
+  --text-code-md--line-height: 20px;
+  --text-code-sm: 12px;
+  --text-code-sm--line-height: 16px;
+  --text-retro-lg: 24px;
+  --text-retro-lg--line-height: 36px;
+  --text-retro-md: 14px;
+  --text-retro-md--line-height: 24px;
+  --text-retro-sm: 10px;
+  --text-retro-sm--line-height: 16px;
+
   --animate-pulse-fast: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-slide-in: slide-in 0.3s ease-out forwards;
   --animate-fade-out: fade-out 0.3s ease-in forwards;

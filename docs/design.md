@@ -171,10 +171,10 @@ Screens are assembled from instances only.
 
 | Group | Components |
 | --- | --- |
-| Actions | `Button` (kind, size, state), `IconButton`, `GoogleAuthButton` |
-| Forms | `Input`, `Select`, `MenuItem`, `Checkbox`, `RadioItem`, `Toggle`, `PromptInput` |
+| Actions | `Button` (kind, size), `IconButton`, `GoogleAuthButton` |
+| Forms | `Input`, `Select`, `Menu`, `Checkbox`, `RadioGroup`, `Toggle`, `PromptInput` |
 | Feedback | `Badge`, `Banner`, `Toast`, `Tooltip`, `Modal`, `Skeleton`, `EmptyState`, `QuotaMeter` |
-| Navigation | `Navbar`, `NavbarMobile`, `Footer`, `Tab`, `Avatar`, `LogoPlaceholder` |
+| Navigation | `MarketingNav`, `MarketingFooter`, `Tabs`, `RouteTabs`, `Avatar`, `LogoPlaceholder` |
 | Studio | `ChatMessage`, `GenerationStatus`, `VersionItem`, `StyleCard`, `CodeLine`, `FileTreeItem` |
 | Arcade | `GameCard`, `GameCardSkeleton`, `LeaderboardRow`, `TouchControls` |
 | Console | `ConsoleFrame` (handheld, 8-bit, 16-bit, arcade, modern, 3d), `GameScreen`, `PatternTile` |
@@ -183,6 +183,14 @@ Screens are assembled from instances only.
 
 Notes:
 
+- [Current] The web builds each of these as one module in
+  `web/src/components/ui/`, shown in the dev gallery at `/dev/components`.
+  Stage 2 and Stage 3 components are built with their stages.
+- `Button` has five kinds: primary, secondary, ghost, danger and
+  quiet-danger. Quiet-danger is the row-level destructive action; the filled
+  danger button is for confirm dialogs only.
+- `MarketingNav` and `MarketingFooter` carry the shared CueLABS™ link
+  inventory. The Figma `Navbar` and `Footer` are to be corrected to match.
 - `GoogleAuthButton` is the only sign-in call to action (C-3).
 - `GenerationStatus` has one state per API status: queued, generating,
   checking, retrying, ready, failed and refused (system design §6.1).
