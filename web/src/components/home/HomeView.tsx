@@ -40,6 +40,7 @@ export default function HomeView() {
         <SelfHostSection
           onTryCloud={home.onTryCloud}
           onSelfHost={home.onSelfHost}
+          onCopyCommand={home.onCopyCommand}
         />
         <FaqSection onOpen={home.onFaqOpen} />
         <FinalCta onStart={home.onTryCloud} onGithub={home.onGithub} />

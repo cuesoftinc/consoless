@@ -68,6 +68,16 @@ prompts drive the other outcomes: one containing `[fail]` fails its checks,
 and one containing `[refuse]` is refused. A code edit fails its check when
 its braces do not balance.
 
+## Docker
+
+```bash
+docker compose up --build -d   # or: make up
+```
+
+This builds `web/Dockerfile` in TEST_MODE and serves the app on port 3000.
+The compose file holds only the web app today; the engine and the services
+join it as they are built.
+
 ## Theme
 
 Light is the default theme. The preference (light, dark or system) is stored

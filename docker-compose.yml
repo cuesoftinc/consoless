@@ -1,0 +1,16 @@
+# Local and self-host stack. Usage: make up (or docker compose up --build -d)
+#
+# Only the web app exists today, so the stack is one service. It is built in
+# TEST_MODE: the app runs on its built-in mock API and the Google button
+# signs in a local test user. The engine, api/common, api/generate and
+# api/verify join this file as they are built (docs/system-design.md).
+services:
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      args:
+        NEXT_PUBLIC_TEST_MODE: "true"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
