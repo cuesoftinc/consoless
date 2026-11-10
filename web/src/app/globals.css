@@ -33,6 +33,60 @@
    * `inline` keeps Tailwind from re-emitting the variables, so tokens.css
    * stays the single source and the theme switch needs no extra CSS.
    */
+  --color-bg-base: var(--color-bg-base);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-bg-raised: var(--color-bg-raised);
+  --color-bg-inset: var(--color-bg-inset);
+  --color-bg-hover: var(--color-bg-hover);
+  --color-border-default: var(--color-border-default);
+  --color-border-strong: var(--color-border-strong);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-accent-default: var(--color-accent-default);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-on-accent: var(--color-accent-on-accent);
+  --color-accent-text: var(--color-accent-text);
+  --color-accent-subtle: var(--color-accent-subtle);
+  --color-brand-default: var(--color-brand-default);
+  --color-brand-on-brand: var(--color-brand-on-brand);
+  --color-brand-text: var(--color-brand-text);
+  --color-brand-subtle: var(--color-brand-subtle);
+  --color-retro-default: var(--color-retro-default);
+  --color-retro-on-retro: var(--color-retro-on-retro);
+  --color-retro-text: var(--color-retro-text);
+  --color-retro-subtle: var(--color-retro-subtle);
+  --color-success-text: var(--color-success-text);
+  --color-success-subtle: var(--color-success-subtle);
+  --color-warning-text: var(--color-warning-text);
+  --color-warning-subtle: var(--color-warning-subtle);
+  --color-danger-default: var(--color-danger-default);
+  --color-danger-on-danger: var(--color-danger-on-danger);
+  --color-danger-text: var(--color-danger-text);
+  --color-danger-subtle: var(--color-danger-subtle);
+  --color-focus-ring: var(--color-focus-ring);
+  --color-overlay-scrim: var(--color-overlay-scrim);
+  --color-rank-gold: var(--color-rank-gold);
+  --color-rank-silver: var(--color-rank-silver);
+  --color-rank-bronze: var(--color-rank-bronze);
+  --color-console-screen-green: var(--color-console-screen-green);
+  --color-console-screen-green-mid: var(--color-console-screen-green-mid);
+  --color-console-screen-ink: var(--color-console-screen-ink);
+  --color-console-screen-black: var(--color-console-screen-black);
+  --color-console-shell-cream: var(--color-console-shell-cream);
+  --color-console-shell-grey: var(--color-console-shell-grey);
+  --color-console-shell-charcoal: var(--color-console-shell-charcoal);
+  --color-console-shell-plum: var(--color-console-shell-plum);
+  --color-console-shell-wood: var(--color-console-shell-wood);
+  --color-console-px-pink: var(--color-console-px-pink);
+  --color-console-px-cyan: var(--color-console-px-cyan);
+  --color-console-px-orange: var(--color-console-px-orange);
+  --color-console-px-yellow: var(--color-console-px-yellow);
+  --color-console-px-green: var(--color-console-px-green);
+  --color-console-px-white: var(--color-console-px-white);
+  --color-console-px-sky: var(--color-console-px-sky);
+  --color-console-px-grey: var(--color-console-px-grey);
+  --color-console-px-dirt: var(--color-console-px-dirt);
 
   /* motion: duration-fast, duration-base, ease-enter and so on */
   --transition-duration-fast: var(--duration-fast);

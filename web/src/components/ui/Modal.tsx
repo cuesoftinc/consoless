@@ -10,7 +10,7 @@
  * With reduced motion both appear at once.
  */
 
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { cn } from "@/lib/cn";
@@ -49,6 +49,11 @@ export default function Modal({
   kind = "default",
   className,
 }: ModalProps) {
+  // The dialog is controlled and has no Radix Trigger, so Radix would send
+  // focus to <body> on close. Remember the opener (onOpenAutoFocus fires
+  // before Radix moves focus in) and return focus to it.
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -62,6 +67,18 @@ export default function Modal({
         />
         <Dialog.Content
           aria-modal="true"
+          onOpenAutoFocus={() => {
+            returnFocusRef.current =
+              document.activeElement instanceof HTMLElement
+                ? document.activeElement
+                : null;
+          }}
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            const opener = returnFocusRef.current;
+            returnFocusRef.current = null;
+            if (opener?.isConnected) opener.focus();
+          }}
           data-kind={kind}
           data-size={size}
           {...(description ? {} : { "aria-describedby": undefined })}

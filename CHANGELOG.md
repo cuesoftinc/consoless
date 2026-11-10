@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Web component library: 35 components in `web/src/components/ui/`, built from the design tokens with a test file each, and a dev-only gallery at `/dev/components`.
 - Web foundations: semantic design tokens with Light as the default theme and a Dark mode, the theme provider and toggle, the mock server base with a reset route, a request hook for controllers, and an HTTP client that sends bearer tokens and idempotency keys.
 - Decision C-5: the Figma designs are the basis for the web build.
 - Design contract (`docs/design.md`) and screen inventory (`docs/pages.md`) for the Figma designs of all three stages, which await sign-off.
@@ -21,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Next.js web app in `web/`, ported from the Vite prototype with every screen kept.
 - Server routes for AI coaching and lobby messages through the Cuesoft Gemini proxy.
 - Firebase App Hosting configuration for consoless.cuesoft.io.
+
+### Fixed
+
+- Design token colours now reach Tailwind: the colour utilities (`bg-bg-base`, `text-text-primary` and the rest) were missing from the theme mapping.
 
 ### Changed
 
