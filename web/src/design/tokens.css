@@ -1,31 +1,218 @@
-/*
- * Consoless design tokens. Only the prototype's dark values are in code.
- * docs/design.md defines the semantic tokens with Light (the default, P-04)
- * and Dark values; they land here when the UI is rebuilt from the designs.
+/**
+ * Consoless design tokens. Mirrors docs/design.md section 2 and the Figma
+ * variable collection `consoless/tokens` (true Light and Dark modes).
+ *
+ * Theming model:
+ *   - Light values on `:root`. Light is the default theme (P-04, D-2).
+ *   - Dark values on `[data-theme="dark"]` (the theme provider sets
+ *     data-theme on <html>).
+ *   - Without JavaScript, the system preference is honoured when no
+ *     data-theme is set.
+ *
+ * No raw hex in components: bind these variables (the same rule as Figma).
  */
-:root,
-[data-theme="dark"] {
-  color-scheme: dark;
 
+:root {
+  color-scheme: light;
+
+  /* ---- Colour (light) ---- */
+  --color-bg-base: #f5f6fa; /* Page background */
+  --color-bg-surface: #ffffff; /* Cards, dialogs, panels */
+  --color-bg-raised: #e9ecf3; /* Raised rows, chips, menus */
+  --color-bg-inset: #e9ecf3; /* Preview stage, inputs, code */
+  --color-bg-hover: #d0d5e2; /* Hover fill, skeletons, tracks */
+  --color-border-default: #d0d5e2; /* Dividers, card borders */
+  --color-border-strong: #aab2ca; /* Control borders */
+  --color-text-primary: #0f0e17; /* Headings and body */
+  --color-text-secondary: #44517a; /* Supporting text */
+  --color-text-muted: #556189; /* Captions, placeholders */
+  --color-accent-default: #0a6e78; /* Primary action fill */
+  --color-accent-hover: #085760; /* Primary action hover */
+  --color-accent-on-accent: #ffffff; /* Ink on the accent fill */
+  --color-accent-text: #0a6e78; /* Accent text and icons */
+  --color-accent-subtle: #e0f9fb; /* Accent tint */
+  --color-brand-default: #c8284a; /* Brand red-pink fill */
+  --color-brand-on-brand: #ffffff; /* Ink on the brand fill */
+  --color-brand-text: #c8284a; /* Brand text */
+  --color-brand-subtle: #fde8ec; /* Brand tint */
+  --color-retro-default: #a84a06; /* Retro orange fill */
+  --color-retro-on-retro: #ffffff; /* Ink on the retro fill */
+  --color-retro-text: #a84a06; /* Retro text */
+  --color-retro-subtle: #fff0e3; /* Retro tint */
+  --color-success-text: #0b7a52; /* Success text and icons */
+  --color-success-subtle: #e2f8ef; /* Success tint */
+  --color-warning-text: #8a5a00; /* Warning text and icons */
+  --color-warning-subtle: #fdf6d8; /* Warning tint */
+  --color-danger-default: #c81e1e; /* Destructive fill, error border */
+  --color-danger-on-danger: #ffffff; /* Ink on the danger fill */
+  --color-danger-text: #c81e1e; /* Error text */
+  --color-danger-subtle: #fde8e8; /* Error tint */
+  --color-focus-ring: #0a6e78; /* Focus ring */
+  --color-overlay-scrim: rgb(15 14 23 / 0.5); /* Behind dialogs */
+  --color-rank-gold: #eab308; /* Leaderboard rank */
+  --color-rank-silver: #9ca3af; /* Leaderboard rank */
+  --color-rank-bronze: #c2410c; /* Leaderboard rank */
+
+  /* ---- Console tokens: game artwork and console shells, same in both themes ---- */
+  --color-console-screen-green: #9bbc0f;
+  --color-console-screen-green-mid: #306230;
+  --color-console-screen-ink: #0f380f;
+  --color-console-screen-black: #08080f;
+  --color-console-shell-cream: #e4e0d6;
+  --color-console-shell-grey: #b9b7b0;
+  --color-console-shell-charcoal: #2a2a33;
+  --color-console-shell-plum: #5a4a78;
+  --color-console-shell-wood: #3b2a20;
+  --color-console-px-pink: #e94560;
+  --color-console-px-cyan: #0ff0fc;
+  --color-console-px-orange: #ff8e3c;
+  --color-console-px-yellow: #facc15;
+  --color-console-px-green: #34d399;
+  --color-console-px-white: #ffffff;
+  --color-console-px-sky: #0c2f3a;
+  --color-console-px-grey: #44517a;
+  --color-console-px-dirt: #3a2210;
+
+  /* ---- Spacing (4px grid) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ---- Radius ---- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ---- Motion ---- */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-moderate: 250ms;
+  --duration-slow: 300ms;
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1); /* ease-out: enter and hover */
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1); /* ease-in: leave */
+  --ease-move: cubic-bezier(0.4, 0, 0.2, 1); /* ease-in-out: move on screen */
+
+  /* ---- Layers ---- */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+
+  /* ---- Elevation (effect colours are a documented raw-value exception) ---- */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.25);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.35);
+  --glow-accent: 0 0 24px rgb(15 240 252 / 0.35);
+
+  /*
+   * ---- Prototype tokens ----
+   * Used only by the prototype screens (landing, hub, leaderboard), which
+   * are drawn dark and do not follow the theme. Removed when those screens
+   * are rebuilt from the designs.
+   */
   --gaming-900: #0f0e17;
   --gaming-800: #1a1a2e;
   --gaming-700: #16213e;
   --gaming-accent: #e94560;
   --gaming-neon: #0ff0fc;
   --gaming-retro: #ff8e3c;
-
   --black: #000000;
   --white: #ffffff;
-
-  /* Handheld console style: the green screen of the landing-page frame. */
   --handheld-screen: #9bbc0f;
-
   --chart-axis: #4a5568;
   --chart-border: #2d3748;
   --chart-cursor: #cccccc;
-
-  /* Glows sit beside Tailwind palette classes; values are the v3 palette the prototype used. */
   --glow-silver: #9ca3af;
   --glow-gold: #eab308;
   --glow-bronze: #c2410c;
+}
+
+/* Dark theme: set by the theme provider on <html>. */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg-base: #0f0e17;
+  --color-bg-surface: #1a1a2e;
+  --color-bg-raised: #16213e;
+  --color-bg-inset: #08080f;
+  --color-bg-hover: #222b47;
+  --color-border-default: #222b47;
+  --color-border-strong: #44517a;
+  --color-text-primary: #f5f6fa;
+  --color-text-secondary: #aab2ca;
+  --color-text-muted: #8590b0;
+  --color-accent-default: #0ff0fc;
+  --color-accent-hover: #7df7fd;
+  --color-accent-on-accent: #0f0e17;
+  --color-accent-text: #0ff0fc;
+  --color-accent-subtle: #0c2f3a;
+  --color-brand-default: #e94560;
+  --color-brand-on-brand: #0f0e17;
+  --color-brand-text: #f0708a;
+  --color-brand-subtle: #3a1420;
+  --color-retro-default: #ff8e3c;
+  --color-retro-on-retro: #0f0e17;
+  --color-retro-text: #ff8e3c;
+  --color-retro-subtle: #3a2210;
+  --color-success-text: #34d399;
+  --color-success-subtle: #0d2e24;
+  --color-warning-text: #facc15;
+  --color-warning-subtle: #33290a;
+  --color-danger-default: #f87171;
+  --color-danger-on-danger: #0f0e17;
+  --color-danger-text: #f87171;
+  --color-danger-subtle: #3a1414;
+  --color-focus-ring: #0ff0fc;
+  --color-overlay-scrim: rgb(0 0 0 / 0.7);
+}
+
+/* No-JavaScript fallback: follow the system preference when data-theme is
+   absent. Values must stay identical to the [data-theme="dark"] block. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    color-scheme: dark;
+
+    --color-bg-base: #0f0e17;
+    --color-bg-surface: #1a1a2e;
+    --color-bg-raised: #16213e;
+    --color-bg-inset: #08080f;
+    --color-bg-hover: #222b47;
+    --color-border-default: #222b47;
+    --color-border-strong: #44517a;
+    --color-text-primary: #f5f6fa;
+    --color-text-secondary: #aab2ca;
+    --color-text-muted: #8590b0;
+    --color-accent-default: #0ff0fc;
+    --color-accent-hover: #7df7fd;
+    --color-accent-on-accent: #0f0e17;
+    --color-accent-text: #0ff0fc;
+    --color-accent-subtle: #0c2f3a;
+    --color-brand-default: #e94560;
+    --color-brand-on-brand: #0f0e17;
+    --color-brand-text: #f0708a;
+    --color-brand-subtle: #3a1420;
+    --color-retro-default: #ff8e3c;
+    --color-retro-on-retro: #0f0e17;
+    --color-retro-text: #ff8e3c;
+    --color-retro-subtle: #3a2210;
+    --color-success-text: #34d399;
+    --color-success-subtle: #0d2e24;
+    --color-warning-text: #facc15;
+    --color-warning-subtle: #33290a;
+    --color-danger-default: #f87171;
+    --color-danger-on-danger: #0f0e17;
+    --color-danger-text: #f87171;
+    --color-danger-subtle: #3a1414;
+    --color-focus-ring: #0ff0fc;
+    --color-overlay-scrim: rgb(0 0 0 / 0.7);
+  }
 }

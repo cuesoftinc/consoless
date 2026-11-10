@@ -16,4 +16,6 @@ export interface AuthProvider {
   signOut(): Promise<void>;
   /** Synchronous snapshot of the current session; null on any failure. */
   currentUser(): AuthUser | null;
+  /** Bearer token for API calls; null when signed out. */
+  getBearerToken(): Promise<string | null>;
 }

@@ -124,3 +124,22 @@ export const LEADERBOARD_DATA: LeaderboardEntry[] = [
     trend: "DOWN",
   },
 ];
+
+/**
+ * The mock server's in-memory database. Entity collections are added with
+ * the API routes that serve them; the store starts from `buildSeed`.
+ */
+export interface MockDb {
+  seededAt: number;
+  /** Counter behind `nextId`. */
+  seq: number;
+  leaderboard: LeaderboardEntry[];
+}
+
+export function buildSeed(now: number): MockDb {
+  return {
+    seededAt: now,
+    seq: 0,
+    leaderboard: LEADERBOARD_DATA.map((entry) => ({ ...entry })),
+  };
+}

@@ -1,7 +1,12 @@
 @import "tailwindcss";
 @import "../design/tokens.css";
 
-/* Tokens (src/design/tokens.css) mapped into Tailwind's color and font namespaces. */
+/*
+ * Tokens (src/design/tokens.css) mapped into Tailwind's namespaces. The
+ * gaming-*, chart-* and glow-* entries serve the prototype screens only and
+ * go when those screens are rebuilt; the radius and shadow scales are
+ * mapped to the tokens in that same change.
+ */
 @theme inline {
   --color-gaming-900: var(--gaming-900);
   --color-gaming-800: var(--gaming-800);
@@ -21,6 +26,31 @@
 
   --font-sans: var(--font-inter), sans-serif;
   --font-retro: var(--font-press-start-2p), cursive;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  /*
+   * Design tokens (docs/design.md section 2) as bg-*, text-*, border-* and
+   * outline-* utilities, for example `bg-bg-base` and `text-text-primary`.
+   * `inline` keeps Tailwind from re-emitting the variables, so tokens.css
+   * stays the single source and the theme switch needs no extra CSS.
+   */
+
+  /* motion: duration-fast, duration-base, ease-enter and so on */
+  --transition-duration-fast: var(--duration-fast);
+  --transition-duration-base: var(--duration-base);
+  --transition-duration-moderate: var(--duration-moderate);
+  --transition-duration-slow: var(--duration-slow);
+  --ease-enter: var(--ease-enter);
+  --ease-exit: var(--ease-exit);
+  --ease-move: var(--ease-move);
+
+  /* layers: z-raised, z-sticky, z-overlay, z-modal, z-toast */
+  --z-index-base: var(--z-base);
+  --z-index-raised: var(--z-raised);
+  --z-index-sticky: var(--z-sticky);
+  --z-index-overlay: var(--z-overlay);
+  --z-index-modal: var(--z-modal);
+  --z-index-toast: var(--z-toast);
 }
 
 @theme {

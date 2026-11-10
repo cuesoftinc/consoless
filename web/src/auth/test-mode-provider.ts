@@ -34,4 +34,8 @@ export class TestModeAuthProvider implements AuthProvider {
       return null;
     }
   }
+
+  async getBearerToken(): Promise<string | null> {
+    return this.currentUser() ? "test-mode-token" : null;
+  }
 }
