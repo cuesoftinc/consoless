@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- GitBook setup: `.gitbook.yaml`, the `docs/SUMMARY.md` navigation, and the overview and setup pages.
 - Web foundations: semantic design tokens with Light as the default theme and a Dark mode, the theme provider and toggle, the mock server base with a reset route, a request hook for controllers, and an HTTP client that sends bearer tokens and idempotency keys.
 - Decision C-5: the Figma designs are the basis for the web build.
 - Design contract (`docs/design.md`) and screen inventory (`docs/pages.md`) for the Figma designs of all three stages, which await sign-off.
