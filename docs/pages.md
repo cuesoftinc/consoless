@@ -41,10 +41,6 @@ band, the self-hosting band and the FAQ that the standard asks for. The
 "Made on Consoless" band became "What you can make" because there are no
 published games to show yet. The Figma frames are corrected to match.
 
-**Not live yet.** [Current] The footer's Quickstart, API reference,
-Self-host guide and Roadmap links point at documentation pages that are not
-written yet.
-
 ### Sign-in and the 16-or-older check
 
 | Frame | Purpose | Refs |
