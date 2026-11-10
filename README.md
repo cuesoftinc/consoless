@@ -59,7 +59,7 @@ See the [system design](docs/system-design.md) for services, data ownership, flo
 | Path | Contents |
 | --- | --- |
 | [`web/`](web/) | Next.js App Router app: the landing page (`/`), the hub (`/dashboard`) and the leaderboard (`/dashboard/leaderboard`) |
-| [`docs/`](docs/) | Decisions register, system design, design contract and screen inventory |
+| [`docs/`](docs/) | Overview, setup, decisions register, system design, design contract and screen inventory. Published at [cuesoft.gitbook.io/consoless](https://cuesoft.gitbook.io/consoless) |
 | [`.cuelabs/project.yaml`](.cuelabs/project.yaml) | CueLABS project manifest: which surfaces are active or planned |
 
 `engine/` and the `api/` services are planned; they are created when their phase starts.
