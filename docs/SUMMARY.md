@@ -5,6 +5,7 @@
 
 ## Product
 - [Decisions](decisions.md)
+- [Roadmap](roadmap.md)
 
 ## Design
 - [Design](design.md)
@@ -12,3 +13,5 @@
 
 ## System
 - [System Design](system-design.md)
+- [API Surface](api.md)
+- [Deployment](deployment.md)
