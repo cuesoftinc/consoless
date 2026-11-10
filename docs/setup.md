@@ -25,6 +25,7 @@ contacting Google.
 | `/` | The landing page |
 | `/dashboard` | The signed-in hub |
 | `/dashboard/leaderboard` | The leaderboard |
+| `/dev/components` | The component gallery (dev and TEST_MODE builds only) |
 | `/api/mock/v1/*` | The mock server, mirroring the API path for path |
 
 ## Configuration

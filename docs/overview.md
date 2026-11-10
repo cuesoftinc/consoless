@@ -17,7 +17,8 @@ The platform has two layers:
 
 - **[Current]** The repository holds the web app (`web/`) and the docs. The
   web app runs in TEST_MODE against an in-app mock server. It carries the
-  design tokens and the prototype's landing page, hub and leaderboard.
+  design tokens, the component library and the prototype's landing page,
+  hub and leaderboard.
 - **[Decided C-5]** The web is being rebuilt from the Figma designs in
   stages: foundations, components, the landing page, then the dashboards.
 - **[Decided S-1]** The engine and the backend services are planned and are
