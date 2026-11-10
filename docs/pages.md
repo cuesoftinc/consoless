@@ -58,7 +58,7 @@ the status badge, the daily quota, Export and Publish.
 | Code | `Studio / Code`, `Code edited`, `Code checking`, `Code check failed`, `Code saved` | CON-007 |
 | Publish | `Studio / Publish dialog`, `In review`, `Published`, `Publish rejected` | CON-006 |
 | Export | `Studio / Export dialog` | CON-007 |
-| Layout checks | `Studio / Tablet`, `Studio / Ready (Light theme)` | — |
+| Layout checks | `Studio / Tablet`, `Studio / Ready (Dark theme)` | — |
 
 Behaviour the frames record:
 
@@ -77,7 +77,7 @@ Behaviour the frames record:
 
 | Group | Frames | Refs |
 | --- | --- | --- |
-| Arcade | `Arcade`, `Arcade / Loading`, `No results`, `Error`, `Empty`, `Arcade (Light theme)` | CON-006, MI-6, MI-12 |
+| Arcade | `Arcade`, `Arcade / Loading`, `No results`, `Error`, `Empty`, `Arcade (Dark theme)` | CON-006, MI-6, MI-12 |
 | Game page | `Game`, `Game / Signed out`, `Score saved`, `No scores yet`, `Loading`, `Remix of another game`, `Not available` | CON-004, CON-006, CON-008 |
 | Share | `Game / Share dialog`, `Link copied` | CON-006, MI-5 |
 | Report | `Game / Report dialog`, `Report sent` | PRD §7 |
@@ -94,7 +94,7 @@ Behaviour the frames record:
 
 | Group | Frames | Refs |
 | --- | --- | --- |
-| Projects | `My Games`, `Loading`, `Empty`, `Error`, `Project menu`, `My Games (Light theme)` | — |
+| Projects | `My Games`, `Loading`, `Empty`, `Error`, `Project menu`, `My Games (Dark theme)` | — |
 | Rename and unpublish | `My Games / Rename`, `Unpublish` | — |
 | Delete a project | `My Games / Delete`, `Delete confirmed`, `Deleted` | CON-014, P-13 |
 | Settings (tabs, P-06) | `Settings / Profile`, `Appearance`, `Data and privacy`, `Delete account` | CON-014, P-13 |
@@ -108,7 +108,7 @@ Destructive confirms ask the user to type their username (P-13).
 
 | Group | Frames | Refs |
 | --- | --- | --- |
-| 3D games | `3D / First version ready`, `Low frame rate`, `First version ready (Light theme)` | CON-009 |
+| 3D games | `3D / First version ready`, `Low frame rate`, `First version ready (Dark theme)` | CON-009 |
 | Multi-file projects | `3D / Files changed`, `Code, multi-file` | CON-011 |
 | Assets | `Assets`, `Empty`, `Loading`, `Generate dialog`, `Generating`, `Generation failed`, `Upload dialog` | CON-010 |
 | Online multiplayer | `Multiplayer lobby (provisional)` | S-17, S-26 |
@@ -120,7 +120,7 @@ realtime design exists.
 
 | Group | Frames | Refs |
 | --- | --- | --- |
-| Desktop builds | `Builds`, `Building`, `Ready`, `Failed`, `Loading`, `Ready (Light theme)` | CON-012, S-20, MI-10 |
+| Desktop builds | `Builds`, `Building`, `Ready`, `Failed`, `Loading`, `Ready (Dark theme)` | CON-012, S-20, MI-10 |
 | People | `People`, `Only you`, `Invite error`, `Invite sent`, `Remove person` | CON-013 |
 | Working together | `Versions with authors`, `Another editor is generating` | CON-013 |
 | Invitations | `Invitation`, `Invitation / No longer valid` | CON-013 |

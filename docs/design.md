@@ -21,8 +21,8 @@ Claims are marked **[Current]**, **[PRD]**, **[Decided]** or **[Proposed]**.
 - **The game is the hero.** The Studio puts the chat beside a live preview.
   Published games are shown in a console frame, next to the prompt that made
   them.
-- **Dark by default, light by token.** [Decided D-2] Dark is the default
-  theme (P-04). Light is a true variable mode, never a component variant.
+- **Light by default, dark by token.** [Decided D-2] Light is the default
+  theme (P-04). Dark is a true variable mode, never a component variant.
 - **Original artwork only.** [PRD §7] Console frames, game pictures and
   demo content are original. Nothing copies a real console, game, character
   or logo.
@@ -36,48 +36,48 @@ Claims are marked **[Current]**, **[PRD]**, **[Decided]** or **[Proposed]**.
 ### 2.1 Colour tokens
 
 [Decided D-1] Tokens are semantic. They live in the Figma variable collection
-`consoless/tokens`, with **Dark** and **Light** modes, and alias the
+`consoless/tokens`, with **Light** (the default) and **Dark** modes, and alias the
 `consoless/primitives` collection. The CSS custom property is the token name
 with `/` replaced by `-`, for example `--color-bg-base`.
 
 Every accent, brand, retro and danger fill pairs with an `on-` token for the
 ink placed on it.
 
-| Token | Dark | Light | Use |
+| Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `color/bg/base` | `#0f0e17` | `#f5f6fa` | Page background |
-| `color/bg/surface` | `#1a1a2e` | `#ffffff` | Cards, dialogs, panels |
-| `color/bg/raised` | `#16213e` | `#e9ecf3` | Raised rows, chips, menus |
-| `color/bg/inset` | `#08080f` | `#e9ecf3` | Preview stage, inputs, code |
-| `color/bg/hover` | `#222b47` | `#d0d5e2` | Hover fill, skeletons, tracks |
-| `color/border/default` | `#222b47` | `#d0d5e2` | Dividers, card borders |
-| `color/border/strong` | `#44517a` | `#aab2ca` | Control borders |
-| `color/text/primary` | `#f5f6fa` | `#0f0e17` | Headings and body |
-| `color/text/secondary` | `#aab2ca` | `#44517a` | Supporting text |
-| `color/text/muted` | `#8590b0` | `#556189` | Captions, placeholders |
-| `color/accent/default` | `#0ff0fc` | `#0a6e78` | Primary action fill |
-| `color/accent/hover` | `#7df7fd` | `#085760` | Primary action hover |
-| `color/accent/on-accent` | `#0f0e17` | `#ffffff` | Ink on the accent fill |
-| `color/accent/text` | `#0ff0fc` | `#0a6e78` | Accent text and icons |
-| `color/accent/subtle` | `#0c2f3a` | `#e0f9fb` | Accent tint |
-| `color/brand/default` | `#e94560` | `#c8284a` | Brand red-pink fill |
-| `color/brand/on-brand` | `#0f0e17` | `#ffffff` | Ink on the brand fill |
-| `color/brand/text` | `#f0708a` | `#c8284a` | Brand text |
-| `color/brand/subtle` | `#3a1420` | `#fde8ec` | Brand tint |
-| `color/retro/default` | `#ff8e3c` | `#a84a06` | Retro orange fill |
-| `color/retro/on-retro` | `#0f0e17` | `#ffffff` | Ink on the retro fill |
-| `color/retro/text` | `#ff8e3c` | `#a84a06` | Retro text |
-| `color/retro/subtle` | `#3a2210` | `#fff0e3` | Retro tint |
-| `color/success/text` | `#34d399` | `#0b7a52` | Success text and icons |
-| `color/success/subtle` | `#0d2e24` | `#e2f8ef` | Success tint |
-| `color/warning/text` | `#facc15` | `#8a5a00` | Warning text and icons |
-| `color/warning/subtle` | `#33290a` | `#fdf6d8` | Warning tint |
-| `color/danger/default` | `#f87171` | `#c81e1e` | Destructive fill, error border |
-| `color/danger/on-danger` | `#0f0e17` | `#ffffff` | Ink on the danger fill |
-| `color/danger/text` | `#f87171` | `#c81e1e` | Error text |
-| `color/danger/subtle` | `#3a1414` | `#fde8e8` | Error tint |
-| `color/focus/ring` | `#0ff0fc` | `#0a6e78` | Focus ring |
-| `color/overlay/scrim` | black at 70% | `#0f0e17` at 50% | Behind dialogs |
+| `color/bg/base` | `#f5f6fa` | `#0f0e17` | Page background |
+| `color/bg/surface` | `#ffffff` | `#1a1a2e` | Cards, dialogs, panels |
+| `color/bg/raised` | `#e9ecf3` | `#16213e` | Raised rows, chips, menus |
+| `color/bg/inset` | `#e9ecf3` | `#08080f` | Preview stage, inputs, code |
+| `color/bg/hover` | `#d0d5e2` | `#222b47` | Hover fill, skeletons, tracks |
+| `color/border/default` | `#d0d5e2` | `#222b47` | Dividers, card borders |
+| `color/border/strong` | `#aab2ca` | `#44517a` | Control borders |
+| `color/text/primary` | `#0f0e17` | `#f5f6fa` | Headings and body |
+| `color/text/secondary` | `#44517a` | `#aab2ca` | Supporting text |
+| `color/text/muted` | `#556189` | `#8590b0` | Captions, placeholders |
+| `color/accent/default` | `#0a6e78` | `#0ff0fc` | Primary action fill |
+| `color/accent/hover` | `#085760` | `#7df7fd` | Primary action hover |
+| `color/accent/on-accent` | `#ffffff` | `#0f0e17` | Ink on the accent fill |
+| `color/accent/text` | `#0a6e78` | `#0ff0fc` | Accent text and icons |
+| `color/accent/subtle` | `#e0f9fb` | `#0c2f3a` | Accent tint |
+| `color/brand/default` | `#c8284a` | `#e94560` | Brand red-pink fill |
+| `color/brand/on-brand` | `#ffffff` | `#0f0e17` | Ink on the brand fill |
+| `color/brand/text` | `#c8284a` | `#f0708a` | Brand text |
+| `color/brand/subtle` | `#fde8ec` | `#3a1420` | Brand tint |
+| `color/retro/default` | `#a84a06` | `#ff8e3c` | Retro orange fill |
+| `color/retro/on-retro` | `#ffffff` | `#0f0e17` | Ink on the retro fill |
+| `color/retro/text` | `#a84a06` | `#ff8e3c` | Retro text |
+| `color/retro/subtle` | `#fff0e3` | `#3a2210` | Retro tint |
+| `color/success/text` | `#0b7a52` | `#34d399` | Success text and icons |
+| `color/success/subtle` | `#e2f8ef` | `#0d2e24` | Success tint |
+| `color/warning/text` | `#8a5a00` | `#facc15` | Warning text and icons |
+| `color/warning/subtle` | `#fdf6d8` | `#33290a` | Warning tint |
+| `color/danger/default` | `#c81e1e` | `#f87171` | Destructive fill, error border |
+| `color/danger/on-danger` | `#ffffff` | `#0f0e17` | Ink on the danger fill |
+| `color/danger/text` | `#c81e1e` | `#f87171` | Error text |
+| `color/danger/subtle` | `#fde8e8` | `#3a1414` | Error tint |
+| `color/focus/ring` | `#0a6e78` | `#0ff0fc` | Focus ring |
+| `color/overlay/scrim` | `#0f0e17` at 50% | black at 70% | Behind dialogs |
 | `color/rank/gold`, `silver`, `bronze` | `#eab308`, `#9ca3af`, `#c2410c` | same | Leaderboard ranks 1 to 3 |
 
 **Console tokens** (`color/console/*`) colour game artwork and console
@@ -92,7 +92,7 @@ shells. They are the same in both modes: `screen-green #9bbc0f`,
 effect colours (shadows and the accent glow).
 
 **Web mapping.** [Current] `web/src/design/tokens.css` still carries the
-prototype names. They map to the new tokens as follows, and are renamed when
+prototype names and only the dark values. They map to the new tokens as follows, and are renamed when
 the web UI is rebuilt from these designs:
 
 | Prototype token | New token |
@@ -237,9 +237,9 @@ to. `pages.md` refers to these IDs.
   designed.
 - **Mobile app** is planned (`.cuelabs/project.yaml`). No app screens are
   designed. Phone playback is designed as a web page.
-- **Theme.** Light-mode checks exist for the Studio, the Arcade, My Games,
-  the 3D Studio and Builds, alongside the Dark and Light QA frames on the
-  Components page.
+- **Theme.** Every screen is drawn in Light. Dark-mode checks exist for the
+  Studio, the Arcade, My Games, the 3D Studio and Builds, alongside the
+  Light and Dark QA frames on the Components page.
 
 ## 7. Prototype journeys
 
@@ -273,8 +273,8 @@ The file's pages, in order:
 
 | Page | Contents |
 | --- | --- |
-| Style Guide | Cover, colour in Dark and Light, typography, foundations |
-| Components | An About card, one stage frame per component in the left column, Dark and Light QA frames with live instances in the right column |
+| Style Guide | Cover, colour in Light and Dark, typography, foundations |
+| Components | An About card, one stage frame per component in the left column, Light and Dark QA frames with live instances in the right column |
 | Assets | Logo placeholder, pattern, console frames, game pictures, attributions |
 | Landing & Auth | Landing, sign-in, the 16-or-older check |
 | Studio | The Studio in every state |

@@ -46,7 +46,7 @@ What was audited: the Consoless PRD, `README.md`, `docs/decisions.md`,
 | F7 | **The decisions register describes rentals.** | P-07 "absolute for bookings", P-12 "the wallet is mock; 16 or older", P-09 and P-11 `n/a`, and no P-17. | The parameters need new values. Each is listed in §13 for sign-off. |
 
 **What is solid and carries forward:** the Next.js app on App Hosting with
-its token layer (the dark "Cyber-Gamer" palette, P-04), the TEST_MODE and
+its token layer (the dark "Cyber-Gamer" palette, which becomes the Dark mode, D-2), the TEST_MODE and
 mock-API pattern (which becomes the contract, §7), the leaderboard screen
 (CON-008), the input-bounding helpers in `lib/ai.ts` (as a pattern for
 `api/common`'s validators), the CI workflow, and the community files.
