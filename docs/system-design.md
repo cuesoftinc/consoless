@@ -368,7 +368,10 @@ access returns `404`.
 `api/common` is built:** `PATCH /me` (display name), `POST /me/attestation`
 (records the 16-or-older attestation, S-15) and
 `DELETE /projects/{id}/publish` (unpublish, or withdraw from review).
-`GET /me` returns the user with today's quota.
+`GET /me` returns the user with today's quota. The Studio adds
+`GET /projects/{id}/generations` (the chat: every prompt and its outcome),
+lets `PATCH /projects/{id}` switch the console style, and has
+`POST /projects` return the project with its first generation.
 
 **The web mock is the contract.** Phase 0 deletes the AI mocks
 (`/api/mock/v1/ai/*`). Phase 1 adds mocks for every route above under

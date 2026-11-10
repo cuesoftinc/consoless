@@ -40,6 +40,7 @@ export async function POST(
     status: "draft",
     slug: null,
     version_count: 1,
+    head_version_id: null,
     artwork: game.artwork,
     created_at: now,
     updated_at: now,

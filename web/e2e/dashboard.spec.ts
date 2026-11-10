@@ -54,6 +54,9 @@ test.describe("age check", () => {
       page.getByRole("heading", { level: 1, name: "My Games" }),
     ).toBeVisible();
     await expect(page.getByText("No games yet")).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Make your first game" }),
+    ).toHaveAttribute("href", "/dashboard/studio/new");
 
     // Asked once: it does not come back on the next visit.
     await page.reload();

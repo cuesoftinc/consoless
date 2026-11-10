@@ -14,6 +14,7 @@ import {
   type ReportReason,
   type Score,
 } from "@/models";
+import { newIdempotencyKey } from "@/lib/idempotency";
 import { arcadeRepo } from "@/models/repositories";
 import { useSessionUser } from "./auth";
 import { useToast } from "./toast";
@@ -47,12 +48,6 @@ export interface GameController {
   reportSent: boolean;
   report: (reason: ReportReason, details: string) => Promise<void>;
   remix: () => Promise<void>;
-}
-
-function newKey(): string {
-  return typeof crypto !== "undefined" && "randomUUID" in crypto
-    ? crypto.randomUUID()
-    : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
 export function useGameController(slug: string): GameController {
@@ -119,7 +114,7 @@ export function useGameController(slug: string): GameController {
     setSaving(true);
     setActionError(null);
     try {
-      await arcadeRepo.remix(slug, newKey());
+      await arcadeRepo.remix(slug, newIdempotencyKey());
       addToast("Remix created. It is in My Games.", "success");
       setDialog(null);
       router.push("/dashboard");

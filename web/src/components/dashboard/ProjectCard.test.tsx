@@ -14,6 +14,7 @@ const PROJECT: Project = {
   status: "published",
   slug: "neon-stack",
   version_count: 2,
+  head_version_id: null,
   artwork: "blocks",
   created_at: "2026-11-01T00:00:00.000Z",
   updated_at: new Date(NOW - 2 * 60 * 60 * 1000).toISOString(),

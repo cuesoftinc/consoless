@@ -5,6 +5,7 @@ import type {
   PublicUser,
   ReportReason,
 } from "@/models/types";
+import type { StudioState } from "./studio";
 
 /**
  * Seed data for the TEST_MODE mock server. State is kept per user, keyed by
@@ -16,6 +17,8 @@ import type {
 export interface UserState {
   me: Me;
   projects: Project[];
+  /** Versions, generations and checks by project id, seeded on first use. */
+  studio: Record<string, StudioState>;
 }
 
 /** A stored score: one best value per player and game. */
@@ -68,6 +71,7 @@ function seededProjects(now: number): Project[] {
       status: "published",
       slug: "neon-stack",
       version_count: 6,
+      head_version_id: null,
       artwork: "blocks",
       created_at: iso(now - 9 * DAY),
       updated_at: iso(now - 2 * HOUR),
@@ -80,6 +84,7 @@ function seededProjects(now: number): Project[] {
       status: "in_review",
       slug: null,
       version_count: 4,
+      head_version_id: null,
       artwork: "platformer",
       created_at: iso(now - 5 * DAY),
       updated_at: iso(now - 1 * DAY),
@@ -92,6 +97,7 @@ function seededProjects(now: number): Project[] {
       status: "draft",
       slug: null,
       version_count: 2,
+      head_version_id: null,
       artwork: "shooter",
       created_at: iso(now - 3 * DAY),
       updated_at: iso(now - 3 * DAY),
@@ -104,6 +110,7 @@ function seededProjects(now: number): Project[] {
       status: "rejected",
       slug: null,
       version_count: 3,
+      head_version_id: null,
       artwork: "kart",
       created_at: iso(now - 12 * DAY),
       updated_at: iso(now - 6 * DAY),
@@ -134,6 +141,7 @@ export function buildUserState(userId: string, now: number): UserState {
       },
     },
     projects: firstTime ? [] : seededProjects(now),
+    studio: {},
   };
 }
 

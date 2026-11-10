@@ -44,6 +44,8 @@ export interface Project {
   /** The public Arcade slug while published; null otherwise. */
   slug: string | null;
   version_count: number;
+  /** The version the project is on; null until the first one is ready. */
+  head_version_id: string | null;
   artwork: ProjectArtwork;
   created_at: string;
   updated_at: string;
@@ -95,3 +97,61 @@ export interface Score {
 }
 
 export type ReportReason = "copied" | "inappropriate" | "broken" | "other";
+
+/** Where a generation stands. The Studio polls this (S-11). */
+export type GenerationStatus =
+  "queued" | "generating" | "checking" | "ready" | "failed" | "refused";
+
+/** One prompt and what became of it (`GET /generations/{id}`). */
+export interface Generation {
+  id: string;
+  project_id: string;
+  prompt: string;
+  status: GenerationStatus;
+  attempt: number;
+  max_attempts: number;
+  /** Set when the generation failed or was refused. */
+  reason_code: string | null;
+  /** What the assistant says about the outcome; null while in flight. */
+  message: string | null;
+  /** The version this generation produced, once ready. */
+  version_id: string | null;
+  requested_at: string;
+  updated_at: string;
+}
+
+export type VersionSource = "generated" | "edited" | "restored" | "remixed";
+
+/** One immutable version of a project (CON-002). */
+export interface Version {
+  id: string;
+  project_id: string;
+  /** 1-based, in the order versions were made. */
+  number: number;
+  source: VersionSource;
+  summary: string;
+  created_at: string;
+}
+
+export interface ProjectFile {
+  path: string;
+  content: string;
+}
+
+/** A version with its files (`GET /versions/{id}`). */
+export interface VersionDetail extends Version {
+  files: ProjectFile[];
+}
+
+export type CheckStatus = "checking" | "passed" | "failed";
+
+/** The check a hand edit goes through before it becomes a version (CON-007). */
+export interface Check {
+  id: string;
+  project_id: string;
+  status: CheckStatus;
+  /** Where the edit failed; set only when the check failed. */
+  error: { path: string; line: number; message: string } | null;
+  /** The version the edit became, once it passed. */
+  version_id: string | null;
+}

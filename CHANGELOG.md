@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The Studio at `/dashboard/studio/{id}`: chat with live build status, a preview in the console frame, versions with preview and restore, a console-style switch, a code view with checked hand edits, and publishing for review.
+- New game at `/dashboard/studio/new`, and games in My Games now open in the Studio.
+- Mock API for the Studio: projects, generations, versions, restore, file edits with checks, and publish.
 - The Arcade at `/arcade`: published games with search and a console-style filter, open to everyone.
 - Game pages at `/arcade/{slug}`: the console frame, the prompt that made the game, the leaderboard, share, report and remix. Remixing needs an account and creates a draft in My Games.
 - Mock API for the Arcade: games, scores, reports and remix.
