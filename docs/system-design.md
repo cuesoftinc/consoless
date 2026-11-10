@@ -46,7 +46,7 @@ What was audited: the Consoless PRD, `README.md`, `docs/decisions.md`,
 | F7 | **The decisions register describes rentals.** | P-07 "absolute for bookings", P-12 "the wallet is mock; 16 or older", P-09 and P-11 `n/a`, and no P-17. | The parameters need new values. Each is listed in §13 for sign-off. |
 
 **What is solid and carries forward:** the Next.js app on App Hosting with
-its token layer (the dark "Cyber-Gamer" palette, P-04), the TEST_MODE and
+its token layer (the dark "Cyber-Gamer" palette, which becomes the Dark mode, D-2), the TEST_MODE and
 mock-API pattern (which becomes the contract, §7), the leaderboard screen
 (CON-008), the input-bounding helpers in `lib/ai.ts` (as a pattern for
 `api/common`'s validators), the CI workflow, and the community files.
@@ -484,7 +484,7 @@ deploy/  docs/  scripts/
 | `docs/system-design.md` (this file), `.json`, `.html` | New |
 | `docs/architecture.md`, `data-model.md`, `api.md`, `deployment.md`, `engineering.md` | Create from §§3–10 on ratification |
 | `docs/flows/generation.md`, `flows/publish.md` | Create from §6, with error codes and acceptance |
-| `docs/design.md` | Create in Phase D from the Figma designs (CueLABS design standard) |
+| `docs/design.md`, `docs/pages.md` | Written from the Figma designs (CueLABS design standard); the designs await sign-off (Phase D) |
 | `docs/engine/` (API reference, game format spec, styles guide) | Create in Phase 1 (PRD Docs component); the API reference is served at `/docs/api` (X-2) |
 | `.cuelabs/project.yaml` | Change: `backend: active` when `api/common` lands; record the `engine/` deviation |
 

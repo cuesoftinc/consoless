@@ -1,6 +1,7 @@
 /*
- * Consoless design tokens. Dark is the default and only designed theme
- * (P-04); light values land here once design.md defines them.
+ * Consoless design tokens. Only the prototype's dark values are in code.
+ * docs/design.md defines the semantic tokens with Light (the default, P-04)
+ * and Dark values; they land here when the UI is rebuilt from the designs.
  */
 :root,
 [data-theme="dark"] {
