@@ -4,8 +4,7 @@
 /*
  * Tokens (src/design/tokens.css) mapped into Tailwind's namespaces. The
  * gaming-*, chart-* and glow-* entries serve the prototype screens only and
- * go when those screens are rebuilt; the radius and shadow scales are
- * mapped to the tokens in that same change.
+ * go when those screens are rebuilt.
  */
 @theme inline {
   --color-gaming-900: var(--gaming-900);
@@ -44,6 +43,17 @@
   --ease-exit: var(--ease-exit);
   --ease-move: var(--ease-move);
 
+  /* radius and elevation scales (docs/design.md section 2.3) */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-full: var(--radius-full);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-glow: var(--glow-accent);
+
   /* layers: z-raised, z-sticky, z-overlay, z-modal, z-toast */
   --z-index-base: var(--z-base);
   --z-index-raised: var(--z-raised);
@@ -54,6 +64,53 @@
 }
 
 @theme {
+  /*
+   * Type scale (docs/design.md section 2.2): text-display-xl, text-heading-md,
+   * text-body-sm and so on. Each sets size, line height, weight and tracking.
+   * Code styles pair with font-mono, retro styles with font-retro.
+   */
+  --text-display-xl: 56px;
+  --text-display-xl--line-height: 64px;
+  --text-display-xl--font-weight: 700;
+  --text-display-xl--letter-spacing: -1px;
+  --text-display-lg: 40px;
+  --text-display-lg--line-height: 48px;
+  --text-display-lg--font-weight: 700;
+  --text-display-lg--letter-spacing: -0.5px;
+  --text-heading-lg: 28px;
+  --text-heading-lg--line-height: 36px;
+  --text-heading-lg--font-weight: 600;
+  --text-heading-md: 20px;
+  --text-heading-md--line-height: 28px;
+  --text-heading-md--font-weight: 600;
+  --text-heading-sm: 16px;
+  --text-heading-sm--line-height: 24px;
+  --text-heading-sm--font-weight: 600;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+  --text-caption: 12px;
+  --text-caption--line-height: 16px;
+  --text-label-md: 14px;
+  --text-label-md--line-height: 20px;
+  --text-label-md--font-weight: 500;
+  --text-label-sm: 12px;
+  --text-label-sm--line-height: 16px;
+  --text-label-sm--font-weight: 500;
+  --text-code-md: 13px;
+  --text-code-md--line-height: 20px;
+  --text-code-sm: 12px;
+  --text-code-sm--line-height: 16px;
+  --text-retro-lg: 24px;
+  --text-retro-lg--line-height: 36px;
+  --text-retro-md: 14px;
+  --text-retro-md--line-height: 24px;
+  --text-retro-sm: 10px;
+  --text-retro-sm--line-height: 16px;
+
   --animate-pulse-fast: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-slide-in: slide-in 0.3s ease-out forwards;
   --animate-fade-out: fade-out 0.3s ease-in forwards;
