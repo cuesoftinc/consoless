@@ -1,4 +1,4 @@
-import { buildSeed, type MockDb } from "./seed";
+import { buildSeed, buildUserState, type MockDb, type UserState } from "./seed";
 
 /**
  * In-memory mock state: a module singleton kept on `globalThis` so it
@@ -26,4 +26,18 @@ export function nextId(prefix: string): string {
   const db = getDb();
   db.seq += 1;
   return `${prefix}_${db.seq.toString(36).padStart(4, "0")}`;
+}
+
+/** One user's state, seeded on first use. */
+export function userState(userId: string): UserState {
+  const db = getDb();
+  if (!db.users[userId]) {
+    db.users[userId] = buildUserState(userId, db.seededAt);
+  }
+  return db.users[userId];
+}
+
+/** Removes everything held for a user (`DELETE /me`). */
+export function dropUser(userId: string): void {
+  delete getDb().users[userId];
 }

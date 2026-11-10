@@ -3,8 +3,8 @@
 > **Status:** [Proposed] — this is the screen inventory of the Figma file
 > [Consoless](https://www.figma.com/design/vy0wG6WXNLMq48GJgjUdHk), which
 > is the basis for the web build (decision C-5). The web app has the
-> landing page and sign-in built from it; the hub and leaderboard are still
-> the prototype's until the dashboards stage.
+> landing page, sign-in, the age check, My Games and Settings built from
+> it. The Arcade and the Studio follow.
 
 Screen names below are the frame names in the Figma file. `MI-n` refers to
 the microinteraction catalog in [`design.md`](design.md) §4. `CON-nnn` refers
@@ -49,7 +49,7 @@ written yet.
 | Frame | Purpose | Refs |
 | --- | --- | --- |
 | `Sign in`, `Sign in / Loading`, `Sign in / Error` | Google is the only login method. Playing needs no account. [Current] Built at `/signin`; signed-in visitors go straight to `/dashboard` | C-3, MI-2 |
-| `Age check`, `Age check / Confirmed` | A one-time attestation for creators | S-15, P-12 |
+| `Age check`, `Age check / Confirmed` | A one-time attestation for creators. [Current] Built: it shows in place of My Games until answered, and Settings stay reachable | S-15, P-12 |
 | `Age check / Under 16` | Explains that playing in the Arcade is still open | S-15 |
 
 ## Part B — App
@@ -114,6 +114,16 @@ Behaviour the frames record:
 | Not found | `Not found` | — |
 
 Destructive confirms ask the user to type their username (P-13).
+
+[Current] Built in the web app: My Games at `/dashboard` (list, loading,
+empty and error states, rename, unpublish or withdraw from review, delete)
+and Settings at `/dashboard/settings` with routed tabs for Profile,
+Appearance and Data and privacy, including account deletion. The app bar
+carries the area links, today's generations, the theme toggle and the
+account menu. Not built yet: opening a game (it needs the Studio), the
+in-app Privacy page (Settings link to privacy.cuesoft.io) and the Arcade.
+The prototype's hub and its ratings leaderboard are removed; the per-game
+leaderboard returns with the Arcade.
 
 ### Stage 2 — 3D and assets
 

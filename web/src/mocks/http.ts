@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import type { UserState } from "./seed";
+import { userState } from "./store";
 
 /** Ecosystem error envelope: `{"error": {code, message, details?}}`, snake_case codes. */
 export function jsonError(
@@ -49,4 +51,33 @@ export function paginate<T extends { id: string }>(
       ? (pageItems[pageItems.length - 1]?.id ?? null)
       : null;
   return { items: pageItems, next_cursor: next };
+}
+
+const TOKEN_PREFIX = "test-mode-token.";
+
+/**
+ * Resolves the caller from the bearer token. TEST_MODE tokens carry the
+ * user id (`test-mode-token.<user id>`); anything else is 401.
+ */
+export function requireUser(
+  req: Request,
+): { userId: string; state: UserState } | NextResponse {
+  const header = req.headers.get("authorization") ?? "";
+  const token = header.startsWith("Bearer ") ? header.slice(7) : "";
+  const userId = token.startsWith(TOKEN_PREFIX)
+    ? token.slice(TOKEN_PREFIX.length)
+    : "";
+  if (!/^usr_[a-z0-9_]+$/.test(userId)) {
+    return jsonError(401, "unauthenticated", "Sign in to continue.");
+  }
+  return { userId, state: userState(userId) };
+}
+
+export function isResponse(value: unknown): value is NextResponse {
+  return value instanceof NextResponse;
+}
+
+/** Route-handler context (Next 16 async params). */
+export interface RouteContext<T extends Record<string, string>> {
+  params: Promise<T>;
 }

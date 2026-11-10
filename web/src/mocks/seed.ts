@@ -1,145 +1,114 @@
-import type { LeaderboardEntry } from "@/models/types";
-
-// Seeded leaderboard for TEST_MODE. Game names are original Consoless
-// community titles; no trademarked names (PRD section 7).
-export const LEADERBOARD_DATA: LeaderboardEntry[] = [
-  {
-    rank: 1,
-    username: "SpeedDemon_X",
-    avatar:
-      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80",
-    region: "NA",
-    rating: 2850,
-    winRate: "78%",
-    favoriteGame: "Orbit Drop",
-    tier: "Grandmaster",
-    trend: "STABLE",
-  },
-  {
-    rank: 2,
-    username: "PixelQueen",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80",
-    region: "EU",
-    rating: 2815,
-    winRate: "72%",
-    favoriteGame: "Pixel Brawl",
-    tier: "Grandmaster",
-    trend: "UP",
-  },
-  {
-    rank: 3,
-    username: "KratosFan88",
-    avatar:
-      "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80",
-    region: "ASIA",
-    rating: 2790,
-    winRate: "69%",
-    favoriteGame: "Rune Breaker",
-    tier: "Master",
-    trend: "DOWN",
-  },
-  {
-    rank: 4,
-    username: "RetroWave",
-    avatar:
-      "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&q=80",
-    region: "EU",
-    rating: 2650,
-    winRate: "65%",
-    favoriteGame: "Turbo Hedge Run",
-    tier: "Master",
-    trend: "UP",
-  },
-  {
-    rank: 5,
-    username: "SniperWolf",
-    avatar:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=100&q=80",
-    region: "NA",
-    rating: 2580,
-    winRate: "61%",
-    favoriteGame: "Night Signal",
-    tier: "Diamond",
-    trend: "STABLE",
-  },
-  {
-    rank: 6,
-    username: "CloudWalker",
-    avatar:
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?auto=format&fit=crop&w=100&q=80",
-    region: "SA",
-    rating: 2510,
-    winRate: "58%",
-    favoriteGame: "Kickabout 8-Bit",
-    tier: "Diamond",
-    trend: "DOWN",
-  },
-  {
-    rank: 7,
-    username: "PlayerOne",
-    avatar:
-      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80",
-    region: "US-EAST",
-    rating: 2450,
-    winRate: "55%",
-    favoriteGame: "Cyber Odyssey",
-    tier: "Diamond II",
-    trend: "UP",
-  },
-  {
-    rank: 8,
-    username: "DriftKing",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80",
-    region: "ASIA",
-    rating: 2400,
-    winRate: "52%",
-    favoriteGame: "Coastline Karts",
-    tier: "Platinum",
-    trend: "UP",
-  },
-  {
-    rank: 9,
-    username: "RPG_Lover",
-    avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80",
-    region: "EU",
-    rating: 2350,
-    winRate: "49%",
-    favoriteGame: "Lantern Quest",
-    tier: "Platinum",
-    trend: "STABLE",
-  },
-  {
-    rank: 10,
-    username: "NoobMaster69",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80",
-    region: "NA",
-    rating: 2200,
-    winRate: "45%",
-    favoriteGame: "Block Tower",
-    tier: "Gold",
-    trend: "DOWN",
-  },
-];
+import type { Me, Project } from "@/models/types";
 
 /**
- * The mock server's in-memory database. Entity collections are added with
- * the API routes that serve them; the store starts from `buildSeed`.
+ * Seed data for the TEST_MODE mock server. State is kept per user, keyed by
+ * the user id in the bearer token, so parallel Playwright journeys that
+ * sign in as different test users never see each other's changes.
+ *
+ * Game names are original; no trademarked names (PRD section 7).
  */
+export interface UserState {
+  me: Me;
+  projects: Project[];
+}
+
 export interface MockDb {
   seededAt: number;
-  /** Counter behind `nextId`. */
   seq: number;
-  leaderboard: LeaderboardEntry[];
+  users: Record<string, UserState>;
+}
+
+const DAY = 24 * 60 * 60 * 1000;
+const HOUR = 60 * 60 * 1000;
+
+function iso(ms: number): string {
+  return new Date(ms).toISOString();
+}
+
+/** `usr_playerone` → `playerone`; ids are already lower-case and URL-safe. */
+function usernameOf(userId: string): string {
+  return userId.replace(/^usr_/, "");
+}
+
+function seededProjects(now: number): Project[] {
+  return [
+    {
+      id: "prj_neonstack",
+      title: "Neon Stack",
+      style_id: "handheld",
+      prompt: "A falling-block puzzle on a handheld with a green screen",
+      status: "published",
+      slug: "neon-stack",
+      version_count: 6,
+      artwork: "blocks",
+      created_at: iso(now - 9 * DAY),
+      updated_at: iso(now - 2 * HOUR),
+    },
+    {
+      id: "prj_coincanyon",
+      title: "Coin Canyon",
+      style_id: "8bit",
+      prompt: "A platformer where you collect coins and jump over gaps",
+      status: "in_review",
+      slug: null,
+      version_count: 4,
+      artwork: "platformer",
+      created_at: iso(now - 5 * DAY),
+      updated_at: iso(now - 1 * DAY),
+    },
+    {
+      id: "prj_starfall",
+      title: "Starfall Patrol",
+      style_id: "arcade",
+      prompt: "A top-down space shooter with waves of enemies",
+      status: "draft",
+      slug: null,
+      version_count: 2,
+      artwork: "shooter",
+      created_at: iso(now - 3 * DAY),
+      updated_at: iso(now - 3 * DAY),
+    },
+    {
+      id: "prj_kartdraft",
+      title: "Kart Draft",
+      style_id: "16bit",
+      prompt: "A top-down kart race around a dirt track",
+      status: "rejected",
+      slug: null,
+      version_count: 3,
+      artwork: "kart",
+      created_at: iso(now - 12 * DAY),
+      updated_at: iso(now - 6 * DAY),
+    },
+  ];
+}
+
+/**
+ * The state a user starts with. Ids beginning `usr_new` are first-time
+ * users: no attestation and no projects. Every other id is a returning
+ * creator with the sample projects.
+ */
+export function buildUserState(userId: string, now: number): UserState {
+  const firstTime = userId.startsWith("usr_new");
+  const username = usernameOf(userId);
+  return {
+    me: {
+      id: userId,
+      email: `${username}@example.com`,
+      display_name: firstTime ? "New Player" : "Player One",
+      username,
+      creator_attested_at: firstTime ? null : iso(now - 9 * DAY),
+      created_at: iso(now - (firstTime ? 0 : 9 * DAY)),
+      quota: {
+        limit: 20,
+        used: firstTime ? 0 : 6,
+        resets_at: iso(now + 8 * HOUR),
+      },
+    },
+    projects: firstTime ? [] : seededProjects(now),
+  };
 }
 
 export function buildSeed(now: number): MockDb {
-  return {
-    seededAt: now,
-    seq: 0,
-    leaderboard: LEADERBOARD_DATA.map((entry) => ({ ...entry })),
-  };
+  return { seededAt: now, seq: 0, users: {} };
 }

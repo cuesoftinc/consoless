@@ -364,6 +364,12 @@ access returns `404`.
   `POST /arcade/games/{slug}/reports`
 - `GET /projects/{id}/export`, `GET /me`, `DELETE /me`
 
+**Added with the web dashboards (2026-11-10), to be confirmed when
+`api/common` is built:** `PATCH /me` (display name), `POST /me/attestation`
+(records the 16-or-older attestation, S-15) and
+`DELETE /projects/{id}/publish` (unpublish, or withdraw from review).
+`GET /me` returns the user with today's quota.
+
 **The web mock is the contract.** Phase 0 deletes the AI mocks
 (`/api/mock/v1/ai/*`). Phase 1 adds mocks for every route above under
 `web/src/app/api/mock/v1/` first; the Go handlers then implement them.

@@ -24,8 +24,8 @@ signs you in without contacting Google.
 | --- | --- |
 | `/` | The landing page |
 | `/signin` | Sign-in (Google only) |
-| `/dashboard` | The signed-in hub |
-| `/dashboard/leaderboard` | The leaderboard |
+| `/dashboard` | My Games, behind the one-time 16-or-older check |
+| `/dashboard/settings` | Settings: Profile, Appearance, Data and privacy |
 | `/dev/components` | The component gallery (dev and TEST_MODE builds only) |
 | `/api/mock/v1/*` | The mock server, mirroring the API path for path |
 
@@ -51,8 +51,13 @@ npm run build
 npm run test:e2e     # Playwright, against the TEST_MODE app
 ```
 
-`POST /api/mock/v1/testing/reset` re-seeds the mock server. The end-to-end
-tests call it so that runs do not depend on each other.
+`POST /api/mock/v1/testing/reset` re-seeds the mock server. The mock keeps
+state per signed-in user, so journeys that change data do not affect each
+other: send `{"user_id": "usr_..."}` to re-seed one user. In TEST_MODE the
+Google button signs in `usr_playerone`, a returning creator with sample
+games. To sign in as someone else, set `localStorage["consoless.test-user"]`
+to a user id before clicking it; ids beginning `usr_new` are first-time
+users with no games who have not answered the age check.
 
 ## Theme
 
