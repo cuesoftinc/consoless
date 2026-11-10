@@ -2,7 +2,7 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 import { paginate } from "./http";
-import { getDb, nextId, resetDb } from "./store";
+import { dropUser, getDb, nextId, resetDb, userState } from "./store";
 
 beforeEach(() => {
   resetDb(1_000);
@@ -12,14 +12,37 @@ describe("mock store", () => {
   it("keeps one seeded database until it is reset", () => {
     const db = getDb();
     expect(db.seededAt).toBe(1_000);
-    expect(db.leaderboard.length).toBeGreaterThan(0);
-    db.leaderboard.pop();
     expect(getDb()).toBe(db);
 
     const fresh = resetDb(2_000);
     expect(fresh).not.toBe(db);
     expect(fresh.seededAt).toBe(2_000);
-    expect(fresh.leaderboard.length).toBe(db.leaderboard.length + 1);
+  });
+
+  it("keeps state per user, seeded on first use", () => {
+    const creator = userState("usr_playerone");
+    expect(creator.me.username).toBe("playerone");
+    expect(creator.me.creator_attested_at).not.toBeNull();
+    expect(creator.projects.length).toBeGreaterThan(0);
+
+    creator.projects.pop();
+    expect(userState("usr_playerone")).toBe(creator);
+    expect(userState("usr_other").projects.length).toBe(
+      creator.projects.length + 1,
+    );
+  });
+
+  it("starts ids beginning usr_new as first-time users", () => {
+    const state = userState("usr_new_1");
+    expect(state.me.creator_attested_at).toBeNull();
+    expect(state.projects).toEqual([]);
+    expect(state.me.quota.used).toBe(0);
+  });
+
+  it("forgets a dropped user", () => {
+    const state = userState("usr_playerone");
+    dropUser("usr_playerone");
+    expect(userState("usr_playerone")).not.toBe(state);
   });
 
   it("hands out monotonic ids", () => {

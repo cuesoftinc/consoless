@@ -29,7 +29,7 @@ test("home renders and has zero critical axe violations", async ({ page }) => {
 });
 
 test("the dashboard sends signed-out visitors to sign in", async ({ page }) => {
-  await page.goto("/dashboard/leaderboard");
+  await page.goto("/dashboard/settings");
   await page.waitForURL((url) => url.pathname === "/signin");
   await expect(
     page.getByRole("heading", { level: 1, name: "Sign in to start building" }),
@@ -37,8 +37,10 @@ test("the dashboard sends signed-out visitors to sign in", async ({ page }) => {
 });
 
 const dashboardRoutes = [
-  { path: "/dashboard", heading: /Command Center/ },
-  { path: "/dashboard/leaderboard", heading: /Global Rankings/ },
+  { path: "/dashboard", heading: "My Games" },
+  { path: "/dashboard/settings", heading: "Settings" },
+  { path: "/dashboard/settings/appearance", heading: "Settings" },
+  { path: "/dashboard/settings/data-privacy", heading: "Settings" },
 ];
 
 for (const route of dashboardRoutes) {
@@ -50,9 +52,7 @@ for (const route of dashboardRoutes) {
     await expect(
       page.getByRole("heading", { level: 1, name: route.heading }),
     ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: /Leaderboard/ }).first(),
-    ).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "App" })).toBeVisible();
     await expectNoCriticalViolations(page);
   });
 }

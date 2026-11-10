@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- My Games at `/dashboard`: the user's games with their status, and rename, unpublish and delete (delete asks for the username).
+- Settings at `/dashboard/settings`: Profile, Appearance and Data and privacy, including account deletion.
+- The signed-in app bar with today's generations and the account menu, and the one-time 16-or-older check for creators.
+- Mock API for `/me` and `/projects`, with state kept per test user so end-to-end journeys run in parallel.
 - Landing page rebuilt from the designs: the marketing navigation and footer, hero, how it works, console style picker, example games, a contributor band, hosted and self-hosted options and an FAQ, in Light and Dark.
 - Sign-in page at `/signin`. Signed-out visitors to the dashboard are sent there, and signed-in visitors skip it.
 - `sitemap.xml`, and analytics events for the landing page that queue locally until an analytics endpoint is configured.
@@ -42,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Removed
 
+- The prototype's hub and ratings leaderboard. The per-game leaderboard returns with the Arcade.
 - Console rentals, the streaming session, the wallet, tournaments and the commercial game library.
 - The AI coaching and lobby routes, the Gemini proxy client and `GEMINI_PROXY_*` variables. Model calls move to the backend.
 - The email and password sign-in form.
