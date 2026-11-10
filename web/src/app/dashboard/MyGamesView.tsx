@@ -2,7 +2,8 @@
 
 /** My Games: every project the user has made, with its actions. */
 
-import { Gamepad2 } from "lucide-react";
+import Link from "next/link";
+import { Gamepad2, Plus } from "lucide-react";
 import ProjectCard from "@/components/dashboard/ProjectCard";
 import {
   DeleteDialog,
@@ -10,12 +11,13 @@ import {
   UnpublishDialog,
 } from "@/components/dashboard/ProjectDialogs";
 import Banner from "@/components/ui/Banner";
-import Button from "@/components/ui/Button";
+import Button, { buttonClasses } from "@/components/ui/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import GameCardSkeleton from "@/components/ui/GameCardSkeleton";
 import { useMe } from "@/controllers/me-context";
 import { useProjectsController } from "@/controllers/use-projects";
 
+const NEW_GAME = "/dashboard/studio/new";
 const GRID =
   "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
 
@@ -60,7 +62,12 @@ export default function MyGamesView({ fail = false }: { fail?: boolean }) {
       <EmptyState
         icon={Gamepad2}
         title="No games yet"
-        body="Games you make in the Studio appear here."
+        body="Describe a game and play it in minutes."
+        action={
+          <Link href={NEW_GAME} className={buttonClasses("primary", "md")}>
+            Make your first game
+          </Link>
+        }
       />
     );
   } else {
@@ -82,11 +89,17 @@ export default function MyGamesView({ fail = false }: { fail?: boolean }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-heading-lg text-text-primary">My Games</h1>
-        <p className="text-body-md text-text-secondary">
-          Every game you have made, most recently changed first.
-        </p>
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-heading-lg text-text-primary">My Games</h1>
+          <p className="text-body-md text-text-secondary">
+            Every game you have made, most recently changed first.
+          </p>
+        </div>
+        <Link href={NEW_GAME} className={buttonClasses("primary", "md")}>
+          <Plus aria-hidden className="h-4 w-4" />
+          New game
+        </Link>
       </header>
 
       {body}

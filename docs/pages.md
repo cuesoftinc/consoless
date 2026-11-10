@@ -3,8 +3,8 @@
 > **Status:** [Proposed] — this is the screen inventory of the Figma file
 > [Consoless](https://www.figma.com/design/vy0wG6WXNLMq48GJgjUdHk), which
 > is the basis for the web build (decision C-5). The web app has the
-> landing page, sign-in, the age check, the Arcade, My Games and Settings
-> built from it. The Studio follows.
+> Stage 1 screens built from it: the landing page, sign-in, the age check,
+> the Arcade, My Games, the Studio and Settings.
 
 Screen names below are the frame names in the Figma file. `MI-n` refers to
 the microinteraction catalog in [`design.md`](design.md) §4. `CON-nnn` refers
@@ -84,6 +84,17 @@ Behaviour the frames record:
   the user's text is kept.
 - Publishing goes through review before the game is live.
 
+[Current] Built in the web app at `/dashboard/studio/new` and
+`/dashboard/studio/{id}`: the first prompt with a style picker, the chat
+with the queued, generating, checking, ready, failed and refused states
+(polled every two seconds), the locked prompt while a game builds or the
+daily quota is used up, versions with preview and restore, the style
+switch, the code view with hand edits that are checked before they become
+a version, and the publish dialog. Not built yet: playing in the preview
+(the frame shows a picture until the engine exists), Export, Compare
+versions, the "retrying" and "generation paused" states, the original-take
+notice, and the review outcome (a game stays in review in the mock).
+
 ### Arcade and play (`/arcade`, `/arcade/{slug}`)
 
 | Group | Frames | Refs |
@@ -130,7 +141,7 @@ empty and error states, rename, unpublish or withdraw from review, delete)
 and Settings at `/dashboard/settings` with routed tabs for Profile,
 Appearance and Data and privacy, including account deletion. The app bar
 carries the area links, today's generations, the theme toggle and the
-account menu. Not built yet: opening a game (it needs the Studio), the
+account menu. Not built yet: the
 in-app Privacy page (Settings link to privacy.cuesoft.io). The prototype's
 hub and its ratings leaderboard are removed; the leaderboard is now per
 game, on the game page.

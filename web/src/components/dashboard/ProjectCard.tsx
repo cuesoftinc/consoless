@@ -6,6 +6,7 @@
  * rename, unpublish and delete.
  */
 
+import Link from "next/link";
 import { Ellipsis } from "lucide-react";
 import Badge, { type BadgeKind } from "@/components/ui/Badge";
 import GameScreen from "@/components/ui/GameScreen";
@@ -24,7 +25,7 @@ export const STATUS_LABEL: Record<ProjectStatus, string> = {
   rejected: "Not approved",
 };
 
-const STATUS_KIND: Record<ProjectStatus, BadgeKind> = {
+export const STATUS_KIND: Record<ProjectStatus, BadgeKind> = {
   draft: "neutral",
   in_review: "warning",
   published: "success",
@@ -70,7 +71,12 @@ export default function ProjectCard({
       <div className="flex flex-col gap-2 p-4">
         <div className="flex items-start justify-between gap-2">
           <h2 className="min-w-0 truncate text-heading-sm text-text-primary">
-            {project.title}
+            <Link
+              href={`/dashboard/studio/${project.id}`}
+              className="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+            >
+              {project.title}
+            </Link>
           </h2>
           <PopoverMenu
             aria-label={`Actions for ${project.title}`}

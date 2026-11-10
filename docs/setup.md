@@ -27,6 +27,8 @@ signs you in without contacting Google.
 | `/arcade` | The Arcade: published games, open to everyone |
 | `/arcade/{slug}` | A game's page: leaderboard, share, remix and report |
 | `/dashboard` | My Games, behind the one-time 16-or-older check |
+| `/dashboard/studio/new` | New game: a first prompt and a console style |
+| `/dashboard/studio/{id}` | The Studio: chat, preview, code, versions, style and publish |
 | `/dashboard/settings` | Settings: Profile, Appearance, Data and privacy |
 | `/dev/components` | The component gallery (dev and TEST_MODE builds only) |
 | `/api/mock/v1/*` | The mock server, mirroring the API path for path |
@@ -60,6 +62,11 @@ Google button signs in `usr_playerone`, a returning creator with sample
 games. To sign in as someone else, set `localStorage["consoless.test-user"]`
 to a user id before clicking it; ids beginning `usr_new` are first-time
 users with no games who have not answered the age check.
+
+The mock builds every prompt into a version after a few seconds. Two
+prompts drive the other outcomes: one containing `[fail]` fails its checks,
+and one containing `[refuse]` is refused. A code edit fails its check when
+its braces do not balance.
 
 ## Theme
 
