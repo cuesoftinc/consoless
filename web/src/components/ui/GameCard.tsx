@@ -4,7 +4,7 @@
  * strengthens and the card lifts onto shadow-md over duration-fast.
  */
 
-import { useId, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { Play } from "lucide-react";
 import { cn } from "@/lib/cn";
@@ -33,11 +33,9 @@ export default function GameCard({
   screen,
   className,
 }: GameCardProps) {
-  const titleId = useId();
   return (
     <Link
       href={href}
-      aria-labelledby={titleId}
       className={cn(
         "group block w-full max-w-74 overflow-hidden rounded-lg border border-border-default bg-bg-raised",
         "hover:border-border-strong hover:shadow-md",
@@ -53,10 +51,7 @@ export default function GameCard({
         {screen}
       </div>
       <div className="flex flex-col gap-2 p-4">
-        <span
-          id={titleId}
-          className="truncate text-heading-sm text-text-primary"
-        >
+        <span className="truncate text-heading-sm text-text-primary">
           {title}
         </span>
         <span className="text-caption text-text-secondary">{byline}</span>

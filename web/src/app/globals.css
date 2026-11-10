@@ -248,14 +248,14 @@
     height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--gaming-900);
+    background: var(--color-bg-base);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--gaming-800);
+    background: var(--color-border-strong);
     border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--gaming-accent);
+    background: var(--color-text-muted);
   }
 }
 

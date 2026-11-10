@@ -2,8 +2,9 @@
 
 > **Status:** [Proposed] — this is the screen inventory of the Figma file
 > [Consoless](https://www.figma.com/design/vy0wG6WXNLMq48GJgjUdHk), which
-> awaits review and sign-off (decision C-4). The web app on `main` still
-> shows the prototype's landing page, hub and leaderboard.
+> is the basis for the web build (decision C-5). The web app has the
+> landing page and sign-in built from it; the hub and leaderboard are still
+> the prototype's until the dashboards stage.
 
 Screen names below are the frame names in the Figma file. `MI-n` refers to
 the microinteraction catalog in [`design.md`](design.md) §4. `CON-nnn` refers
@@ -13,31 +14,41 @@ to the PRD requirements.
 
 ### Landing (`/`)
 
+[Current] Built in the web app. Sign-in happens at `/signin`; "Start
+building" and "Try Cloud" lead there.
+
 | Band | Content | Refs |
 | --- | --- | --- |
-| Navigation | Logo, Studio, Arcade, My Games, Docs, a GitHub "Star" action with no count, Sign in | — |
-| Hero | "Describe it. Play it. Share it.", a filled prompt input, three starter prompts, a handheld console frame. Calls to action: Start building, Play in the Arcade, View on GitHub | MI-1 |
-| How it works | Describe it, Play it, Keep changing it, Share it | CON-001, CON-002, CON-006 |
-| From a sentence to a game | A sample of the Studio chat beside a console frame | CON-001 |
-| Pick a look | The five Stage 1 console styles | CON-003 |
-| Made on Consoless | Four game cards and a link to the Arcade | CON-006, MI-12 |
-| Open source, with a hosted service | The MIT engine ("Self-hosting is free forever") and the hosted service (free, 20 generations a day, S-21) | — |
-| Footer | Licence line, Docs, GitHub, Privacy, Terms, Support | — |
+| Navigation | The shared marketing navigation: logo, Features, Consoles, Docs, the GitHub star badge (a neutral "Star" in TEST_MODE), the theme toggle, Sign in, Try Cloud. A menu button below 768px | — |
+| Hero | "Describe it. Play it. Share it.", a filled prompt input, three starter prompts, a handheld console frame. Calls to action: Start building, See what you can make, View on GitHub | MI-1 |
+| How it works (`#features`) | Describe it, Play it, Keep changing it, Share it | CON-001, CON-002, CON-006 |
+| From a sentence to a game (`#example`) | A sample of the Studio chat beside a console frame | CON-001 |
+| Pick a look (`#consoles`) | The five Stage 1 console styles. Choosing one swaps the frame | CON-003 |
+| What you can make (`#arcade`) | Four example games with the prompt that would make each. Examples only: no authors or play counts until the Arcade has real games | CON-006 |
+| Built in the open (`#developers`) | For contributors: the engine, the checks, console styles as data. GitHub, Discord, good first issues, the contributing guide | — |
+| Hosted, or run it yourself (`#self-host`) | The hosted service (free, 20 generations a day, S-21) and self-hosting ("Self-hosting is free forever"). No install command until the engine and services ship | — |
+| Questions and answers (`#faq`) | Seven questions, one open at a time | — |
+| Final call to action | Start building, View on GitHub | — |
+| Footer | The shared marketing footer: Product, Docs, Community and Legal columns, and the legal bar | — |
 
 Frames: `Landing`, `Landing / Mobile`.
 
-**Gap against the landing dual-audience rule.** [Proposed] The standard asks
-the landing page to sell to contributor-developers (stack, interesting
-problems, good first issues, community links) and to self-hosting adopters
-(data ownership, one-line install, what ships), with an FAQ. The current
-design covers the open-source and hosted pitch in one band. A contributor
-band, a self-hosting band and an FAQ are not designed yet.
+**Differences from the Figma frames.** [Current] The web follows the
+CueLABS web standard where the frames differ (C-5): the navigation and
+footer use the standard link inventory, and the page adds the contributor
+band, the self-hosting band and the FAQ that the standard asks for. The
+"Made on Consoless" band became "What you can make" because there are no
+published games to show yet. The Figma frames are corrected to match.
+
+**Not live yet.** [Current] The footer's Quickstart, API reference,
+Self-host guide and Roadmap links point at documentation pages that are not
+written yet.
 
 ### Sign-in and the 16-or-older check
 
 | Frame | Purpose | Refs |
 | --- | --- | --- |
-| `Sign in`, `Sign in / Loading`, `Sign in / Error` | Google is the only login method. Playing needs no account | C-3, MI-2 |
+| `Sign in`, `Sign in / Loading`, `Sign in / Error` | Google is the only login method. Playing needs no account. [Current] Built at `/signin`; signed-in visitors go straight to `/dashboard` | C-3, MI-2 |
 | `Age check`, `Age check / Confirmed` | A one-time attestation for creators | S-15, P-12 |
 | `Age check / Under 16` | Explains that playing in the Arcade is still open | S-15 |
 

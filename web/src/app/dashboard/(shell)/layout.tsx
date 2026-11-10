@@ -6,7 +6,7 @@ export default function ShellLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen bg-gaming-900 text-white font-sans">
+    <div className="flex h-screen overflow-hidden bg-gaming-900 font-sans text-white selection:bg-gaming-accent selection:text-white">
       <Navbar />
 
       <main id="main" tabIndex={-1} className="flex-1 overflow-hidden relative">

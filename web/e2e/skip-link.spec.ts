@@ -21,7 +21,7 @@ test("home: first Tab lands on the skip link; activating it focuses #main", asyn
 test("dashboard: first Tab lands on the skip link; activating it focuses #main", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/signin");
   await page.getByRole("button", { name: "Continue with Google" }).click();
   await page.waitForURL("**/dashboard");
 

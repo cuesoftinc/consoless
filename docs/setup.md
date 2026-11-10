@@ -17,12 +17,13 @@ npm ci
 NEXT_PUBLIC_TEST_MODE=true npm run dev
 ```
 
-Open `http://localhost:3000`. "Continue with Google" signs you in without
-contacting Google.
+Open `http://localhost:3000` and choose Sign in. "Continue with Google"
+signs you in without contacting Google.
 
 | Route | What it is |
 | --- | --- |
 | `/` | The landing page |
+| `/signin` | Sign-in (Google only) |
 | `/dashboard` | The signed-in hub |
 | `/dashboard/leaderboard` | The leaderboard |
 | `/dev/components` | The component gallery (dev and TEST_MODE builds only) |
