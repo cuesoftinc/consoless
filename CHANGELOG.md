@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Design contract (`docs/design.md`) and screen inventory (`docs/pages.md`) for the Figma designs of all three stages, which await sign-off.
+- Decisions D-1 to D-5: semantic colour tokens, a light theme, the typefaces, placeholder brand assets and one design file.
 - Ratified system design (S-1 to S-26) for the prompt-to-game platform (`docs/system-design.md`, `.json`, `.html`).
 - Decisions C-1 to C-4: the new product direction, the retired prototype, Google sign-in only, and design-first UI.
 - A single "Continue with Google" sign-in button.

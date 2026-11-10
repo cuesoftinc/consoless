@@ -484,7 +484,7 @@ deploy/  docs/  scripts/
 | `docs/system-design.md` (this file), `.json`, `.html` | New |
 | `docs/architecture.md`, `data-model.md`, `api.md`, `deployment.md`, `engineering.md` | Create from §§3–10 on ratification |
 | `docs/flows/generation.md`, `flows/publish.md` | Create from §6, with error codes and acceptance |
-| `docs/design.md` | Create in Phase D from the Figma designs (CueLABS design standard) |
+| `docs/design.md`, `docs/pages.md` | Written from the Figma designs (CueLABS design standard); the designs await sign-off (Phase D) |
 | `docs/engine/` (API reference, game format spec, styles guide) | Create in Phase 1 (PRD Docs component); the API reference is served at `/docs/api` (X-2) |
 | `.cuelabs/project.yaml` | Change: `backend: active` when `api/common` lands; record the `engine/` deviation |
 

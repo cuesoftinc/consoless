@@ -14,7 +14,7 @@ decided; a parameter whose surface is `absent` or `planned` may read `n/a`.
 | P-01 | Product slug | consoless | Matches `name` in `.cuelabs/project.yaml` |
 | P-02 | Display name | Consoless | |
 | P-03 | Marketing product slot | Consoles | |
-| P-04 | Default theme | dark | Gaming product; the prototype is already dark |
+| P-04 | Default theme | dark | Gaming product. Light is a true token mode in the designs (D-2) |
 | P-05 | Playwright port | 3150 | Siblings use 3100, 3131 and 3311 |
 | P-06 | Settings IA | tabs | |
 | P-07 | Date idiom per surface class | relative for activity and versions | Ratified S-15; bookings are retired (C-2) |
@@ -66,6 +66,20 @@ The new landing page, Studio, Arcade, My Games and console-style frames are
 designed in Figma first. Until those designs are signed off, web changes are
 limited to clean-up and copy within the existing layouts. Engine and backend
 work may proceed in parallel (system design §14, phase D).
+
+### D-1 to D-5 — Design direction (2026-11-10)
+
+Set by the product owner before the Figma file was built. The designs
+themselves still await review and sign-off (C-4); the full contract is in
+[`design.md`](design.md) and the screen inventory in [`pages.md`](pages.md).
+
+| ID | Decision |
+| --- | --- |
+| D-1 | Colour tokens are semantic (`color/bg/base`, `color/accent/default`, `color/accent/on-accent` and so on), seeded from the prototype's palette. The web tokens are renamed to match when the UI is rebuilt |
+| D-2 | A light palette is designed now. Dark and Light are true variable modes on `consoless/tokens`; dark stays the default (P-04) |
+| D-3 | Typefaces are Inter for the interface, Press Start 2P for retro display moments and JetBrains Mono for code |
+| D-4 | The logo and the African geometric pattern are placeholders in the designs until the brand owner supplies the official assets. No mark is designed in the product file |
+| D-5 | One Figma file, in the Cuesoft Inc. team, covers all three delivery stages. It follows the written CueLABS design standard |
 
 ### S-1 to S-15 — System design v1 (ratified 2026-10-30)
 
