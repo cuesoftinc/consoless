@@ -73,6 +73,15 @@ See the [system design](docs/system-design.md) for services, data ownership, flo
 - **Node.js** 24 (see [`web/.nvmrc`](web/.nvmrc))
 - **npm**
 
+### Run with Docker
+
+```bash
+git clone https://github.com/cuesoftinc/consoless.git
+cd consoless && docker compose up --build -d
+```
+
+Open `http://localhost:3000`. The stack is the web app in TEST_MODE for now; the engine and the services join the same file as they are built.
+
 ### Run locally
 
 ```bash

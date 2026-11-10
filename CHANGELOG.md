@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The landing page shows the commands to run Consoless yourself, in a copyable block with Docker Compose and npm tabs.
+- `docker-compose.yml` and `web/Dockerfile`, so `docker compose up --build -d` (or `make up`) starts the web app.
 - The Studio at `/dashboard/studio/{id}`: chat with live build status, a preview in the console frame, versions with preview and restore, a console-style switch, a code view with checked hand edits, and publishing for review.
 - New game at `/dashboard/studio/new`, and games in My Games now open in the Studio.
 - Mock API for the Studio: projects, generations, versions, restore, file edits with checks, and publish.

@@ -12,6 +12,7 @@ export interface HomeController {
   onGithub: () => void;
   onContribute: () => void;
   onDemo: (style: string) => void;
+  onCopyCommand: (method: string) => void;
   onFaqOpen: (index: number) => void;
   onNavLink: (id: string) => void;
 }
@@ -23,6 +24,11 @@ export function useHomeController(): HomeController {
 
   const onTryCloud = useCallback(() => trackEvent("try_cloud_click"), []);
   const onSelfHost = useCallback(() => trackEvent("self_host_click"), []);
+  const onCopyCommand = useCallback(
+    (method: string) =>
+      trackEvent("self_host_click", { target: "copy", method }),
+    [],
+  );
   const onGithub = useCallback(() => trackEvent("github_click"), []);
   const onContribute = useCallback(() => trackEvent("contribute_click"), []);
   const onDemo = useCallback(
@@ -42,6 +48,7 @@ export function useHomeController(): HomeController {
     stars,
     onTryCloud,
     onSelfHost,
+    onCopyCommand,
     onGithub,
     onContribute,
     onDemo,

@@ -124,6 +124,28 @@ test.describe("home", () => {
     ).toContainText("Self-hosting is free forever.");
   });
 
+  test("the self-host commands can be copied, per install method", async ({
+    page,
+    context,
+  }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/");
+    const snippet = page.getByTestId("selfhost-snippet");
+    await expect(snippet.getByRole("tabpanel")).toContainText(
+      "docker compose up --build -d",
+    );
+    await snippet.getByRole("button", { name: "Copy commands" }).click();
+    await expect(snippet.getByRole("button", { name: "Copied" })).toBeVisible();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      "git clone https://github.com/cuesoftinc/consoless\ncd consoless && docker compose up --build -d",
+    );
+
+    await snippet.getByRole("tab", { name: "npm" }).click();
+    await expect(snippet.getByRole("tabpanel")).toContainText(
+      "NEXT_PUBLIC_TEST_MODE=true npm run dev",
+    );
+  });
+
   test("on a phone the page does not scroll sideways and the menu works", async ({
     page,
   }) => {

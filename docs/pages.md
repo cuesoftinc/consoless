@@ -26,7 +26,7 @@ building" and "Try Cloud" lead there.
 | Pick a look (`#consoles`) | The five Stage 1 console styles. Choosing one swaps the frame | CON-003 |
 | What you can make (`#arcade`) | Four example games with the prompt that would make each. Examples only: no authors or play counts until the Arcade has real games | CON-006 |
 | Built in the open (`#developers`) | For contributors: the engine, the checks, console styles as data. GitHub, Discord, good first issues, the contributing guide | — |
-| Hosted, or run it yourself (`#self-host`) | The hosted service (free, 20 generations a day, S-21) and self-hosting ("Self-hosting is free forever"). No install command until the engine and services ship | — |
+| Hosted, or run it yourself (`#self-host`) | The hosted service (free, 20 generations a day, S-21) and self-hosting ("Self-hosting is free forever"), then the commands to run it yourself in a copyable block with Docker Compose and npm tabs | — |
 | Questions and answers (`#faq`) | Seven questions, one open at a time | — |
 | Final call to action | Start building, View on GitHub | — |
 | Footer | The shared marketing footer: Product, Docs, Community and Legal columns, and the legal bar | — |
