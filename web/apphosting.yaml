@@ -4,3 +4,14 @@ runConfig:
   concurrency: 80
   cpu: 1
   memoryMiB: 512
+
+# Until api/common exists the hosted site runs on its in-app mock API, like
+# the sibling CueLABS products before their backends land. NEXT_PUBLIC_*
+# values are inlined at build time, so this must be available to the build.
+# Remove this block when the web server proxies /api/v1 to the real API.
+env:
+  - variable: NEXT_PUBLIC_TEST_MODE
+    value: "true"
+    availability:
+      - BUILD
+      - RUNTIME
