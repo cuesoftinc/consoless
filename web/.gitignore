@@ -43,3 +43,7 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 /blob-report/
+
+# Written by `next dev` on every run; not part of the repo (the sibling
+# CueLABS repos do not carry it).
+AGENTS.md
