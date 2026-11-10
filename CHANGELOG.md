@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- The hosted site now builds in TEST_MODE, so the dashboard loads from the mock API instead of failing with "We could not load your account".
 - The selected version row and the game card link pass the accessibility checks.
 - Design token colours now reach Tailwind: the colour utilities (`bg-bg-base`, `text-text-primary` and the rest) were missing from the theme mapping.
 

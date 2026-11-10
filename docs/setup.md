@@ -40,7 +40,7 @@ Never commit secrets. Configuration comes from environment variables;
 
 | Variable | Used by | Description |
 | --- | --- | --- |
-| `NEXT_PUBLIC_TEST_MODE` | web | `true` points the API client at the mock server and uses the test-mode sign-in |
+| `NEXT_PUBLIC_TEST_MODE` | web | `true` points the API client at the mock server and uses the test-mode sign-in. The hosted site sets it in `web/apphosting.yaml` until `api/common` exists |
 | `PW_PORT` | web end-to-end tests | Port for the Playwright server. Defaults to 3150 |
 
 ## Checks
