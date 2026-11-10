@@ -67,10 +67,21 @@ designed in Figma first. Until those designs are signed off, web changes are
 limited to clean-up and copy within the existing layouts. Engine and backend
 work may proceed in parallel (system design §14, phase D).
 
+### C-5 — The designs are the basis for the web build (2026-11-10)
+
+The product owner accepted the Figma designs as the basis for the web
+build, which lifts the hold in C-4. The web is built in the standard
+stages: foundations, components, the landing page, then the dashboards, one
+pull request per stage. Where the CueLABS web standard fixes something the
+designs draw differently (the `/signin` and `/dashboard` routes, the
+marketing navigation and footer inventory), the web follows the standard
+and the Figma file is corrected to match. The independent design QA loop is
+still owed.
+
 ### D-1 to D-5 — Design direction (2026-11-10)
 
 Set by the product owner before the Figma file was built. The designs
-themselves still await review and sign-off (C-4); the full contract is in
+were accepted as the basis for the web build in C-5; the full contract is in
 [`design.md`](design.md) and the screen inventory in [`pages.md`](pages.md).
 
 | ID | Decision |

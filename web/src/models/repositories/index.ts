@@ -1,1 +1,1 @@
-export { apiBase, http } from "./client";
+export { apiBase, http, type RequestOptions } from "./client";

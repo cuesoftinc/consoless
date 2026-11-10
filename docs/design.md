@@ -1,8 +1,8 @@
 # Consoless — Design
 
-> **Status:** [Proposed] — the Figma file is built and awaits review and
-> sign-off (decision C-4, system design phase D). Web UI work starts only
-> after sign-off. The independent design QA loop has not been run yet.
+> **Status:** [Decided C-5] — the Figma file is accepted as the basis for
+> the web build. The independent design QA loop has not been run yet, so
+> findings from it are still to come.
 >
 > **Source of truth:** the Figma file
 > [Consoless](https://www.figma.com/design/vy0wG6WXNLMq48GJgjUdHk), in the
@@ -91,9 +91,11 @@ shells. They are the same in both modes: `screen-green #9bbc0f`,
 **Raw hex** is allowed only for the Google glyph (official colours) and
 effect colours (shadows and the accent glow).
 
-**Web mapping.** [Current] `web/src/design/tokens.css` still carries the
-prototype names and only the dark values. They map to the new tokens as follows, and are renamed when
-the web UI is rebuilt from these designs:
+**Web mapping.** [Current] `web/src/design/tokens.css` carries these tokens,
+with Light on `:root` and Dark on `[data-theme="dark"]`, and `globals.css`
+maps them to Tailwind utilities such as `bg-bg-base` and `text-text-primary`.
+The prototype screens still use the prototype tokens below. Those tokens go
+when the screens are rebuilt:
 
 | Prototype token | New token |
 | --- | --- |

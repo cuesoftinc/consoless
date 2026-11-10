@@ -1,10 +1,18 @@
 // Typed access to public (browser-exposed) environment variables.
 // NEXT_PUBLIC_* values are inlined at build time.
+const testMode = process.env.NEXT_PUBLIC_TEST_MODE === "true";
+
 export const env = {
   /**
-   * TEST_MODE (web-standard): NEXT_PUBLIC_TEST_MODE=true points the repository
-   * client at the in-app mock routes (/api/mock) and lets the Google sign-in
-   * button open the dashboard without Firebase.
+   * TEST_MODE (web standard): NEXT_PUBLIC_TEST_MODE=true points the repository
+   * client at the in-app mock server and lets the Google sign-in button open
+   * the dashboard without Firebase.
    */
-  testMode: process.env.NEXT_PUBLIC_TEST_MODE === "true",
+  testMode,
+  /**
+   * Base path for the repository client. The mock server mirrors the API
+   * path for path; outside TEST_MODE the browser calls the web server's
+   * /api/v1 proxy (S-14).
+   */
+  apiBase: testMode ? "/api/mock/v1" : "/api/v1",
 } as const;

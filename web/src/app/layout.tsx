@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Press_Start_2P } from "next/font/google";
+import { Inter, JetBrains_Mono, Press_Start_2P } from "next/font/google";
 import SkipLink from "@/components/ui/SkipLink";
 import ToastViewport from "@/components/ui/ToastViewport";
 import { ToastProvider } from "@/controllers/toast";
+import { ThemeProvider, themeInitScript } from "@/design/ThemeProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,6 +16,12 @@ const pressStart2P = Press_Start_2P({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-press-start-2p",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
   display: "swap",
 });
 
@@ -38,17 +45,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    // suppressHydrationWarning: the pre-paint script sets data-theme before
+    // React hydrates.
     <html
       lang="en"
-      data-theme="dark"
-      className={`${inter.variable} ${pressStart2P.variable}`}
+      className={`${inter.variable} ${pressStart2P.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
     >
       <body className="bg-gaming-900 text-white h-screen overflow-hidden selection:bg-gaming-accent selection:text-white">
+        {/* Apply the stored theme before first paint (no flash). */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <SkipLink />
-        <ToastProvider>
-          {children}
-          <ToastViewport />
-        </ToastProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            {children}
+            <ToastViewport />
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

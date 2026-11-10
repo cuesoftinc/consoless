@@ -22,6 +22,13 @@ describe("TestModeAuthProvider", () => {
     expect(provider.currentUser()).toBeNull();
   });
 
+  it("hands out a bearer token only while signed in", async () => {
+    const provider = new TestModeAuthProvider();
+    expect(await provider.getBearerToken()).toBeNull();
+    await provider.signInWithGoogle();
+    expect(await provider.getBearerToken()).toBe("test-mode-token");
+  });
+
   it("reads a corrupted session as signed out", () => {
     window.sessionStorage.setItem("consoless.test-session", "{not json");
     expect(new TestModeAuthProvider().currentUser()).toBeNull();
