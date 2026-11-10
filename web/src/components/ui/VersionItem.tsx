@@ -71,7 +71,14 @@ export default function VersionItem({
       <span className="line-clamp-2 text-body-sm text-text-secondary">
         {summary}
       </span>
-      <span className="text-caption text-text-muted">{time}</span>
+      <span
+        className={cn(
+          "text-caption",
+          selected ? "text-text-secondary" : "text-text-muted",
+        )}
+      >
+        {time}
+      </span>
     </button>
   );
 }

@@ -93,3 +93,17 @@ export const http = {
     return request<T>("DELETE", path, undefined, options);
   },
 };
+
+/**
+ * GET a public JSON document from outside the API (for example the GitHub
+ * REST API). No credentials are sent. Resolves null on any failure.
+ */
+export async function getExternalJson<T>(url: string): Promise<T | null> {
+  try {
+    const res = await fetch(url, { headers: { accept: "application/json" } });
+    if (!res.ok) return null;
+    return (await res.json()) as T;
+  } catch {
+    return null;
+  }
+}

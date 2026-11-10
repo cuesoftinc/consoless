@@ -12,7 +12,7 @@ async function expectNoCriticalViolations(page: Page): Promise<void> {
 }
 
 async function signIn(page: Page): Promise<void> {
-  await page.goto("/");
+  await page.goto("/signin");
   await page.getByRole("button", { name: "Continue with Google" }).click();
   await page.waitForURL("**/dashboard");
 }
@@ -20,16 +20,19 @@ async function signIn(page: Page): Promise<void> {
 test("home renders and has zero critical axe violations", async ({ page }) => {
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { level: 1, name: /Describe It\./ }),
+    page.getByRole("heading", {
+      level: 1,
+      name: "Describe it. Play it. Share it.",
+    }),
   ).toBeVisible();
   await expectNoCriticalViolations(page);
 });
 
-test("the dashboard sends signed-out visitors home", async ({ page }) => {
+test("the dashboard sends signed-out visitors to sign in", async ({ page }) => {
   await page.goto("/dashboard/leaderboard");
-  await page.waitForURL((url) => url.pathname === "/");
+  await page.waitForURL((url) => url.pathname === "/signin");
   await expect(
-    page.getByRole("heading", { level: 1, name: /Describe It\./ }),
+    page.getByRole("heading", { level: 1, name: "Sign in to start building" }),
   ).toBeVisible();
 });
 
@@ -53,12 +56,3 @@ for (const route of dashboardRoutes) {
     await expectNoCriticalViolations(page);
   });
 }
-
-test("the landing page offers Google sign-in only", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.getByLabel("Password")).toHaveCount(0);
-  await expect(page.getByLabel("Email")).toHaveCount(0);
-  await expect(
-    page.getByRole("button", { name: "Continue with Google" }),
-  ).toBeVisible();
-});

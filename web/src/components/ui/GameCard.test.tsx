@@ -14,7 +14,7 @@ const props = {
 describe("GameCard", () => {
   it("is a link named by the title", () => {
     render(<GameCard {...props} />);
-    const card = screen.getByRole("link", { name: "Neon Stack" });
+    const card = screen.getByRole("link", { name: /Neon Stack/ });
     expect(card).toHaveAttribute("href", "/play/neon-stack");
     expect(card).toHaveClass(
       "group",
@@ -82,7 +82,7 @@ describe("GameCard", () => {
         className="mx-auto"
       />,
     );
-    const card = screen.getByRole("link", { name: "Kart Draft" });
+    const card = screen.getByRole("link", { name: /Kart Draft/ });
     expect(card).toHaveAttribute("href", "/studio/kart-draft");
     expect(card).toHaveClass("mx-auto");
     expect(screen.getByText("Edited 2 minutes ago")).toBeInTheDocument();

@@ -15,4 +15,9 @@ export const env = {
    * /api/v1 proxy (S-14).
    */
   apiBase: testMode ? "/api/mock/v1" : "/api/v1",
+  /**
+   * Endpoint of the shared analytics service. Unset by default: events then
+   * stay on the in-page queue (S-23).
+   */
+  analyticsUrl: process.env.NEXT_PUBLIC_UPSTAT_EVENTS_URL || undefined,
 } as const;

@@ -1,5 +1,3 @@
-"use client";
-
 /**
  * Button (docs/design.md section 3). Kinds: primary carries the main action
  * of a view; secondary and ghost are supporting actions; danger is for

@@ -27,7 +27,7 @@ The platform has two layers:
 
 The repository is in **Phase 0**: the earlier console-rental prototype has been retired, and the new direction is recorded in [`docs/decisions.md`](docs/decisions.md) (C-1 to C-4).
 
-- **Design first.** The landing page, Studio, Arcade, My Games and console-style frames are designed in Figma before any new UI is built (C-4). The designs for all three stages are drafted and await sign-off: [`docs/design.md`](docs/design.md) holds the tokens, components and prototype journeys, and [`docs/pages.md`](docs/pages.md) lists every screen. Until sign-off the web app keeps the prototype's layouts with updated copy.
+- **Design.** The designs for all three stages are in Figma and are the basis for the web build (C-5): [`docs/design.md`](docs/design.md) holds the tokens, components and prototype journeys, and [`docs/pages.md`](docs/pages.md) lists every screen. The landing page and sign-in are built from them; the Studio, Arcade and My Games follow.
 - **Architecture.** The system design is in [`docs/system-design.md`](docs/system-design.md) (open [`docs/system-design.html`](docs/system-design.html) for the diagrams). It was ratified on 2026-10-30 (S-1 to S-26 in [`docs/decisions.md`](docs/decisions.md)).
 
 ---
@@ -58,7 +58,7 @@ See the [system design](docs/system-design.md) for services, data ownership, flo
 
 | Path | Contents |
 | --- | --- |
-| [`web/`](web/) | Next.js App Router app: the landing page (`/`), the hub (`/dashboard`) and the leaderboard (`/dashboard/leaderboard`) |
+| [`web/`](web/) | Next.js App Router app: the landing page (`/`), sign-in (`/signin`), the hub (`/dashboard`) and the leaderboard (`/dashboard/leaderboard`) |
 | [`docs/`](docs/) | Decisions register, system design, design contract and screen inventory |
 | [`.cuelabs/project.yaml`](.cuelabs/project.yaml) | CueLABS project manifest: which surfaces are active or planned |
 
@@ -82,7 +82,7 @@ npm ci
 NEXT_PUBLIC_TEST_MODE=true npm run dev
 ```
 
-Open `http://localhost:3000`. In TEST_MODE, "Continue with Google" signs you in as a local test user without contacting Google.
+Open `http://localhost:3000` and choose Sign in. In TEST_MODE, "Continue with Google" signs you in as a local test user without contacting Google.
 
 ### Test
 

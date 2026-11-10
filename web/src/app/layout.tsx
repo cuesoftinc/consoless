@@ -26,6 +26,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://consoless.cuesoft.io"),
+  alternates: { canonical: "./" },
   title: {
     default: "Consoless",
     template: "%s | Consoless",
@@ -52,7 +54,7 @@ export default function RootLayout({
       className={`${inter.variable} ${pressStart2P.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-gaming-900 text-white h-screen overflow-hidden selection:bg-gaming-accent selection:text-white">
+      <body className="min-h-screen bg-bg-base text-text-primary">
         {/* Apply the stored theme before first paint (no flash). */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <SkipLink />

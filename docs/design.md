@@ -310,4 +310,4 @@ These are in the designs as proposals and need a decision before sign-off.
 | Engine API in code samples | [Proposed] The code shown in the Studio is illustrative. The engine API is defined in Phase 1a. |
 | Upload file types | [Proposed] The upload dialog names "images, 3D models and audio". The accepted formats and size limits are set with `api/intake`. |
 | Online multiplayer | [Proposed] One provisional lobby frame. The realtime design (system design v2, S-26) comes first. |
-| Landing page audiences | [Proposed] The landing page has no FAQ and no contributor band yet. See `pages.md` Part A. |
+| Landing page audiences | [Current] The web landing page has the contributor band, the self-hosting band and the FAQ. The Figma frames do not have them yet. See `pages.md` Part A. |
