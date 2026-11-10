@@ -50,9 +50,10 @@ const REPO_RULES = {
         path.startsWith("src/components/") || path.startsWith("src/app/"),
       allowLinePatterns: [],
       commentedException: "none",
-      // The GoogleAuthButton brand glyph is the documented file-level
-      // exception.
-      allowFileSuffixes: ["GoogleAuthButton.tsx"],
+      // The GoogleAuthButton brand glyph and the web manifest (which can
+      // only carry literal colours) are the documented file-level
+      // exceptions.
+      allowFileSuffixes: ["GoogleAuthButton.tsx", "app/manifest.ts"],
       colorFunctions: true,
     }),
   ],
@@ -110,9 +111,10 @@ const REPO_RULES = {
       // §2 on-crit: only raw white passes, and only when the line (or the
       // line above) carries the documenting comment.
       commentedException: "white-only",
-      // The GoogleAuthButton brand glyph is the documented file-level
-      // exception.
-      allowFileSuffixes: ["GoogleAuthButton.tsx"],
+      // The GoogleAuthButton brand glyph and the web manifest (which can
+      // only carry literal colours) are the documented file-level
+      // exceptions.
+      allowFileSuffixes: ["GoogleAuthButton.tsx", "app/manifest.ts"],
     }),
   ],
 };
