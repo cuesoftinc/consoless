@@ -6,6 +6,7 @@ export const ANCHORS = {
   arcade: "arcade",
   developers: "developers",
   selfHost: "self-host",
+  community: "community",
   faq: "faq",
 } as const;
 
@@ -18,3 +19,5 @@ export const CONTRIBUTING_URL =
 export const DOCS_URL = "https://cuesoft.gitbook.io/consoless";
 export const DISCORD_URL = "https://discord.gg/CDfZxxrxbb";
 export const CUELABS_URL = "https://cuelabs.cuesoft.io";
+export const ROADMAP_URL =
+  "https://cuesoft.gitbook.io/consoless/product/roadmap";

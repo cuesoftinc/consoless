@@ -124,6 +124,32 @@ test.describe("home", () => {
     ).toContainText("Self-hosting is free forever.");
   });
 
+  test("the community band links Discord and the roadmap, and the social card exists", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const community = page.getByRole("region", { name: "Community" });
+    await expect(
+      community.getByRole("link", { name: "Join the Discord" }),
+    ).toHaveAttribute("href", "https://discord.gg/CDfZxxrxbb");
+    await expect(
+      community.getByRole("link", { name: "See the public roadmap" }),
+    ).toHaveAttribute(
+      "href",
+      "https://cuesoft.gitbook.io/consoless/product/roadmap",
+    );
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+      "content",
+      /opengraph-image/,
+    );
+    await expect(page.locator('link[rel="manifest"]')).toHaveAttribute(
+      "href",
+      "/manifest.webmanifest",
+    );
+    const manifest = await page.request.get("/manifest.webmanifest");
+    expect((await manifest.json()).name).toBe("Consoless");
+  });
+
   test("the self-host commands can be copied, per install method", async ({
     page,
     context,

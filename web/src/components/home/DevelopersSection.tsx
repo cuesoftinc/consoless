@@ -3,7 +3,6 @@ import { buttonClasses } from "@/components/ui/Button";
 import {
   ANCHORS,
   CONTRIBUTING_URL,
-  DISCORD_URL,
   GITHUB_URL,
   GOOD_FIRST_ISSUES_URL,
 } from "./links";
@@ -41,7 +40,7 @@ export default function DevelopersSection({
     <Section
       id={ANCHORS.developers}
       title="Built in the open"
-      intro="Consoless is MIT-licensed. The web app is Next.js and TypeScript; the services are Go and Python. Join us in #consoless-lab on the CueLABS™ Discord."
+      intro="Consoless is MIT-licensed. The web app is Next.js and TypeScript; the services are Go and Python."
     >
       <ul className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {TOPICS.map(({ icon: Icon, title, body }) => (
@@ -62,13 +61,6 @@ export default function DevelopersSection({
           {...externalLinkProps}
         >
           View on GitHub
-        </a>
-        <a
-          href={DISCORD_URL}
-          className={buttonClasses("secondary", "md")}
-          {...externalLinkProps}
-        >
-          Join the Discord
         </a>
         <a
           href={GOOD_FIRST_ISSUES_URL}

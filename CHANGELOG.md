@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- A Community section on the landing page: the Discord channel, the public roadmap and CueLABS.
+- A branded error page, the web app manifest, and placeholder favicon, touch icon and social-card images (drawn by `web/scripts/generate-brand-assets.mjs` until the official mark arrives).
 - The landing page shows the commands to run Consoless yourself, in a copyable block with Docker Compose and npm tabs.
 - `docker-compose.yml` and `web/Dockerfile`, so `docker compose up --build -d` (or `make up`) starts the web app.
 - The Studio at `/dashboard/studio/{id}`: chat with live build status, a preview in the console frame, versions with preview and restore, a console-style switch, a code view with checked hand edits, and publishing for review.

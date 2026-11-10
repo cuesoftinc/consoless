@@ -18,6 +18,7 @@ import FaqSection from "./FaqSection";
 import FeaturesSection from "./FeaturesSection";
 import FinalCta from "./FinalCta";
 import HeroSection from "./HeroSection";
+import CommunitySection from "./CommunitySection";
 import SelfHostSection from "./SelfHostSection";
 
 export default function HomeView() {
@@ -42,6 +43,7 @@ export default function HomeView() {
           onSelfHost={home.onSelfHost}
           onCopyCommand={home.onCopyCommand}
         />
+        <CommunitySection onDiscord={home.onContribute} />
         <FaqSection onOpen={home.onFaqOpen} />
         <FinalCta onStart={home.onTryCloud} onGithub={home.onGithub} />
       </main>
