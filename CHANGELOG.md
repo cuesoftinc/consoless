@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `.gitattributes` keeps shell scripts LF, matching the shared template (#26).
 - Docs pages for the roadmap, the API surface, and deployment and self-hosting, so every docs link in the footer resolves. `/docs/api` redirects to the API page.
 - A Community section on the landing page: the Discord channel, the public roadmap and CueLABS.
 - A branded error page, the web app manifest, and placeholder favicon, touch icon and social-card images (drawn by `web/scripts/generate-brand-assets.mjs` until the official mark arrives).
